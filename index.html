@@ -165,14 +165,30 @@
             <h1 class="text-base sm:text-lg lg:text-xl font-bold text-furg-navy leading-snug">
               Comprometimento Organizacional de Profissionais de TI nas IFES
             </h1>
-            <p class="text-xs sm:text-sm text-slate-500 mt-0.5 hide-in-presentation">
+            <p id="header-subtitle" class="text-xs sm:text-sm text-slate-500 mt-0.5 hide-in-presentation">
               Diagnóstico psicométrico e comparativo da carreira PCCTAE no Brasil (<span class="font-semibold text-slate-700">n = 77</span>)
             </p>
           </div>
         </div>
 
-        <!-- Botão de Modo Apresentação -->
-        <div class="flex items-center gap-2 self-start md:self-center">
+        <!-- Botões de Modo Simples e Modo Apresentação -->
+        <div class="flex flex-wrap items-center gap-2 self-start md:self-center">
+          <button
+            id="btn-simple-mode"
+            type="button"
+            onclick="toggleSimpleMode()"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-furg-blue bg-white text-furg-blue hover:bg-furg-sky transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-furg-blue focus:ring-offset-1"
+            title="Alterna para uma apresentação em linguagem acessível, sem termos estatísticos técnicos"
+          >
+            <svg id="icon-simple-enter" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <svg id="icon-simple-exit" class="w-4 h-4 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            <span id="label-simple-mode">Simples</span>
+          </button>
+
           <button
             id="btn-presentation"
             type="button"
@@ -191,8 +207,8 @@
         </div>
       </div>
 
-      <!-- Navegação em 4 Abas (Atos da Apresentação) -->
-      <nav class="mt-4 -mb-3.5 flex overflow-x-auto custom-scroll gap-1 border-t border-slate-100 pt-2" role="tablist" aria-label="Atos da Apresentação">
+      <!-- Navegação em 4 Abas (Atos da Apresentação Técnica) -->
+      <nav id="technical-nav" class="mt-4 -mb-3.5 flex overflow-x-auto custom-scroll gap-1 border-t border-slate-100 pt-2" role="tablist" aria-label="Atos da Apresentação">
         <button
           type="button"
           role="tab"
@@ -201,7 +217,7 @@
           onclick="switchTab('tab-visao-geral')"
           class="tab-btn whitespace-nowrap px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-t-lg border-b-2 border-furg-navy text-furg-navy bg-furg-sky/60 transition-all"
         >
-          <span class="inline-block px-1.5 py-0.5 text-[10px] rounded bg-furg-navy text-white mr-1.5">Ato 1 &amp; 3</span>
+          <span class="inline-block px-1.5 py-0.5 text-[10px] rounded bg-furg-navy text-white mr-1.5">Atos 1 &amp; 3</span>
           Visão Geral &amp; Inversão da ECO
         </button>
 
@@ -245,9 +261,234 @@
   </header>
 
   <!-- ===================================================================== -->
-  <!-- CONTEÚDO PRINCIPAL (4 ABAS)                                           -->
+  <!-- CONTEÚDO PRINCIPAL (VISÃO TÉCNICA + VISÃO SIMPLES)                    -->
   <!-- ===================================================================== -->
   <main class="flex-1 main-container max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <!-- =================================================================== -->
+    <!-- VISÃO SIMPLES (LINGUAGEM ACESSÍVEL PARA LEIGOS E COLEGAS DE TI)     -->
+    <!-- =================================================================== -->
+    <section id="simple-view" class="hidden space-y-6">
+      <!-- Banner Principal Explicativo -->
+      <div class="bg-gradient-to-r from-furg-navy via-furg-blue to-sky-700 text-white rounded-2xl p-6 sm:p-8 shadow-sm">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <div class="max-w-3xl">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/15 text-amber-200 mb-3">
+              Resumo em Linguagem Direta • 77 profissionais de TI das 5 regiões do Brasil
+            </span>
+            <h2 class="section-title text-xl sm:text-2xl font-extrabold tracking-tight leading-snug">
+              Por que o profissional de TI permanece nas Universidades e Institutos Federais?
+            </h2>
+            <p class="text-sm sm:text-base text-slate-100 mt-2.5 leading-relaxed">
+              Ouvimos 77 servidores efetivos de TI em todo o país. A grande descoberta é clara:
+              <strong class="text-amber-200">a categoria permanece porque gosta do que faz e se identifica com a instituição</strong> — e não porque se sente "presa" sem opções no mercado ou por obrigação moral.
+            </p>
+          </div>
+          <div class="flex-shrink-0 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center min-w-[200px]">
+            <div class="text-xs uppercase tracking-wider text-slate-200 font-semibold">Nota Geral de Vínculo</div>
+            <div class="kpi-value text-4xl font-extrabold text-white mt-1">3,11 <span class="text-lg font-medium text-slate-300">/ 5</span></div>
+            <div class="text-xs text-emerald-200 font-semibold mt-1">Acima da média (3,00 = positivo)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Os 3 Motivos de Permanência Traduzidos -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Motivo 1: Quero ficar -->
+        <div class="bg-white rounded-xl border-2 border-furg-blue/30 p-5 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-furg-blue">1. Fica porque QUER</span>
+              <span class="px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Ponto Forte</span>
+            </div>
+            <div class="kpi-value text-3xl font-extrabold text-furg-blue mt-3">3,65 <span class="text-sm font-normal text-slate-400">de 5,00</span></div>
+            <p class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+              É o principal motor da categoria. Os colegas se sentem "em casa", gostam da equipe e veem propósito no serviço público.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-furg-blue font-semibold">
+            Vínculo emocional e orgulho de pertencer
+          </div>
+        </div>
+
+        <!-- Motivo 2: Preciso ficar -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-furg-gold">2. Fica porque PRECISA</span>
+              <span class="px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-amber-50 text-amber-800 border border-amber-200">Em cima do muro</span>
+            </div>
+            <div class="kpi-value text-3xl font-extrabold text-furg-gold mt-3">3,08 <span class="text-sm font-normal text-slate-400">de 5,00</span></div>
+            <p class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+              Sair da IFES desestruturaria a rotina pessoal, <strong>mas</strong> o profissional de TI sabe que tem boa empregabilidade fora.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-amber-700 font-semibold">
+            Bem menor que em outras áreas administrativas (4,47)
+          </div>
+        </div>
+
+        <!-- Motivo 3: Sinto que devo -->
+        <div class="bg-white rounded-xl border border-red-200 p-5 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-furg-red">3. Fica porque SENTE QUE DEVE</span>
+              <span class="px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-red-50 text-furg-red border border-red-200">Ponto Baixo</span>
+            </div>
+            <div class="kpi-value text-3xl font-extrabold text-furg-red mt-3">2,61 <span class="text-sm font-normal text-slate-400">de 5,00</span></div>
+            <p class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+              A categoria tem gratidão pela instituição, mas <strong>não sentiria culpa</strong> em sair se recebesse uma proposta melhor.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-furg-red font-semibold">
+            Relação profissional, sem peso de obrigação moral
+          </div>
+        </div>
+      </div>
+
+      <!-- Raio-X Rápido da Categoria -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+        <h3 class="text-sm sm:text-base font-bold text-furg-navy mb-3">
+          Raio-X de quem participou da pesquisa
+        </h3>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-2xl font-extrabold text-furg-navy">98,7%</div>
+            <div class="text-xs font-semibold text-slate-700 mt-0.5">Mais qualificados que o cargo exige</div>
+            <div class="text-[11px] text-slate-500 mt-1">96,1% têm especialização, mestrado ou doutorado</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-2xl font-extrabold text-furg-blue">66,2%</div>
+            <div class="text-xs font-semibold text-slate-700 mt-0.5">No formato flexível (PGD)</div>
+            <div class="text-[11px] text-slate-500 mt-1">42,9% híbrido e 23,4% 100% remoto</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-2xl font-extrabold text-furg-navy">51,9%</div>
+            <div class="text-xs font-semibold text-slate-700 mt-0.5">Mais de 12 anos de casa</div>
+            <div class="text-[11px] text-slate-500 mt-1">Categoria madura (79,2% já são estáveis)</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-2xl font-extrabold text-furg-gold">93,5%</div>
+            <div class="text-xs font-semibold text-slate-700 mt-0.5">Homens na área de TI</div>
+            <div class="text-[11px] text-slate-500 mt-1">Apenas 6,5% mulheres entre os respondentes</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Linha de Gráficos 1: Comparação TI vs Geral + O que mais pesa -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <h3 class="text-base font-bold text-furg-navy">
+            TI nas IFES vs. Outros Servidores Administrativos
+          </h3>
+          <p class="text-xs text-slate-500 mt-0.5 mb-4">
+            Enquanto outros servidores ficam muito por "precisar" (4,47), na TI a principal razão é "querer ficar" (3,65).
+          </p>
+          <div class="chart-box-std relative h-72 w-full">
+            <canvas id="chart-simple-comparativo"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <h3 class="text-base font-bold text-furg-navy">
+            O que mais prende e o que menos pesa para quem é de TI
+          </h3>
+          <p class="text-xs text-slate-500 mt-0.5 mb-4">
+            As 3 frases mais concordadas (azul) e as 3 menos concordadas (vermelho) na pesquisa (escala de 1 a 5).
+          </p>
+          <div class="chart-box-std relative h-72 w-full">
+            <canvas id="chart-simple-extremos"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Linha de Gráficos 2: Curva da Carreira + Mito do Remoto (PGD) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
+            <div>
+              <h3 class="text-base font-bold text-furg-navy">
+                A "Curva da Carreira": quando o vínculo esfria?
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">
+                Entre <strong>4 e 9 anos de casa</strong> (logo após a estabilidade), o entusiasmo cai abaixo da média e só volta a subir após os 10 anos.
+              </p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-50 text-furg-red border border-red-200">
+              Janela de atenção
+            </span>
+          </div>
+          <div class="chart-box-std relative h-72 w-full">
+            <canvas id="chart-simple-carreira"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
+            <div>
+              <h3 class="text-base font-bold text-furg-navy">
+                Mito derrubado: o Trabalho Remoto afasta o servidor?
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">
+                <strong>Não!</strong> Quem trabalha no formato híbrido ou 100% remoto tem o mesmo nível de compromisso que quem vai todo dia presencialmente.
+              </p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              PGD aprovado nos dados
+            </span>
+          </div>
+          <div class="chart-box-std relative h-72 w-full">
+            <canvas id="chart-simple-pgd"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outros 2 Achados Diretos + Conclusão Prática -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex items-start gap-4">
+          <div class="w-11 h-11 rounded-xl bg-furg-sky text-furg-navy flex items-center justify-center font-extrabold text-lg flex-shrink-0">
+            +
+          </div>
+          <div>
+            <h4 class="text-sm sm:text-base font-bold text-furg-navy">A idade fortalece o vínculo</h4>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+              Colegas entre <strong>29 e 39 anos</strong> apresentam a menor nota geral (<strong>2,78</strong>). Já entre <strong>51 e 61 anos</strong>, o comprometimento sobe para <strong>3,64</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex items-start gap-4">
+          <div class="w-11 h-11 rounded-xl bg-amber-50 text-furg-gold flex items-center justify-center font-extrabold text-lg flex-shrink-0">
+            ★
+          </div>
+          <div>
+            <h4 class="text-sm sm:text-base font-bold text-furg-navy">Chefias sentem mais dever de permanência</h4>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+              Quem ocupa cargo de gestão ou coordenação (FG/CD) tem senso de obrigação institucional maior (<strong>2,93</strong>) do que quem não ocupa função (<strong>2,41</strong>).
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensagem Final para a Categoria e Gestores -->
+      <div class="bg-furg-sky/70 border border-furg-blue/25 rounded-xl p-5 sm:p-6">
+        <h3 class="text-base font-bold text-furg-navy mb-2">Em resumo: o que isso significa na prática?</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
+          <div class="bg-white/90 rounded-lg p-4 border border-slate-200/80">
+            <strong class="text-furg-blue block mb-1">1. Valorizar quem quer ficar</strong>
+            A TI das IFES é altamente qualificada e comprometida pelo propósito. O ambiente de trabalho e o reconhecimento são decisivos para manter esse vínculo vivo.
+          </div>
+          <div class="bg-white/90 rounded-lg p-4 border border-slate-200/80">
+            <strong class="text-furg-red block mb-1">2. Cuidar da fase intermediária</strong>
+            Como o profissional de TI tem mercado lá fora e não sente culpa em sair, a perda de talentos ameaça mais quem tem entre 29–39 anos e 4–9 anos de casa.
+          </div>
+          <div class="bg-white/90 rounded-lg p-4 border border-slate-200/80">
+            <strong class="text-emerald-700 block mb-1">3. Manter a flexibilidade do PGD</strong>
+            Os dados comprovam na prática: o trabalho híbrido e o teletrabalho não prejudicam o comprometimento e ajudam a reter profissionais na instituição.
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- =================================================================== -->
     <!-- ABA 1: VISÃO GERAL & INVERSÃO DA ECO (ATO 1 E 3)                    -->
@@ -942,61 +1183,63 @@
     // 1. UTILITÁRIOS DE FORMATAÇÃO BRASILEIRA (VÍRGULA DECIMAL)
     // =========================================================================
     function fmtBR(valor, casas = 2) {
-      if (valor === null || valor === undefined || isNaN(valor)) return '—';
-      return Number(valor).toFixed(casas).replace('.', ',');
+      if (valor === null || valor === undefined || Number.isNaN(Number(valor))) return '—';
+      return Number(valor).toLocaleString('pt-BR', {
+        minimumFractionDigits: casas,
+        maximumFractionDigits: casas
+      });
     }
 
-    function fmtPctBR(valor, casas = 1) {
-      if (valor === null || valor === undefined || isNaN(valor)) return '—';
-      return Number(valor).toFixed(casas).replace('.', ',') + '%';
+    function mediaArray(arr) {
+      if (!arr || arr.length === 0) return 0;
+      return arr.reduce((acc, v) => acc + v, 0) / arr.length;
     }
 
     // =========================================================================
-    // 2. PLUGINS CUSTOMIZADOS DO CHART.JS (LINHA DE CORTE 3,0 + RÓTULOS)
+    // 2. PLUGINS CUSTOMIZADOS DO CHART.JS (LINHA DE CORTE E RÓTULOS DE VALOR)
     // =========================================================================
     const referenceLinePlugin = {
       id: 'referenceLinePlugin',
-      afterDatasetsDraw(chart, args, options) {
-        if (!options || options.value === undefined) return;
-        const { ctx, chartArea: { left, right, top, bottom }, scales } = chart;
-        const axis = options.axis || 'y';
+      afterDatasetsDraw(chart, args, opts) {
+        if (!opts || opts.value === undefined) return;
+        const { ctx, chartArea, scales } = chart;
+        const axis = opts.axis || 'y';
         const scale = scales[axis];
         if (!scale) return;
 
         ctx.save();
         ctx.beginPath();
         ctx.setLineDash([6, 4]);
-        ctx.lineWidth = 1.8;
-        ctx.strokeStyle = options.color || '#0F172A';
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = opts.color || '#0F172A';
 
         if (axis === 'y') {
-          const yPos = scale.getPixelForValue(options.value);
-          ctx.moveTo(left, yPos);
-          ctx.lineTo(right, yPos);
+          const yPos = scale.getPixelForValue(opts.value);
+          ctx.moveTo(chartArea.left, yPos);
+          ctx.lineTo(chartArea.right, yPos);
           ctx.stroke();
 
-          if (options.label) {
+          if (opts.label) {
             ctx.setLineDash([]);
-            ctx.font = '600 11px Inter, sans-serif';
-            const textWidth = ctx.measureText(options.label).width;
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
-            ctx.fillRect(right - textWidth - 14, yPos - 22, textWidth + 10, 18);
-            ctx.fillStyle = '#0F172A';
+            ctx.fillStyle = opts.color || '#0F172A';
+            ctx.font = '700 11px Inter, sans-serif';
             ctx.textAlign = 'right';
-            ctx.fillText(options.label, right - 9, yPos - 9);
+            ctx.textBaseline = 'bottom';
+            ctx.fillText(opts.label, chartArea.right - 4, yPos - 4);
           }
         } else {
-          const xPos = scale.getPixelForValue(options.value);
-          ctx.moveTo(xPos, top);
-          ctx.lineTo(xPos, bottom);
+          const xPos = scale.getPixelForValue(opts.value);
+          ctx.moveTo(xPos, chartArea.top);
+          ctx.lineTo(xPos, chartArea.bottom);
           ctx.stroke();
 
-          if (options.label) {
+          if (opts.label) {
             ctx.setLineDash([]);
-            ctx.font = '600 11px Inter, sans-serif';
-            ctx.fillStyle = '#0F172A';
+            ctx.fillStyle = opts.color || '#0F172A';
+            ctx.font = '700 11px Inter, sans-serif';
             ctx.textAlign = 'left';
-            ctx.fillText(options.label, xPos + 6, top + 12);
+            ctx.textBaseline = 'top';
+            ctx.fillText(opts.label, xPos + 5, chartArea.top + 4);
           }
         }
         ctx.restore();
@@ -1005,33 +1248,32 @@
 
     const valueLabelsPlugin = {
       id: 'valueLabelsPlugin',
-      afterDatasetsDraw(chart, args, options) {
-        if (!options || !options.enabled) return;
+      afterDatasetsDraw(chart, args, opts) {
+        if (!opts || !opts.enabled) return;
         const { ctx } = chart;
         const isHorizontal = chart.options.indexAxis === 'y';
+        const decimals = opts.decimals !== undefined ? opts.decimals : 2;
 
         ctx.save();
-        ctx.font = options.font || '600 11px Inter, sans-serif';
+        ctx.font = opts.font || '700 11px Inter, sans-serif';
+        ctx.fillStyle = opts.color || '#0F172A';
 
-        chart.data.datasets.forEach((dataset, datasetIndex) => {
-          const meta = chart.getDatasetMeta(datasetIndex);
+        chart.data.datasets.forEach((dataset, dsIndex) => {
+          const meta = chart.getDatasetMeta(dsIndex);
           if (meta.hidden) return;
+          meta.data.forEach((element, idx) => {
+            const raw = dataset.data[idx];
+            if (raw === null || raw === undefined) return;
+            const txt = opts.suffix ? `${fmtBR(raw, decimals)}${opts.suffix}` : fmtBR(raw, decimals);
 
-          meta.data.forEach((element, index) => {
-            const val = dataset.data[index];
-            if (val === null || val === undefined) return;
-            const text = options.formatter ? options.formatter(val) : fmtBR(val, 2);
-
-            ctx.fillStyle = options.color || '#1E293B';
             if (isHorizontal) {
               ctx.textAlign = 'left';
               ctx.textBaseline = 'middle';
-              ctx.fillText(text, element.x + 6, element.y);
+              ctx.fillText(txt, element.x + 6, element.y);
             } else {
               ctx.textAlign = 'center';
               ctx.textBaseline = 'bottom';
-              const yOffset = dataset.labelOffsetY || -5;
-              ctx.fillText(text, element.x, element.y + yOffset);
+              ctx.fillText(txt, element.x, element.y - 6);
             }
           });
         });
@@ -1042,144 +1284,120 @@
     Chart.register(referenceLinePlugin, valueLabelsPlugin);
 
     // =========================================================================
-    // 3. BASES DE DADOS OFICIAIS DA PESQUISA (n = 77)
+    // 3. MICRODADOS REAIS EMBUTIDOS (base_anonimizada_n77.csv — 77 RESPONDENTES)
+    //    Formato compacto: [gênero, faixa, região, ifes, escolaridade, cargo,
+    //    atuação, fgcd, tempo, pgd, [ECO01..ECO18 brutos]]
     // =========================================================================
-
-    // 3.1 Itens da ECO (Figura 2 e Tabela 3 do Relatório Final)
-    const ITENS_ECO = [
-      { id: 'ECO01', desc: 'Feliz em dedicar carreira à IFES', base: 'Afetivo', sub: 'Afetivo', media: 3.61, h2: 0.568, rc1: 0.670, rc2: 0.307, rc3: 0.159, fator: 'RC1', decisao: 'Manter', status: 'keep' },
-      { id: 'ECO02', desc: 'Problemas da IFES como meus', base: 'Afetivo', sub: 'Afetivo', media: 3.51, h2: 0.388, rc1: 0.436, rc2: 0.421, rc3: -0.141, fator: 'RC1', decisao: 'Excluir (h² < 0,40)', status: 'exclude' },
-      { id: 'ECO03r', desc: 'Senso de integração (inv.)', base: 'Afetivo', sub: 'Afetivo', media: 3.55, h2: 0.598, rc1: 0.767, rc2: 0.077, rc3: -0.059, fator: 'RC1', decisao: 'Manter', status: 'keep' },
-      { id: 'ECO04r', desc: 'Vínculo emocional (inv.)', base: 'Afetivo', sub: 'Afetivo', media: 3.61, h2: 0.725, rc1: 0.807, rc2: 0.232, rc3: -0.139, fator: 'RC1', decisao: 'Manter', status: 'keep' },
-      { id: 'ECO05r', desc: 'Sentir-se "pessoa de casa" (inv.)', base: 'Afetivo', sub: 'Afetivo', media: 3.88, h2: 0.689, rc1: 0.825, rc2: 0.086, rc3: -0.010, fator: 'RC1', decisao: 'Manter', status: 'keep' },
-      { id: 'ECO06', desc: 'Imenso significado pessoal', base: 'Afetivo', sub: 'Afetivo', media: 3.71, h2: 0.778, rc1: 0.857, rc2: 0.190, rc3: 0.088, fator: 'RC1', decisao: 'Manter', status: 'keep' },
-      { id: 'ECO07', desc: 'Ficar é necessidade e desejo', base: 'Instrumental', sub: 'Inst-Custo', media: 3.64, h2: 0.534, rc1: 0.615, rc2: -0.002, rc3: 0.395, fator: 'RC1*', decisao: 'Manter (migrou)', status: 'migrated' },
-      { id: 'ECO08', desc: 'Difícil deixar a IFES agora', base: 'Instrumental', sub: 'Inst-Custo', media: 3.29, h2: 0.646, rc1: 0.486, rc2: -0.068, rc3: 0.636, fator: 'RC3', decisao: 'Manter', status: 'keep' },
-      { id: 'ECO09', desc: 'Vida ficaria desestruturada', base: 'Instrumental', sub: 'Inst-Custo', media: 3.62, h2: 0.569, rc1: 0.240, rc2: -0.008, rc3: 0.715, fator: 'RC3', decisao: 'Manter', status: 'keep' },
-      { id: 'ECO10', desc: 'Poucas alternativas se saísse', base: 'Instrumental', sub: 'Inst-Alt', media: 2.60, h2: 0.609, rc1: -0.046, rc2: 0.302, rc3: 0.718, fator: 'RC3', decisao: 'Manter', status: 'keep' },
-      { id: 'ECO11', desc: 'Já dei muito de mim', base: 'Instrumental', sub: 'Inst-Alt', media: 2.53, h2: 0.347, rc1: -0.228, rc2: 0.347, rc3: 0.418, fator: 'RC3', decisao: 'Excluir (h² < 0,40)', status: 'exclude' },
-      { id: 'ECO12', desc: 'Escassez de alternativas imediatas', base: 'Instrumental', sub: 'Inst-Alt', media: 2.83, h2: 0.582, rc1: -0.165, rc2: 0.285, rc3: 0.688, fator: 'RC3', decisao: 'Manter', status: 'keep' },
-      { id: 'ECO13r', desc: 'Obrigação de permanecer (inv.)', base: 'Normativo', sub: 'Normativo', media: 2.55, h2: 0.426, rc1: 0.361, rc2: 0.512, rc3: 0.181, fator: 'RC2', decisao: 'Manter', status: 'keep' },
-      { id: 'ECO14', desc: 'Não seria certo sair agora', base: 'Normativo', sub: 'Normativo', media: 2.53, h2: 0.616, rc1: 0.171, rc2: 0.707, rc3: 0.297, fator: 'RC2', decisao: 'Manter', status: 'keep' },
-      { id: 'ECO15', desc: 'Sentiria culpa se saísse (CV 66,5%)', base: 'Normativo', sub: 'Normativo', media: 2.23, h2: 0.633, rc1: 0.045, rc2: 0.781, rc3: 0.144, fator: 'RC2', decisao: 'Manter', status: 'keep' },
-      { id: 'ECO16', desc: 'Instituição merece lealdade', base: 'Normativo', sub: 'Normativo', media: 2.88, h2: 0.682, rc1: 0.591, rc2: 0.559, rc3: 0.145, fator: 'RC1*', decisao: 'Manter (cruzada)', status: 'migrated' },
-      { id: 'ECO17', desc: 'Obrigação moral com pessoas', base: 'Normativo', sub: 'Normativo', media: 2.26, h2: 0.596, rc1: 0.354, rc2: 0.683, rc3: 0.058, fator: 'RC2', decisao: 'Manter', status: 'keep' },
-      { id: 'ECO18', desc: 'Devo muito à instituição', base: 'Normativo', sub: 'Normativo', media: 3.21, h2: 0.597, rc1: 0.634, rc2: 0.419, rc3: 0.139, fator: 'RC1*', decisao: 'Manter (migrou)', status: 'migrated' }
-    ];
-
-    // 3.2 Base Anonimizada REAL de 77 Respondentes (base_anonimizada_n77.csv)
-    // Estrutura compacta por respondente:
-    // [genero, faixa_etaria, regiao, tipo_ifes, escolaridade, nivel_cargo, atuacao, fg_cd, tempo_servico, pgd, [ECO01..ECO18 brutos]]
     const RAW_N77 = [
-      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','Mais de 12 anos','Teletrabalho integral',[3,3,2,4,2,5,3,5,4,4,2,4,5,2,2,4,2,4]],
-      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Doutorado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Teletrabalho integral',[5,4,1,1,1,5,4,5,4,1,1,2,5,1,1,1,1,5]],
-      ['Masculino','40 a 50 anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[4,3,4,3,2,4,3,4,5,3,4,3,5,3,1,1,1,4]],
-      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[5,5,1,1,1,3,2,2,2,2,3,2,3,4,3,2,3,2]],
-      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','De 4 a 6 anos','Teletrabalho integral',[5,4,4,4,4,2,4,3,2,1,3,5,3,2,3,4,5,3]],
-      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Até 1 ano','Presencial integral',[3,2,3,3,1,3,3,1,5,3,1,3,5,1,1,1,1,1]],
-      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[5,5,1,1,1,5,3,3,4,2,2,1,3,1,1,3,1,5]],
-      ['Masculino','29 a 39 anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 4 a 6 anos','Teletrabalho integral',[4,3,3,3,3,3,5,5,5,5,3,5,4,5,4,4,1,4]],
-      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Até 1 ano','Presencial integral',[3,2,4,4,3,2,5,3,5,1,1,1,3,1,1,1,4,2]],
-      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Até 1 ano','Presencial integral',[4,5,1,1,1,3,4,3,2,1,1,2,4,3,1,3,2,3]],
-      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 10 a 12 anos','Teletrabalho integral',[3,4,2,2,3,3,3,4,4,2,2,2,4,2,2,2,1,1]],
-      ['Feminino','51 a 61 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Presencial integral',[5,4,1,1,1,5,5,5,5,5,4,5,1,4,1,4,4,5]],
-      ['Masculino','29 a 39 anos','Norte','Universidade Federal','Graduação','Nível D (Médio)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[3,4,3,2,2,3,4,4,4,4,3,4,2,3,2,2,2,3]],
-      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[5,4,1,2,1,4,5,5,5,2,2,2,4,3,1,4,3,5]],
-      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Teletrabalho integral',[4,3,3,2,1,5,3,4,3,2,4,3,1,1,1,3,1,5]],
-      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Teletrabalho integral',[3,4,3,2,2,5,3,4,4,4,4,3,3,3,2,3,3,4]],
-      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Até 1 ano','Teletrabalho integral',[5,3,2,2,2,4,4,1,1,1,2,1,3,3,1,4,1,2]],
-      ['Masculino','29 a 39 anos','Norte','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','Mais de 12 anos','Teletrabalho integral',[1,1,1,1,3,1,2,1,1,1,5,1,5,1,1,1,1,1]],
-      ['Feminino','62+ anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[5,4,1,1,1,5,5,4,2,1,1,1,4,3,1,5,2,5]],
-      ['Masculino','29 a 39 anos','Nordeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Teletrabalho integral',[3,1,3,3,3,3,5,4,4,3,1,3,5,1,1,1,2,2]],
-      ['Masculino','40 a 50 anos','Nordeste','Universidade Federal','Doutorado','Nível E (Superior)','Técnica/Especializada','Exerce atualmente','Mais de 12 anos','Teletrabalho integral',[1,1,5,5,4,2,3,5,5,4,5,4,4,2,1,2,2,2]],
-      ['Masculino','62+ anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Exerce atualmente','Mais de 12 anos','Híbrido',[5,4,1,1,1,5,5,5,3,3,2,2,5,5,5,5,5,5]],
-      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[4,3,5,3,2,4,3,2,4,3,5,5,4,1,3,4,1,2]],
-      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','Mais de 12 anos','Teletrabalho integral',[3,1,2,2,2,3,4,5,5,1,4,2,3,4,1,2,2,1]],
-      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Até 1 ano','Presencial integral',[5,4,2,1,1,5,5,3,2,2,3,3,3,3,1,5,5,5]],
-      ['Masculino','51 a 61 anos','Sul','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 10 a 12 anos','Híbrido',[5,5,1,1,1,5,5,5,5,5,1,5,1,5,5,5,5,5]],
-      ['Masculino','29 a 39 anos','Nordeste','Universidade Federal','Mestrado','Nível D (Médio)','Gestão/Liderança','Exerce atualmente','De 10 a 12 anos','Híbrido',[1,1,3,3,2,3,3,4,2,1,5,1,3,1,1,1,1,1]],
-      ['Masculino','40 a 50 anos','Centro-Oeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','De 4 a 6 anos','Presencial integral',[4,4,5,3,4,1,1,1,1,1,1,1,5,1,1,1,1,1]],
-      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[4,5,2,1,1,5,4,3,2,4,2,4,4,2,3,5,2,5]],
-      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Doutorado','Nível D (Médio)','Gestão/Liderança','Não exerce','Mais de 12 anos','Híbrido',[4,3,2,2,2,5,4,4,5,3,3,5,5,1,1,4,2,4]],
-      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Doutorado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Teletrabalho integral',[5,5,1,1,1,5,5,3,5,1,1,1,5,1,1,5,3,4]],
-      ['Masculino','40 a 50 anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[1,1,5,5,5,1,2,1,2,1,1,1,5,1,1,1,2,1]],
-      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[2,3,5,5,3,1,3,4,5,4,4,4,4,4,4,1,1,2]],
-      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Exerce atualmente','De 1 a 3 anos','Híbrido',[5,3,1,1,1,5,5,5,5,3,3,3,1,5,5,5,5,5]],
-      ['Feminino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Presencial integral',[3,5,1,1,1,5,5,5,5,2,1,1,4,1,1,1,1,4]],
-      ['Masculino','29 a 39 anos','Sudeste','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 10 a 12 anos','Presencial integral',[5,5,1,1,1,5,4,4,5,5,2,3,5,4,3,3,3,3]],
-      ['Masculino','40 a 50 anos','Norte','Universidade Federal','Especialização / MBA','Nível D (Médio)','Gestão/Liderança','Não exerce','Mais de 12 anos','Teletrabalho integral',[4,4,3,3,2,4,4,4,5,4,3,4,2,4,5,4,3,5]],
-      ['Masculino','40 a 50 anos','Sul','IF ou CEFET','Mestrado','Outro','Técnica/Especializada','Não exerce','De 10 a 12 anos','Híbrido',[3,4,4,2,2,3,4,3,4,3,4,3,3,3,2,3,2,2]],
-      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Teletrabalho integral',[4,4,4,4,3,2,4,3,5,4,1,5,3,4,2,1,1,1]],
-      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[5,3,1,1,1,5,5,5,5,3,3,1,1,5,5,5,4,5]],
-      ['Masculino','29 a 39 anos','Centro-Oeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Híbrido',[1,2,1,5,5,3,2,5,1,1,1,4,5,1,1,1,1,1]],
-      ['Masculino','51 a 61 anos','Centro-Oeste','Universidade Federal','Especialização / MBA','Nível D (Médio)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[5,5,1,1,1,5,5,5,5,4,5,5,1,5,5,5,5,5]],
-      ['Masculino','29 a 39 anos','Norte','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Híbrido',[2,4,3,3,2,4,2,1,5,4,1,2,4,1,1,4,1,3]],
-      ['Masculino','51 a 61 anos','Centro-Oeste','Universidade Federal','Mestrado','Nível D (Médio)','Gestão/Liderança','Não exerce','Mais de 12 anos','Híbrido',[1,4,2,2,2,4,4,2,3,1,2,2,5,1,1,2,1,2]],
-      ['Feminino','51 a 61 anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[4,2,2,2,2,4,4,2,3,2,3,3,3,2,2,3,2,3]],
-      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[5,5,1,1,1,5,4,5,5,1,1,1,2,5,5,5,3,3]],
-      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Exerce atualmente','Mais de 12 anos','Híbrido',[3,4,2,1,2,4,2,2,4,2,2,2,2,4,4,4,3,3]],
-      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[4,3,1,1,1,4,3,5,5,3,1,3,3,4,4,3,3,4]],
-      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Exerce atualmente','De 7 a 9 anos','Presencial integral',[2,3,4,4,4,2,1,1,2,1,1,2,5,4,4,1,1,5]],
-      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Doutorado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Híbrido',[3,2,4,2,3,4,3,4,5,4,4,2,2,4,3,3,2,4]],
-      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[5,5,2,1,1,5,5,5,3,5,3,5,3,2,1,5,1,5]],
-      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Graduação','Nível D (Médio)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Híbrido',[4,4,1,2,2,5,5,5,4,3,2,3,2,1,1,4,1,4]],
-      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[4,1,5,5,3,2,4,4,4,3,2,2,4,1,1,1,1,1]],
-      ['Masculino','51 a 61 anos','Sul','Universidade Federal','Doutorado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[5,5,1,1,1,5,5,2,5,1,3,3,3,3,3,3,3,4]],
-      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Presencial integral',[5,4,1,4,2,5,5,5,5,4,4,5,4,4,5,4,4,4]],
-      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 4 a 6 anos','Presencial integral',[1,3,5,5,5,1,1,1,1,1,1,1,5,2,2,1,1,1]],
-      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Doutorado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[5,5,5,2,5,5,3,2,2,2,4,4,3,3,2,4,4,5]],
-      ['Masculino','29 a 39 anos','Nordeste','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Híbrido',[5,4,2,2,2,5,4,2,1,4,2,4,3,3,2,3,3,3]],
-      ['Masculino','18 a 28 anos','Sudeste','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Exerce atualmente','De 4 a 6 anos','Híbrido',[4,5,4,2,4,3,4,5,5,2,4,3,4,1,1,3,1,3]],
-      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[5,5,5,4,1,3,4,1,3,3,4,1,2,3,2,3,4,3]],
-      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','De 7 a 9 anos','Presencial integral',[4,4,2,2,2,4,4,3,5,4,2,3,3,2,2,3,2,1]],
-      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Até 1 ano','Presencial integral',[2,3,5,5,5,2,5,1,2,4,3,5,3,3,1,3,3,3]],
-      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Híbrido',[1,1,5,5,5,2,4,2,2,1,1,3,5,1,1,1,1,1]],
-      ['Masculino','29 a 39 anos','Centro-Oeste','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Gestão/Liderança','Exerce atualmente','De 4 a 6 anos','Híbrido',[3,3,1,2,2,4,2,1,4,4,3,3,4,2,2,3,4,3]],
-      ['Masculino','29 a 39 anos','Norte','IF ou CEFET','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Híbrido',[4,4,2,2,1,5,4,3,3,1,1,3,5,1,1,1,1,5]],
-      ['Masculino','40 a 50 anos','Centro-Oeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Presencial integral',[4,4,2,2,1,4,4,4,4,2,4,4,2,4,4,5,4,5]],
-      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[4,2,2,1,1,5,4,5,3,1,3,1,2,4,3,3,3,4]],
-      ['Masculino','29 a 39 anos','Sudeste','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Gestão/Liderança','Exerce atualmente','De 7 a 9 anos','Teletrabalho integral',[1,5,1,1,1,5,3,1,1,1,1,1,3,1,5,3,3,5]],
-      ['Masculino','29 a 39 anos','Sudeste','IF ou CEFET','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Até 1 ano','Presencial integral',[1,5,5,5,1,3,3,1,1,1,3,3,5,1,1,1,1,2]],
-      ['Masculino','51 a 61 anos','Centro-Oeste','IF ou CEFET','Graduação','Nível D (Médio)','Técnica/Especializada','Não exerce','Mais de 12 anos','Presencial integral',[2,5,2,3,5,2,1,1,5,5,4,4,5,1,5,1,1,2]],
-      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Doutorado','Nível D (Médio)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[5,3,3,3,2,4,4,3,3,2,2,3,3,3,1,2,2,2]],
-      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Teletrabalho integral',[4,4,1,1,1,5,5,5,4,1,1,2,1,4,4,4,4,4]],
-      ['Masculino','40 a 50 anos','Norte','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Presencial integral',[1,2,3,3,3,2,3,4,5,2,2,2,3,1,1,2,1,2]],
-      ['Masculino','18 a 28 anos','Norte','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Presencial integral',[5,3,1,4,1,3,4,3,3,3,1,3,5,2,1,1,1,3]],
-      ['Masculino','40 a 50 anos','Norte','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[5,3,1,1,1,5,3,3,3,4,3,3,1,1,1,5,3,4]],
-      ['Feminino','40 a 50 anos','Sudeste','Universidade Federal','Doutorado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[3,4,2,3,3,2,2,3,5,5,5,5,5,5,5,2,1,4]],
-      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Teletrabalho integral',[5,4,1,2,1,4,2,2,4,3,3,2,4,1,2,4,2,2]]
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica','Não exerce','> 12 anos','Teletrabalho integral',[3,3,2,4,2,5,3,5,4,4,2,4,5,2,2,4,2,4]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Doutorado','Nível E (Superior)','Técnica','Não exerce','> 12 anos','Teletrabalho integral',[5,4,1,1,1,5,4,5,4,1,1,2,5,1,1,1,1,5]],
+      ['Masculino','40 a 50 anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Não exerce','> 12 anos','Híbrido',[4,3,4,3,2,4,3,4,5,3,4,3,5,3,1,1,1,4]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Presencial integral',[5,5,1,1,1,3,2,2,2,2,3,2,3,4,3,2,3,2]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão','Exerce atualmente','4 a 6 anos','Teletrabalho integral',[5,4,4,4,4,2,4,3,2,1,3,5,3,2,3,4,5,3]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Não exerce','Até 1 ano','Presencial integral',[3,2,3,3,1,3,3,1,5,3,1,3,5,1,1,1,1,1]],
+      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Híbrido',[5,5,1,1,1,5,3,3,4,2,2,1,3,1,1,3,1,5]],
+      ['Masculino','29 a 39 anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Não exerce','4 a 6 anos','Teletrabalho integral',[4,3,3,3,3,3,5,5,5,5,3,5,4,5,4,4,1,4]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Não exerce','Até 1 ano','Presencial integral',[3,2,4,4,3,2,5,3,5,1,1,1,3,1,1,1,4,2]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Não exerce','Até 1 ano','Presencial integral',[4,5,1,1,1,3,4,3,2,1,1,2,4,3,1,3,2,3]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica','Não exerce','10 a 12 anos','Teletrabalho integral',[3,4,2,2,3,3,3,4,4,2,2,2,4,2,2,2,1,1]],
+      ['Feminino','51 a 61 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Não exerce','> 12 anos','Presencial integral',[5,4,1,1,1,5,5,5,5,5,4,5,1,4,1,4,4,5]],
+      ['Masculino','29 a 39 anos','Norte','Universidade Federal','Graduação','Nível D (Médio)','Gestão','Exerce atualmente','> 12 anos','Presencial integral',[3,4,3,2,2,3,4,4,4,4,3,4,2,3,2,2,2,3]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Híbrido',[5,4,1,2,1,4,5,5,5,2,2,2,4,3,1,4,3,5]],
+      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Não exerce','7 a 9 anos','Teletrabalho integral',[4,3,3,2,1,5,3,4,3,2,4,3,1,1,1,3,1,5]],
+      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Não exerce','> 12 anos','Teletrabalho integral',[3,4,3,2,2,5,3,4,4,4,4,3,3,3,2,3,3,4]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Não exerce','Até 1 ano','Teletrabalho integral',[5,3,2,2,2,4,4,1,1,1,2,1,3,3,1,4,1,2]],
+      ['Masculino','29 a 39 anos','Norte','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica','Não exerce','> 12 anos','Teletrabalho integral',[1,1,1,1,3,1,2,1,1,1,5,1,5,1,1,1,1,1]],
+      ['Feminino','62 anos ou mais','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Presencial integral',[5,4,1,1,1,5,5,4,2,1,1,1,4,3,1,5,2,5]],
+      ['Masculino','29 a 39 anos','Nordeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Não exerce','7 a 9 anos','Teletrabalho integral',[3,1,3,3,3,3,5,4,4,3,1,3,5,1,1,1,2,2]],
+      ['Masculino','40 a 50 anos','Nordeste','Universidade Federal','Doutorado','Nível E (Superior)','Técnica','Exerce atualmente','> 12 anos','Teletrabalho integral',[1,1,5,5,4,2,3,5,5,4,5,4,4,2,1,2,2,2]],
+      ['Masculino','62 anos ou mais','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Exerce atualmente','> 12 anos','Híbrido',[5,4,1,1,1,5,5,5,3,3,2,2,5,5,5,5,5,5]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Híbrido',[4,3,5,3,2,4,3,2,4,3,5,5,4,1,3,4,1,2]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica','Não exerce','> 12 anos','Teletrabalho integral',[3,1,2,2,2,3,4,5,5,1,4,2,3,4,1,2,2,1]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Não exerce','Até 1 ano','Presencial integral',[5,4,2,1,1,5,5,3,2,2,3,3,3,3,1,5,5,5]],
+      ['Masculino','51 a 61 anos','Sul','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica','Não exerce','10 a 12 anos','Híbrido',[5,5,1,1,1,5,5,5,5,5,1,5,1,5,5,5,5,5]],
+      ['Masculino','29 a 39 anos','Nordeste','Universidade Federal','Mestrado','Nível D (Médio)','Gestão','Exerce atualmente','10 a 12 anos','Híbrido',[1,1,3,3,2,3,3,4,2,1,5,1,3,1,1,1,1,1]],
+      ['Masculino','40 a 50 anos','Centro-Oeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão','Exerce atualmente','4 a 6 anos','Presencial integral',[4,4,5,3,4,1,1,1,1,1,1,1,5,1,1,1,1,1]],
+      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Não exerce','> 12 anos','Híbrido',[4,5,2,1,1,5,4,3,2,4,2,4,4,2,3,5,2,5]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Doutorado','Nível D (Médio)','Gestão','Não exerce','> 12 anos','Híbrido',[4,3,2,2,2,5,4,4,5,3,3,5,5,1,1,4,2,4]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Doutorado','Nível E (Superior)','Técnica','Não exerce','1 a 3 anos','Teletrabalho integral',[5,5,1,1,1,5,5,3,5,1,1,1,5,1,1,5,3,4]],
+      ['Masculino','40 a 50 anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Não exerce','> 12 anos','Híbrido',[1,1,5,5,5,1,2,1,2,1,1,1,5,1,1,1,2,1]],
+      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica','Não exerce','> 12 anos','Híbrido',[2,3,5,5,3,1,3,4,5,4,4,4,4,4,4,1,1,2]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Exerce atualmente','1 a 3 anos','Híbrido',[5,3,1,1,1,5,5,5,5,3,3,3,1,5,5,5,5,5]],
+      ['Feminino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Não exerce','7 a 9 anos','Presencial integral',[3,5,1,1,1,5,5,5,5,2,1,1,4,1,1,1,1,4]],
+      ['Masculino','29 a 39 anos','Sudeste','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Técnica','Não exerce','10 a 12 anos','Presencial integral',[5,5,1,1,1,5,4,4,5,5,2,3,5,4,3,3,3,3]],
+      ['Masculino','40 a 50 anos','Norte','Universidade Federal','Especialização / MBA','Nível D (Médio)','Gestão','Não exerce','> 12 anos','Teletrabalho integral',[4,4,3,3,2,4,4,4,5,4,3,4,2,4,5,4,3,5]],
+      ['Masculino','40 a 50 anos','Sul','IF ou CEFET','Mestrado','Outro','Técnica','Não exerce','10 a 12 anos','Híbrido',[3,4,4,2,2,3,4,3,4,3,4,3,3,3,2,3,2,2]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Não exerce','1 a 3 anos','Teletrabalho integral',[4,4,4,4,3,2,4,3,5,4,1,5,3,4,2,1,1,1]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Presencial integral',[5,3,1,1,1,5,5,5,5,3,3,1,1,5,5,5,4,5]],
+      ['Masculino','29 a 39 anos','Centro-Oeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Não exerce','7 a 9 anos','Híbrido',[1,2,1,5,5,3,2,5,1,1,1,4,5,1,1,1,1,1]],
+      ['Masculino','51 a 61 anos','Centro-Oeste','Universidade Federal','Especialização / MBA','Nível D (Médio)','Gestão','Exerce atualmente','> 12 anos','Híbrido',[5,5,1,1,1,5,5,5,5,4,5,5,1,5,5,5,5,5]],
+      ['Masculino','29 a 39 anos','Norte','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Não exerce','1 a 3 anos','Híbrido',[2,4,3,3,2,4,2,1,5,4,1,2,4,1,1,4,1,3]],
+      ['Masculino','51 a 61 anos','Centro-Oeste','Universidade Federal','Mestrado','Nível D (Médio)','Gestão','Não exerce','> 12 anos','Híbrido',[1,4,2,2,2,4,4,2,3,1,2,2,5,1,1,2,1,2]],
+      ['Feminino','51 a 61 anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Híbrido',[4,2,2,2,2,4,4,2,3,2,3,3,3,2,2,3,2,3]],
+      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Não exerce','> 12 anos','Híbrido',[5,5,1,1,1,5,4,5,5,1,1,1,2,5,5,5,3,3]],
+      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Exerce atualmente','> 12 anos','Híbrido',[3,4,2,1,2,4,2,2,4,2,2,2,2,4,4,4,3,3]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Não exerce','> 12 anos','Híbrido',[4,3,1,1,1,4,3,5,5,3,1,3,3,4,4,3,3,4]],
+      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Exerce atualmente','7 a 9 anos','Presencial integral',[2,3,4,4,4,2,1,1,2,1,1,2,5,4,4,1,1,5]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Doutorado','Nível E (Superior)','Técnica','Não exerce','1 a 3 anos','Híbrido',[3,2,4,2,3,4,3,4,5,4,4,2,2,4,3,3,2,4]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Híbrido',[5,5,2,1,1,5,5,5,3,5,3,5,3,2,1,5,1,5]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Graduação','Nível D (Médio)','Técnica','Não exerce','1 a 3 anos','Híbrido',[4,4,1,2,2,5,5,5,4,3,2,3,2,1,1,4,1,4]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Não exerce','> 12 anos','Híbrido',[4,1,5,5,3,2,4,4,4,3,2,2,4,1,1,1,1,1]],
+      ['Masculino','51 a 61 anos','Sul','Universidade Federal','Doutorado','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Híbrido',[5,5,1,1,1,5,5,2,5,1,3,3,3,3,3,3,3,4]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Não exerce','1 a 3 anos','Presencial integral',[5,4,1,4,2,5,5,5,5,4,4,5,4,4,5,4,4,4]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica','Não exerce','4 a 6 anos','Presencial integral',[1,3,5,5,5,1,1,1,1,1,1,1,5,2,2,1,1,1]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Doutorado','Nível E (Superior)','Técnica','Não exerce','> 12 anos','Híbrido',[5,5,5,2,5,5,3,2,2,2,4,4,3,3,2,4,4,5]],
+      ['Masculino','29 a 39 anos','Nordeste','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica','Não exerce','1 a 3 anos','Híbrido',[5,4,2,2,2,5,4,2,1,4,2,4,3,3,2,3,3,3]],
+      ['Masculino','18 a 28 anos','Sudeste','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Técnica','Exerce atualmente','4 a 6 anos','Híbrido',[4,5,4,2,4,3,4,5,5,2,4,3,4,1,1,3,1,3]],
+      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Presencial integral',[5,5,5,4,1,3,4,1,3,3,4,1,2,3,2,3,4,3]],
+      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Gestão','Exerce atualmente','7 a 9 anos','Presencial integral',[4,4,2,2,2,4,4,3,5,4,2,3,3,2,2,3,2,1]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Não exerce','Até 1 ano','Presencial integral',[2,3,5,5,5,2,5,1,2,4,3,5,3,3,1,3,3,3]],
+      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Técnica','Não exerce','7 a 9 anos','Híbrido',[1,1,5,5,5,2,4,2,2,1,1,3,5,1,1,1,1,1]],
+      ['Masculino','29 a 39 anos','Centro-Oeste','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Gestão','Exerce atualmente','4 a 6 anos','Híbrido',[3,3,1,2,2,4,2,1,4,4,3,3,4,2,2,3,4,3]],
+      ['Masculino','29 a 39 anos','Norte','IF ou CEFET','Especialização / MBA','Nível E (Superior)','Técnica','Não exerce','7 a 9 anos','Híbrido',[4,4,2,2,1,5,4,3,3,1,1,3,5,1,1,1,1,5]],
+      ['Masculino','40 a 50 anos','Centro-Oeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Não exerce','> 12 anos','Presencial integral',[4,4,2,2,1,4,4,4,4,2,4,4,2,4,4,5,4,5]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Presencial integral',[4,2,2,1,1,5,4,5,3,1,3,1,2,4,3,3,3,4]],
+      ['Masculino','29 a 39 anos','Sudeste','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Gestão','Exerce atualmente','7 a 9 anos','Teletrabalho integral',[1,5,1,1,1,5,3,1,1,1,1,1,3,1,5,3,3,5]],
+      ['Masculino','29 a 39 anos','Sudeste','IF ou CEFET','Especialização / MBA','Nível E (Superior)','Gestão','Exerce atualmente','Até 1 ano','Presencial integral',[1,5,5,5,1,3,3,1,1,1,3,3,5,1,1,1,1,2]],
+      ['Masculino','51 a 61 anos','Centro-Oeste','IF ou CEFET','Graduação','Nível D (Médio)','Técnica','Não exerce','> 12 anos','Presencial integral',[2,5,2,3,5,2,1,1,5,5,4,4,5,1,5,1,1,2]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Doutorado','Nível D (Médio)','Gestão','Exerce atualmente','> 12 anos','Presencial integral',[5,3,3,3,2,4,4,3,3,2,2,3,3,3,1,2,2,2]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Teletrabalho integral',[4,4,1,1,1,5,5,5,4,1,1,2,1,4,4,4,4,4]],
+      ['Masculino','40 a 50 anos','Norte','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica','Não exerce','7 a 9 anos','Presencial integral',[1,2,3,3,3,2,3,4,5,2,2,2,3,1,1,2,1,2]],
+      ['Masculino','18 a 28 anos','Norte','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Técnica','Não exerce','1 a 3 anos','Presencial integral',[5,3,1,4,1,3,4,3,3,3,1,3,5,2,1,1,1,3]],
+      ['Masculino','40 a 50 anos','Norte','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Presencial integral',[5,3,1,1,1,5,3,3,3,4,3,3,1,1,1,5,3,4]],
+      ['Feminino','40 a 50 anos','Sudeste','Universidade Federal','Doutorado','Nível E (Superior)','Gestão','Exerce atualmente','> 12 anos','Híbrido',[3,4,2,3,3,2,2,3,5,5,5,5,5,5,5,2,1,4]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica','Não exerce','> 12 anos','Teletrabalho integral',[5,4,1,2,1,4,2,2,4,3,3,2,4,1,2,4,2,2]]
     ];
 
-    // Processamento da Etapa 1 (Inversão matemática 6 - x em ECO03, ECO04, ECO05 e ECO13 + médias exatas)
-    const RESPONDENTES_N77 = RAW_N77.map((row, idx) => {
-      const [genero, faixa_etaria, regiao, tipo_ifes, escolaridade, nivel_cargo, atuacao, fg_cd, tempo_servico, pgd, ecoRaw] = row;
-      // Aplica inversão nos índices 2 (ECO03), 3 (ECO04), 4 (ECO05) e 12 (ECO13)
-      const eco = ecoRaw.map((val, i) => (i === 2 || i === 3 || i === 4 || i === 12) ? (6 - val) : val);
+    // Índices 0-based dos itens negativos invertidos na Etapa 1: ECO03 (2), ECO04 (3), ECO05 (4), ECO13 (12)
+    const INVERT_IDX = new Set([2, 3, 4, 12]);
 
-      const afetivo = eco.slice(0, 6).reduce((a, b) => a + b, 0) / 6;
-      const instrumental = eco.slice(6, 12).reduce((a, b) => a + b, 0) / 6;
-      const normativo = eco.slice(12, 18).reduce((a, b) => a + b, 0) / 6;
-      const global = (afetivo + instrumental + normativo) / 3;
-
-      // Regra de sobre-educação do protocolo (76 de 77 = 98,7%; 1 caso 'Outro' não classificado como sobre-educado)
-      const sobre_educacao =
-        (nivel_cargo === 'Nível D (Médio)') ||
-        (nivel_cargo === 'Nível E (Superior)' && escolaridade !== 'Graduação');
+    const RESPONDENTES_N77 = RAW_N77.map((r, i) => {
+      const itens = r[10].map((v, idx) => (INVERT_IDX.has(idx) ? 6 - v : v));
+      const afetivo = mediaArray(itens.slice(0, 6));
+      const instrumental = mediaArray(itens.slice(6, 12));
+      const normativo = mediaArray(itens.slice(12, 18));
+      const global = mediaArray(itens);
+      const esc = r[4];
+      const cargo = r[5];
+      const sobreEducado =
+        cargo !== 'Outro' &&
+        ((cargo === 'Nível D (Médio)' && ['Graduação', 'Especialização / MBA', 'Mestrado', 'Doutorado'].includes(esc)) ||
+          (cargo === 'Nível E (Superior)' && ['Especialização / MBA', 'Mestrado', 'Doutorado'].includes(esc)));
 
       return {
-        id: idx + 1,
-        genero,
-        faixa_etaria,
-        regiao,
-        tipo_ifes,
-        escolaridade,
-        nivel_cargo,
-        atuacao,
-        fg_cd,
-        tempo_servico,
-        pgd,
-        sobre_educacao,
-        eco,
+        id: i + 1,
+        genero: r[0],
+        faixa: r[1],
+        regiao: r[2],
+        ifes: r[3],
+        escolaridade: esc,
+        cargo,
+        atuacao: r[6],
+        fgcd: r[7],
+        tempo: r[8],
+        pgd: r[9],
+        sobreEducado,
+        itens,
         afetivo,
         instrumental,
         normativo,
@@ -1187,17 +1405,61 @@
       };
     });
 
-    // Sincroniza as médias reais item a item (ECO01..ECO18) diretamente dos 77 respondentes
-    ITENS_ECO.forEach((item, idx) => {
-      item.media = RESPONDENTES_N77.reduce((sum, r) => sum + r.eco[idx], 0) / RESPONDENTES_N77.length;
-    });
+    const ECO_ITEMS_META = [
+      { code: 'ECO01', label: 'ECO01 – Feliz em dedicar carreira à IFES', dim: 'Afetivo', color: '#16537E' },
+      { code: 'ECO02', label: 'ECO02 – Problemas da IFES como meus [h²<0,40]', dim: 'Afetivo', color: '#16537E' },
+      { code: 'ECO03r', label: 'ECO03r – Senso de integração (inv.)', dim: 'Afetivo', color: '#16537E' },
+      { code: 'ECO04r', label: 'ECO04r – Vínculo emocional (inv.)', dim: 'Afetivo', color: '#16537E' },
+      { code: 'ECO05r', label: 'ECO05r – Sentir-se "pessoa de casa" (inv.)', dim: 'Afetivo', color: '#16537E' },
+      { code: 'ECO06', label: 'ECO06 – Imenso significado pessoal', dim: 'Afetivo', color: '#16537E' },
+      { code: 'ECO07', label: 'ECO07 – Ficar é necessidade e desejo', dim: 'Instrumental (Custo)', color: '#D97706' },
+      { code: 'ECO08', label: 'ECO08 – Difícil deixar a IFES agora', dim: 'Instrumental (Custo)', color: '#D97706' },
+      { code: 'ECO09', label: 'ECO09 – Vida ficaria desestruturada', dim: 'Instrumental (Custo)', color: '#D97706' },
+      { code: 'ECO10', label: 'ECO10 – Poucas alternativas se saísse', dim: 'Instrumental (Alternativas)', color: '#FB923C' },
+      { code: 'ECO11', label: 'ECO11 – Já dei muito de mim [h²<0,40]', dim: 'Instrumental (Alternativas)', color: '#FB923C' },
+      { code: 'ECO12', label: 'ECO12 – Escassez de alternativas imediatas', dim: 'Instrumental (Alternativas)', color: '#FB923C' },
+      { code: 'ECO13r', label: 'ECO13r – Obrigação de permanecer (inv.)', dim: 'Normativo', color: '#B91C1C' },
+      { code: 'ECO14', label: 'ECO14 – Não seria certo sair agora', dim: 'Normativo', color: '#B91C1C' },
+      { code: 'ECO15', label: 'ECO15 – Sentiria culpa se saísse', dim: 'Normativo', color: '#B91C1C' },
+      { code: 'ECO16', label: 'ECO16 – Instituição merece lealdade', dim: 'Normativo', color: '#B91C1C' },
+      { code: 'ECO17', label: 'ECO17 – Obrigação moral com pessoas', dim: 'Normativo', color: '#B91C1C' },
+      { code: 'ECO18', label: 'ECO18 – Devo muito à instituição', dim: 'Normativo', color: '#B91C1C' }
+    ];
+
+    // Tabela 3 do Relatório Final (PCA com rotação Varimax, n = 77)
+    const AFE_DATA = [
+      { item: 'ECO01', desc: 'Feliz em dedicar carreira à IFES', base: 'Afetivo', h2: 0.568, rc1: 0.670, rc2: 0.307, rc3: 0.159, fator: 'RC1', status: 'keep', decision: 'Manter' },
+      { item: 'ECO02', desc: 'Problemas da IFES como meus', base: 'Afetivo', h2: 0.388, rc1: 0.436, rc2: 0.421, rc3: -0.141, fator: 'RC1', status: 'exclude', decision: 'Excluir (h² < 0,40)' },
+      { item: 'ECO03r', desc: 'Senso de integração (inv.)', base: 'Afetivo', h2: 0.598, rc1: 0.767, rc2: 0.077, rc3: -0.059, fator: 'RC1', status: 'keep', decision: 'Manter' },
+      { item: 'ECO04r', desc: 'Vínculo emocional (inv.)', base: 'Afetivo', h2: 0.725, rc1: 0.807, rc2: 0.232, rc3: -0.139, fator: 'RC1', status: 'keep', decision: 'Manter' },
+      { item: 'ECO05r', desc: 'Sentir-se "pessoa de casa" (inv.)', base: 'Afetivo', h2: 0.689, rc1: 0.825, rc2: 0.086, rc3: -0.010, fator: 'RC1', status: 'keep', decision: 'Manter' },
+      { item: 'ECO06', desc: 'Imenso significado pessoal', base: 'Afetivo', h2: 0.778, rc1: 0.857, rc2: 0.190, rc3: 0.088, fator: 'RC1', status: 'keep', decision: 'Manter' },
+      { item: 'ECO07', desc: 'Ficar é necessidade e desejo', base: 'Instrumental', h2: 0.534, rc1: 0.615, rc2: -0.002, rc3: 0.395, fator: 'RC1*', status: 'migrated', decision: 'Manter (migrou p/ RC1)' },
+      { item: 'ECO08', desc: 'Difícil deixar a IFES agora', base: 'Instrumental', h2: 0.646, rc1: 0.486, rc2: -0.068, rc3: 0.636, fator: 'RC3', status: 'keep', decision: 'Manter' },
+      { item: 'ECO09', desc: 'Vida ficaria desestruturada', base: 'Instrumental', h2: 0.569, rc1: 0.240, rc2: -0.008, rc3: 0.715, fator: 'RC3', status: 'keep', decision: 'Manter' },
+      { item: 'ECO10', desc: 'Poucas alternativas se saísse', base: 'Instrumental', h2: 0.609, rc1: -0.046, rc2: 0.302, rc3: 0.718, fator: 'RC3', status: 'keep', decision: 'Manter' },
+      { item: 'ECO11', desc: 'Já dei muito de mim na IFES', base: 'Instrumental', h2: 0.347, rc1: -0.228, rc2: 0.347, rc3: 0.418, fator: 'RC3', status: 'exclude', decision: 'Excluir (h² < 0,40)' },
+      { item: 'ECO12', desc: 'Escassez de alternativas imediatas', base: 'Instrumental', h2: 0.582, rc1: -0.165, rc2: 0.285, rc3: 0.688, fator: 'RC3', status: 'keep', decision: 'Manter' },
+      { item: 'ECO13r', desc: 'Obrigação de permanecer (inv.)', base: 'Normativo', h2: 0.426, rc1: 0.361, rc2: 0.512, rc3: 0.181, fator: 'RC2', status: 'keep', decision: 'Manter' },
+      { item: 'ECO14', desc: 'Não seria certo sair agora', base: 'Normativo', h2: 0.616, rc1: 0.171, rc2: 0.707, rc3: 0.297, fator: 'RC2', status: 'keep', decision: 'Manter' },
+      { item: 'ECO15', desc: 'Sentiria culpa se saísse', base: 'Normativo', h2: 0.633, rc1: 0.045, rc2: 0.781, rc3: 0.144, fator: 'RC2', status: 'keep', decision: 'Manter' },
+      { item: 'ECO16', desc: 'Instituição merece lealdade', base: 'Normativo', h2: 0.682, rc1: 0.591, rc2: 0.559, rc3: 0.145, fator: 'RC1*', status: 'migrated', decision: 'Manter (carga cruzada)' },
+      { item: 'ECO17', desc: 'Obrigação moral com pessoas', base: 'Normativo', h2: 0.596, rc1: 0.354, rc2: 0.683, rc3: 0.058, fator: 'RC2', status: 'keep', decision: 'Manter' },
+      { item: 'ECO18', desc: 'Devo muito à instituição', base: 'Normativo', h2: 0.597, rc1: 0.634, rc2: 0.419, rc3: 0.139, fator: 'RC1*', status: 'migrated', decision: 'Manter (migrou p/ RC1)' }
+    ];
 
     // =========================================================================
-    // 4. CONTROLE DE ABAS E MODO APRESENTAÇÃO
+    // 4. CONTROLE DE ABAS, MODO SIMPLES E MODO APRESENTAÇÃO
     // =========================================================================
     const chartInstances = {};
+    let isSimpleMode = false;
+    let simpleChartsInitialized = false;
+    let activeTechnicalTab = 'tab-visao-geral';
 
     function switchTab(tabId) {
+      activeTechnicalTab = tabId;
+      if (isSimpleMode) return;
+
       document.querySelectorAll('.tab-panel').forEach(panel => {
         panel.classList.toggle('active', panel.id === tabId);
       });
@@ -1222,6 +1484,53 @@
           if (ch && typeof ch.resize === 'function') ch.resize();
         });
       }, 60);
+    }
+
+    function toggleSimpleMode() {
+      isSimpleMode = !isSimpleMode;
+      const simpleView = document.getElementById('simple-view');
+      const techNav = document.getElementById('technical-nav');
+      const btn = document.getElementById('btn-simple-mode');
+      const label = document.getElementById('label-simple-mode');
+      const iconEnter = document.getElementById('icon-simple-enter');
+      const iconExit = document.getElementById('icon-simple-exit');
+      const subtitle = document.getElementById('header-subtitle');
+
+      if (isSimpleMode) {
+        // Oculta abas e painéis técnicos, exibe visão simples
+        techNav.classList.add('hidden');
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        simpleView.classList.remove('hidden');
+
+        label.textContent = 'Visão Técnica';
+        iconEnter.classList.add('hidden');
+        iconExit.classList.remove('hidden');
+        btn.classList.remove('bg-white', 'text-furg-blue', 'hover:bg-furg-sky');
+        btn.classList.add('bg-furg-blue', 'text-white', 'hover:bg-furg-navy');
+        subtitle.innerHTML = 'Apresentação em linguagem acessível para todos os públicos (<span class="font-semibold text-slate-700">n = 77</span>)';
+
+        if (!simpleChartsInitialized) {
+          initSimpleCharts();
+          simpleChartsInitialized = true;
+        }
+      } else {
+        // Restaura visão técnica na última aba ativa
+        simpleView.classList.add('hidden');
+        techNav.classList.remove('hidden');
+        switchTab(activeTechnicalTab);
+
+        label.textContent = 'Simples';
+        iconEnter.classList.remove('hidden');
+        iconExit.classList.add('hidden');
+        btn.classList.remove('bg-furg-blue', 'text-white', 'hover:bg-furg-navy');
+        btn.classList.add('bg-white', 'text-furg-blue', 'hover:bg-furg-sky');
+        subtitle.innerHTML = 'Diagnóstico psicométrico e comparativo da carreira PCCTAE no Brasil (<span class="font-semibold text-slate-700">n = 77</span>)';
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        Object.values(chartInstances).forEach(ch => ch && ch.resize());
+      }, 80);
     }
 
     function togglePresentationMode() {
@@ -1257,38 +1566,36 @@
     });
 
     // =========================================================================
-    // 5. RENDERIZAÇÃO DOS GRÁFICOS — ABA 1 (VISÃO GERAL & INVERSÃO)
+    // 5. ABA 1 — GRÁFICOS VISÃO GERAL & INVERSÃO DA ECO
     // =========================================================================
     function initTab1Charts() {
-      // Gráfico 1: Comparativo Amostra Atual vs. Avelino (2024 – UFPI)
-      const ctxComp = document.getElementById('chart-comparativo-avelino').getContext('2d');
-      chartInstances.comparativo = new Chart(ctxComp, {
+      const mAfet = mediaArray(RESPONDENTES_N77.map(r => r.afetivo));
+      const mInst = mediaArray(RESPONDENTES_N77.map(r => r.instrumental));
+      const mNorm = mediaArray(RESPONDENTES_N77.map(r => r.normativo));
+      const mGlob = mediaArray(RESPONDENTES_N77.map(r => r.global));
+
+      chartInstances.comparativoAvelino = new Chart(document.getElementById('chart-comparativo-avelino'), {
         type: 'bar',
         data: {
-          labels: [
-            ['Afetivo', '(quer ficar)'],
-            ['Instrumental', '(precisa ficar)'],
-            ['Normativo', '(sente que deve)'],
-            ['Global', '(média geral)']
-          ],
+          labels: ['Afetivo\n(quer ficar)', 'Instrumental\n(precisa ficar)', 'Normativo\n(sente que deve)', 'ECO Global\n(média geral)'],
           datasets: [
             {
-              label: 'TI / IFES (Presente estudo, n = 77)',
-              data: [3.65, 3.08, 2.61, 3.11],
+              label: 'TI / IFES (2026, n = 77)',
+              data: [mAfet, mInst, mNorm, mGlob],
               backgroundColor: ['#16537E', '#D97706', '#B91C1C', '#0B2E4E'],
               borderRadius: 6,
-              barPercentage: 0.78,
-              categoryPercentage: 0.65
+              barPercentage: 0.8,
+              categoryPercentage: 0.68
             },
             {
-              label: 'TAEs Gerais / UFPI (Avelino, 2024, n = 281)',
+              label: 'TAEs UFPI (Avelino, 2024, n = 281)',
               data: [3.72, 4.47, 3.19, 3.35],
               backgroundColor: '#CBD5E1',
               borderColor: '#64748B',
               borderWidth: 1.5,
               borderRadius: 6,
-              barPercentage: 0.78,
-              categoryPercentage: 0.65
+              barPercentage: 0.8,
+              categoryPercentage: 0.68
             }
           ]
         },
@@ -1300,40 +1607,22 @@
             y: {
               min: 0,
               max: 5,
-              ticks: {
-                stepSize: 1,
-                callback: (v) => fmtBR(v, 1),
-                font: { size: 12 }
-              },
+              ticks: { stepSize: 1, callback: (v) => fmtBR(v, 1) },
               grid: { color: '#E2E8F0' },
-              title: {
-                display: true,
-                text: 'Escore Médio (Escala Likert 1 a 5)',
-                font: { size: 12, weight: '600' },
-                color: '#475569'
-              }
+              title: { display: true, text: 'Escore Médio (Likert 1 a 5)', font: { size: 11, weight: '600' } }
             },
             x: {
               grid: { display: false },
-              ticks: { font: { size: 12, weight: '600' }, color: '#1E293B' }
+              ticks: { font: { size: 11, weight: '600' }, color: '#1E293B' }
             }
           },
           plugins: {
             legend: { display: false },
-            referenceLinePlugin: {
-              axis: 'y',
-              value: 3.0,
-              color: '#0F172A',
-              label: 'Ponto de corte: 3,00 (Luz et al., 2018)'
-            },
-            valueLabelsPlugin: {
-              enabled: true,
-              font: '700 12px Inter, sans-serif',
-              formatter: (v) => fmtBR(v, 2)
-            },
+            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Ponto de corte (3,00)' },
+            valueLabelsPlugin: { enabled: true, font: '700 11px Inter, sans-serif' },
             tooltip: {
               backgroundColor: '#0B2E4E',
-              padding: 12,
+              padding: 10,
               callbacks: {
                 label: (ctx) => ` ${ctx.dataset.label}: ${fmtBR(ctx.raw, 2)}`
               }
@@ -1342,86 +1631,51 @@
         }
       });
 
-      // Gráfico 2: Item a Item Horizontal (ECO01 a ECO18)
-      const ctxItens = document.getElementById('chart-itens-eco').getContext('2d');
-      const itemColors = ITENS_ECO.map(item => {
-        if (item.sub === 'Afetivo') return '#16537E';
-        if (item.sub === 'Inst-Custo') return '#D97706';
-        if (item.sub === 'Inst-Alt') return '#FB923C';
-        return '#B91C1C';
-      });
+      const itemMeans = ECO_ITEMS_META.map((meta, idx) =>
+        mediaArray(RESPONDENTES_N77.map(r => r.itens[idx]))
+      );
 
-      chartInstances.itensEco = new Chart(ctxItens, {
+      chartInstances.itensEco = new Chart(document.getElementById('chart-itens-eco'), {
         type: 'bar',
         data: {
-          labels: ITENS_ECO.map(i => `${i.id} – ${i.desc}${i.status === 'exclude' ? ' [h²<0,40]' : ''}`),
+          labels: ECO_ITEMS_META.map(m => m.label),
           datasets: [{
             label: 'Média do Item (n = 77)',
-            data: ITENS_ECO.map(i => i.media),
-            backgroundColor: itemColors,
+            data: itemMeans,
+            backgroundColor: ECO_ITEMS_META.map(m => m.color),
             borderRadius: 4,
-            barThickness: 17
+            barThickness: 18
           }]
         },
         options: {
           indexAxis: 'y',
           responsive: true,
           maintainAspectRatio: false,
-          layout: { padding: { right: 44 } },
+          layout: { padding: { right: 42 } },
           scales: {
             x: {
               min: 1,
               max: 4.5,
-              ticks: {
-                stepSize: 0.5,
-                callback: (v) => fmtBR(v, 1),
-                font: { size: 11 }
-              },
+              ticks: { stepSize: 0.5, callback: (v) => fmtBR(v, 1) },
               grid: { color: '#E2E8F0' },
-              title: {
-                display: true,
-                text: 'Escore Médio (Escala Likert 1 a 5)',
-                font: { size: 12, weight: '600' },
-                color: '#475569'
-              }
+              title: { display: true, text: 'Escore Médio (Escala Likert 1 a 5)', font: { size: 11, weight: '600' } }
             },
             y: {
               grid: { display: false },
-              ticks: {
-                font: { size: 11, weight: '500' },
-                color: '#1E293B'
-              }
+              ticks: { font: { size: 11, weight: '500' }, color: '#1E293B' }
             }
           },
           plugins: {
             legend: { display: false },
-            referenceLinePlugin: {
-              axis: 'x',
-              value: 3.0,
-              color: '#0F172A',
-              label: 'Corte 3,00'
-            },
-            valueLabelsPlugin: {
-              enabled: true,
-              font: '700 11px Inter, sans-serif',
-              formatter: (v) => fmtBR(v, 2)
-            },
+            referenceLinePlugin: { axis: 'x', value: 3.0, color: '#0F172A', label: 'Corte 3,00' },
+            valueLabelsPlugin: { enabled: true, font: '700 11px Inter, sans-serif' },
             tooltip: {
               backgroundColor: '#0B2E4E',
-              padding: 12,
+              padding: 10,
               callbacks: {
-                title: (items) => {
-                  const item = ITENS_ECO[items[0].dataIndex];
-                  return `${item.id} (${item.base})`;
-                },
                 label: (ctx) => {
-                  const item = ITENS_ECO[ctx.dataIndex];
-                  const linhas = [
-                    ` Média: ${fmtBR(item.media, 2)}`,
-                    ` Classificação: ${item.media > 3 ? 'Comprometido (> 3,0)' : 'Não comprometido (< 3,0)'}`,
-                    ` AFE: h² = ${fmtBR(item.h2, 3)} | ${item.decisao}`
-                  ];
-                  return linhas;
+                  const meta = ECO_ITEMS_META[ctx.dataIndex];
+                  return ` ${meta.dim}: ${fmtBR(ctx.raw, 2)} (${ctx.raw >= 3 ? 'Acima do corte' : 'Abaixo do corte'})`;
                 }
               }
             }
@@ -1431,47 +1685,145 @@
     }
 
     // =========================================================================
-    // 6. FILTROS DINÂMICOS E GRÁFICOS — ABA 2 (PERFIL)
+    // 6. ABA 2 — PERFIL & FILTROS DINÂMICOS
     // =========================================================================
-    function updateStatusBadge(elId, val) {
+    function initTab2Charts() {
+      const commonBarOpts = (horizontal = false) => ({
+        indexAxis: horizontal ? 'y' : 'x',
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: { padding: horizontal ? { right: 36 } : { top: 22 } },
+        scales: {
+          x: {
+            grid: { display: horizontal, color: '#E2E8F0' },
+            ticks: { precision: 0, font: { size: 11 } }
+          },
+          y: {
+            grid: { display: !horizontal, color: '#E2E8F0' },
+            ticks: { precision: 0, font: { size: 11, weight: '600' } }
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          valueLabelsPlugin: { enabled: true, decimals: 0, font: '700 11px Inter, sans-serif' },
+          tooltip: {
+            backgroundColor: '#0B2E4E',
+            padding: 10,
+            callbacks: {
+              label: (ctx) => {
+                const total = ctx.dataset.data.reduce((a, b) => a + b, 0) || 1;
+                const pct = (ctx.raw / total) * 100;
+                return ` ${ctx.raw} servidor(es) (${fmtBR(pct, 1)}%)`;
+              }
+            }
+          }
+        }
+      });
+
+      chartInstances.distGenero = new Chart(document.getElementById('chart-dist-genero'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Masculino', 'Feminino'],
+          datasets: [{
+            data: [0, 0],
+            backgroundColor: ['#0B2E4E', '#D97706'],
+            borderWidth: 2,
+            borderColor: '#FFFFFF'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '58%',
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 12, weight: '600' } } },
+            tooltip: {
+              backgroundColor: '#0B2E4E',
+              padding: 10,
+              callbacks: {
+                label: (ctx) => {
+                  const total = ctx.dataset.data.reduce((a, b) => a + b, 0) || 1;
+                  return ` ${ctx.label}: ${ctx.raw} (${fmtBR((ctx.raw / total) * 100, 1)}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      chartInstances.distEscolaridade = new Chart(document.getElementById('chart-dist-escolaridade'), {
+        type: 'bar',
+        data: {
+          labels: ['Graduação', 'Especialização / MBA', 'Mestrado', 'Doutorado'],
+          datasets: [{
+            data: [0, 0, 0, 0],
+            backgroundColor: ['#94A3B8', '#16537E', '#0B2E4E', '#D97706'],
+            borderRadius: 6
+          }]
+        },
+        options: commonBarOpts(false)
+      });
+
+      chartInstances.distPgd = new Chart(document.getElementById('chart-dist-pgd'), {
+        type: 'bar',
+        data: {
+          labels: ['Híbrido', 'Presencial integral', 'Teletrabalho integral'],
+          datasets: [{
+            data: [0, 0, 0],
+            backgroundColor: ['#16537E', '#64748B', '#0F766E'],
+            borderRadius: 6
+          }]
+        },
+        options: commonBarOpts(false)
+      });
+
+      chartInstances.distRegiao = new Chart(document.getElementById('chart-dist-regiao'), {
+        type: 'bar',
+        data: {
+          labels: ['Sudeste', 'Sul', 'Nordeste', 'Norte', 'Centro-Oeste'],
+          datasets: [{
+            data: [0, 0, 0, 0, 0],
+            backgroundColor: ['#0B2E4E', '#16537E', '#2563EB', '#D97706', '#64748B'],
+            borderRadius: 6
+          }]
+        },
+        options: commonBarOpts(true)
+      });
+
+      applyFilters();
+    }
+
+    function updateDynamicBadge(elId, val) {
       const el = document.getElementById(elId);
+      if (!el) return;
       if (val > 3.0) {
-        el.textContent = 'Comprometido (> 3,0)';
+        el.textContent = 'Comprometido';
         el.className = 'px-2 py-0.5 text-[10px] font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200';
       } else {
-        el.textContent = 'Não comprometido (< 3,0)';
+        el.textContent = 'Não comprometido';
         el.className = 'px-2 py-0.5 text-[10px] font-semibold rounded-full bg-red-50 text-furg-red border border-red-200';
       }
     }
 
-    function countBy(arr, key, orderedKeys) {
-      const map = {};
-      orderedKeys.forEach(k => { map[k] = 0; });
-      arr.forEach(item => {
-        if (map[item[key]] !== undefined) map[item[key]]++;
-      });
-      return orderedKeys.map(k => map[k]);
-    }
-
     function applyFilters() {
-      const regiao = document.getElementById('f-regiao').value;
-      const ifes = document.getElementById('f-ifes').value;
-      const pgd = document.getElementById('f-pgd').value;
-      const fgcd = document.getElementById('f-fgcd').value;
-      const cargo = document.getElementById('f-cargo').value;
+      const fRegiao = document.getElementById('f-regiao').value;
+      const fIfes = document.getElementById('f-ifes').value;
+      const fPgd = document.getElementById('f-pgd').value;
+      const fFgcd = document.getElementById('f-fgcd').value;
+      const fCargo = document.getElementById('f-cargo').value;
 
-      const filtered = RESPONDENTES_N77.filter(r =>
-        (regiao === 'Todos' || r.regiao === regiao) &&
-        (ifes === 'Todos' || r.tipo_ifes === ifes) &&
-        (pgd === 'Todos' || r.pgd === pgd) &&
-        (fgcd === 'Todos' || r.fg_cd === fgcd) &&
-        (cargo === 'Todos' || r.nivel_cargo === cargo)
+      const filtrados = RESPONDENTES_N77.filter(r =>
+        (fRegiao === 'Todos' || r.regiao === fRegiao) &&
+        (fIfes === 'Todos' || r.ifes === fIfes) &&
+        (fPgd === 'Todos' || r.pgd === fPgd) &&
+        (fFgcd === 'Todos' || r.fgcd === fFgcd) &&
+        (fCargo === 'Todos' || r.cargo === fCargo)
       );
 
-      const n = filtered.length;
+      const n = filtrados.length;
       const pct = (n / RESPONDENTES_N77.length) * 100;
       document.getElementById('filter-status-badge').textContent =
-        `Exibindo ${n} de 77 respondentes (${fmtPctBR(pct)})`;
+        `Exibindo ${n} de ${RESPONDENTES_N77.length} respondentes (${fmtBR(pct, 1)}%)`;
 
       const emptyAlert = document.getElementById('empty-filter-alert');
       const kpisGrid = document.getElementById('filtered-kpis-grid');
@@ -1479,63 +1831,49 @@
 
       if (n === 0) {
         emptyAlert.classList.remove('hidden');
-        kpisGrid.classList.add('opacity-40');
-        chartsGrid.classList.add('opacity-40');
-        document.getElementById('dyn-n').textContent = '0';
-        document.getElementById('dyn-pct').textContent = '0,0% da amostra';
-        ['dyn-global', 'dyn-afetivo', 'dyn-instrumental', 'dyn-normativo'].forEach(id => {
-          document.getElementById(id).textContent = '—';
-        });
+        kpisGrid.classList.add('hidden');
+        chartsGrid.classList.add('hidden');
         return;
       }
 
       emptyAlert.classList.add('hidden');
-      kpisGrid.classList.remove('opacity-40');
-      chartsGrid.classList.remove('opacity-40');
+      kpisGrid.classList.remove('hidden');
+      chartsGrid.classList.remove('hidden');
 
-      const meanA = filtered.reduce((s, r) => s + r.afetivo, 0) / n;
-      const meanI = filtered.reduce((s, r) => s + r.instrumental, 0) / n;
-      const meanN = filtered.reduce((s, r) => s + r.normativo, 0) / n;
-      const meanG = (meanA + meanI + meanN) / 3;
-      const sobreCount = filtered.filter(r => r.sobre_educacao).length;
-      const sobrePct = (sobreCount / n) * 100;
+      const mGlob = mediaArray(filtrados.map(r => r.global));
+      const mAfet = mediaArray(filtrados.map(r => r.afetivo));
+      const mInst = mediaArray(filtrados.map(r => r.instrumental));
+      const mNorm = mediaArray(filtrados.map(r => r.normativo));
 
-      document.getElementById('dyn-n').textContent = String(n);
-      document.getElementById('dyn-pct').textContent = `${fmtPctBR(pct)} da amostra`;
-      document.getElementById('dyn-global').textContent = fmtBR(meanG, 2);
-      document.getElementById('dyn-afetivo').textContent = fmtBR(meanA, 2);
-      document.getElementById('dyn-instrumental').textContent = fmtBR(meanI, 2);
-      document.getElementById('dyn-normativo').textContent = fmtBR(meanN, 2);
-      document.getElementById('badge-sobre-educacao').textContent = `Sobre-educação: ${fmtPctBR(sobrePct)}`;
+      document.getElementById('dyn-n').textContent = n;
+      document.getElementById('dyn-pct').textContent = `${fmtBR(pct, 1)}% da amostra`;
+      document.getElementById('dyn-global').textContent = fmtBR(mGlob, 2);
+      document.getElementById('dyn-afetivo').textContent = fmtBR(mAfet, 2);
+      document.getElementById('dyn-instrumental').textContent = fmtBR(mInst, 2);
+      document.getElementById('dyn-normativo').textContent = fmtBR(mNorm, 2);
 
-      updateStatusBadge('dyn-badge-global', meanG);
-      updateStatusBadge('dyn-badge-afetivo', meanA);
-      updateStatusBadge('dyn-badge-instrumental', meanI);
-      updateStatusBadge('dyn-badge-normativo', meanN);
+      updateDynamicBadge('dyn-badge-global', mGlob);
+      updateDynamicBadge('dyn-badge-afetivo', mAfet);
+      updateDynamicBadge('dyn-badge-instrumental', mInst);
+      updateDynamicBadge('dyn-badge-normativo', mNorm);
 
-      // Atualiza os 4 gráficos de distribuição
-      const generoKeys = ['Masculino', 'Feminino'];
-      const escKeys = ['Especialização / MBA', 'Mestrado', 'Doutorado', 'Graduação'];
-      const pgdKeys = ['Híbrido', 'Presencial integral', 'Teletrabalho integral'];
-      const regKeys = ['Sudeste', 'Sul', 'Nordeste', 'Norte', 'Centro-Oeste'];
+      const sobreCount = filtrados.filter(r => r.sobreEducado).length;
+      document.getElementById('badge-sobre-educacao').textContent =
+        `Sobre-educação: ${fmtBR((sobreCount / n) * 100, 1)}%`;
 
-      updateDistChart('distGenero', generoKeys, countBy(filtered, 'genero', generoKeys), n);
-      updateDistChart('distEscolaridade', escKeys, countBy(filtered, 'escolaridade', escKeys), n);
-      updateDistChart('distPgd', pgdKeys, countBy(filtered, 'pgd', pgdKeys), n);
-      updateDistChart('distRegiao', regKeys, countBy(filtered, 'regiao', regKeys), n);
-    }
+      const countBy = (list, key, cats) => cats.map(c => list.filter(x => x[key] === c).length);
 
-    function updateDistChart(instanceKey, labels, values, totalN) {
-      const ch = chartInstances[instanceKey];
-      if (!ch) return;
-      ch.data.labels = labels;
-      ch.data.datasets[0].data = values;
-      ch.options.plugins.tooltip.callbacks.label = (ctx) => {
-        const v = ctx.raw;
-        const p = totalN > 0 ? (v / totalN) * 100 : 0;
-        return ` ${v} servidores (${fmtPctBR(p)})`;
-      };
-      ch.update();
+      chartInstances.distGenero.data.datasets[0].data = countBy(filtrados, 'genero', ['Masculino', 'Feminino']);
+      chartInstances.distGenero.update();
+
+      chartInstances.distEscolaridade.data.datasets[0].data = countBy(filtrados, 'escolaridade', ['Graduação', 'Especialização / MBA', 'Mestrado', 'Doutorado']);
+      chartInstances.distEscolaridade.update();
+
+      chartInstances.distPgd.data.datasets[0].data = countBy(filtrados, 'pgd', ['Híbrido', 'Presencial integral', 'Teletrabalho integral']);
+      chartInstances.distPgd.update();
+
+      chartInstances.distRegiao.data.datasets[0].data = countBy(filtrados, 'regiao', ['Sudeste', 'Sul', 'Nordeste', 'Norte', 'Centro-Oeste']);
+      chartInstances.distRegiao.update();
     }
 
     function resetFilters() {
@@ -1545,310 +1883,206 @@
       applyFilters();
     }
 
-    function initTab2Charts() {
-      // 1. Gênero (Doughnut)
-      chartInstances.distGenero = new Chart(document.getElementById('chart-dist-genero'), {
-        type: 'doughnut',
-        data: {
-          labels: ['Masculino', 'Feminino'],
-          datasets: [{
-            data: [72, 5],
-            backgroundColor: ['#0B2E4E', '#D97706'],
-            borderWidth: 2,
-            borderColor: '#FFFFFF'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          cutout: '62%',
-          plugins: {
-            legend: { position: 'bottom', labels: { padding: 16, font: { size: 12, weight: '600' } } },
-            tooltip: { backgroundColor: '#0B2E4E', padding: 10 }
-          }
-        }
-      });
-
-      // 2. Escolaridade (Bar)
-      chartInstances.distEscolaridade = new Chart(document.getElementById('chart-dist-escolaridade'), {
-        type: 'bar',
-        data: {
-          labels: ['Especialização / MBA', 'Mestrado', 'Doutorado', 'Graduação'],
-          datasets: [{
-            label: 'Respondentes',
-            data: [39, 26, 9, 3],
-            backgroundColor: ['#16537E', '#0B2E4E', '#0F766E', '#94A3B8'],
-            borderRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          layout: { padding: { top: 20 } },
-          scales: {
-            y: { beginAtZero: true, grid: { color: '#F1F5F9' }, ticks: { precision: 0 } },
-            x: { grid: { display: false }, ticks: { font: { size: 11, weight: '500' } } }
-          },
-          plugins: {
-            legend: { display: false },
-            valueLabelsPlugin: { enabled: true, formatter: (v) => String(v) },
-            tooltip: { backgroundColor: '#0B2E4E', padding: 10 }
-          }
-        }
-      });
-
-      // 3. PGD (Doughnut)
-      chartInstances.distPgd = new Chart(document.getElementById('chart-dist-pgd'), {
-        type: 'doughnut',
-        data: {
-          labels: ['Híbrido', 'Presencial integral', 'Teletrabalho integral'],
-          datasets: [{
-            data: [33, 26, 18],
-            backgroundColor: ['#16537E', '#64748B', '#0F766E'],
-            borderWidth: 2,
-            borderColor: '#FFFFFF'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          cutout: '62%',
-          plugins: {
-            legend: { position: 'bottom', labels: { padding: 14, font: { size: 12, weight: '600' } } },
-            tooltip: { backgroundColor: '#0B2E4E', padding: 10 }
-          }
-        }
-      });
-
-      // 4. Macrorregião (Horizontal Bar)
-      chartInstances.distRegiao = new Chart(document.getElementById('chart-dist-regiao'), {
-        type: 'bar',
-        data: {
-          labels: ['Sudeste', 'Sul', 'Nordeste', 'Norte', 'Centro-Oeste'],
-          datasets: [{
-            label: 'Respondentes',
-            data: [31, 22, 9, 8, 7],
-            backgroundColor: ['#0B2E4E', '#16537E', '#2B6CB0', '#4A90A4', '#64748B'],
-            borderRadius: 6
-          }]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          layout: { padding: { right: 32 } },
-          scales: {
-            x: { beginAtZero: true, grid: { color: '#F1F5F9' }, ticks: { precision: 0 } },
-            y: { grid: { display: false }, ticks: { font: { size: 12, weight: '600' } } }
-          },
-          plugins: {
-            legend: { display: false },
-            valueLabelsPlugin: { enabled: true, formatter: (v) => String(v) },
-            tooltip: { backgroundColor: '#0B2E4E', padding: 10 }
-          }
-        }
-      });
-
-      applyFilters();
-    }
-
     // =========================================================================
-    // 7. TABELA INTERATIVA DE PSICOMETRIA & AFE — ABA 3
+    // 7. ABA 3 — TABELA INTERATIVA DE CARGAS FATORIAIS (AFE / VARIMAX)
     // =========================================================================
-    function renderAfeTable(filterMode = 'all') {
+    function renderAfeTable(filterKey = 'all') {
       const tbody = document.getElementById('afe-table-body');
-      tbody.innerHTML = '';
-
-      const rows = ITENS_ECO.filter(item => {
-        if (filterMode === 'all') return true;
-        if (filterMode === 'keep') return item.status !== 'exclude';
-        if (filterMode === 'exclude') return item.status === 'exclude';
-        if (filterMode === 'migrated') return item.status === 'migrated';
+      const rows = AFE_DATA.filter(r => {
+        if (filterKey === 'all') return true;
+        if (filterKey === 'keep') return r.status !== 'exclude';
+        if (filterKey === 'exclude') return r.status === 'exclude';
+        if (filterKey === 'migrated') return r.status === 'migrated';
         return true;
       });
 
-      rows.forEach(item => {
-        const isExcl = item.status === 'exclude';
-        const isMigr = item.status === 'migrated';
+      const fmtLoad = (val) => {
+        const strong = Math.abs(val) >= 0.50;
+        return `<span class="${strong ? 'font-bold text-furg-navy' : 'text-slate-400'}">${fmtBR(val, 3)}</span>`;
+      };
 
-        let rowBg = 'hover:bg-slate-50';
-        if (isExcl) rowBg = 'bg-red-50/70 hover:bg-red-50';
-        else if (isMigr) rowBg = 'bg-amber-50/60 hover:bg-amber-50';
+      tbody.innerHTML = rows.map(r => {
+        const rowBg = r.status === 'exclude'
+          ? 'bg-red-50/60 hover:bg-red-50'
+          : r.status === 'migrated'
+            ? 'bg-amber-50/60 hover:bg-amber-50'
+            : 'hover:bg-slate-50';
 
-        const fmtLoad = (val) => {
-          const bold = Math.abs(val) >= 0.50 ? 'font-bold text-furg-navy bg-furg-sky/70 px-1.5 py-0.5 rounded' : 'text-slate-500';
-          return `<span class="${bold}">${fmtBR(val, 3)}</span>`;
-        };
+        const decisionBadge = r.status === 'exclude'
+          ? '<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-red-100 text-furg-red">Excluir (h² &lt; 0,40)</span>'
+          : r.status === 'migrated'
+            ? `<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-900">${r.decision}</span>`
+            : '<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700">Manter</span>';
 
-        let badgeDecisao = `<span class="inline-flex px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">${item.decisao}</span>`;
-        if (isExcl) {
-          badgeDecisao = `<span class="inline-flex px-2 py-0.5 rounded-full text-[11px] font-semibold bg-red-100 text-furg-red border border-red-200">${item.decisao}</span>`;
-        } else if (isMigr) {
-          badgeDecisao = `<span class="inline-flex px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-900 border border-amber-300">${item.decisao}</span>`;
-        }
-
-        const tr = document.createElement('tr');
-        tr.className = `${rowBg} transition-colors`;
-        tr.innerHTML = `
-          <td class="py-3 px-4 font-bold text-furg-navy whitespace-nowrap">${item.id}</td>
-          <td class="py-3 px-4 text-slate-700">${item.desc}</td>
-          <td class="py-3 px-4 text-slate-600 whitespace-nowrap">${item.base}</td>
-          <td class="py-3 px-4 text-right font-mono ${item.h2 < 0.4 ? 'font-bold text-furg-red' : 'text-slate-700'}">${fmtBR(item.h2, 3)}</td>
-          <td class="py-3 px-4 text-right font-mono">${fmtLoad(item.rc1)}</td>
-          <td class="py-3 px-4 text-right font-mono">${fmtLoad(item.rc2)}</td>
-          <td class="py-3 px-4 text-right font-mono">${fmtLoad(item.rc3)}</td>
-          <td class="py-3 px-4 text-center font-bold ${isMigr ? 'text-amber-800' : 'text-slate-700'}">${item.fator}</td>
-          <td class="py-3 px-4 whitespace-nowrap">${badgeDecisao}</td>
+        return `
+          <tr class="${rowBg} transition-colors">
+            <td class="py-2.5 px-4 font-bold text-furg-navy whitespace-nowrap">${r.item}</td>
+            <td class="py-2.5 px-4 text-slate-700">${r.desc}</td>
+            <td class="py-2.5 px-4 text-slate-600 whitespace-nowrap">${r.base}</td>
+            <td class="py-2.5 px-4 text-right font-semibold ${r.h2 < 0.40 ? 'text-furg-red' : 'text-slate-800'}">${fmtBR(r.h2, 3)}</td>
+            <td class="py-2.5 px-4 text-right">${fmtLoad(r.rc1)}</td>
+            <td class="py-2.5 px-4 text-right">${fmtLoad(r.rc2)}</td>
+            <td class="py-2.5 px-4 text-right">${fmtLoad(r.rc3)}</td>
+            <td class="py-2.5 px-4 text-center font-bold text-furg-blue">${r.fator}</td>
+            <td class="py-2.5 px-4 whitespace-nowrap">${decisionBadge}</td>
+          </tr>
         `;
-        tbody.appendChild(tr);
-      });
+      }).join('');
     }
 
-    function filterAfeTable(mode) {
+    function filterAfeTable(filterKey) {
+      renderAfeTable(filterKey);
       document.querySelectorAll('.afe-filter-btn').forEach(btn => {
-        const active = btn.dataset.afe === mode;
+        const active = btn.dataset.afe === filterKey;
         if (active) {
-          btn.classList.add('ring-2', 'ring-offset-1', 'ring-furg-navy');
+          btn.className = 'afe-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-furg-navy text-white transition-colors';
+        } else if (btn.dataset.afe === 'exclude') {
+          btn.className = 'afe-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-50 text-furg-red hover:bg-red-100 transition-colors';
+        } else if (btn.dataset.afe === 'migrated') {
+          btn.className = 'afe-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-800 hover:bg-amber-100 transition-colors';
         } else {
-          btn.classList.remove('ring-2', 'ring-offset-1', 'ring-furg-navy');
+          btn.className = 'afe-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors';
         }
       });
-      renderAfeTable(mode);
     }
 
     // =========================================================================
-    // 8. GRÁFICOS DE FATORES ASSOCIADOS — ABA 4
+    // 8. ABA 4 — FATORES ASSOCIADOS (FAIXA ETÁRIA, TEMPO, FG/CD, PGD)
     // =========================================================================
     function initTab4Charts() {
-      // 1. Progressão por Faixa Etária (Figura 3)
+      // 1. Progressão por Faixa Etária (calculada diretamente sobre RESPONDENTES_N77)
+      const faixas = ['18 a 28 anos', '29 a 39 anos', '40 a 50 anos', '51 a 61 anos', '62 anos ou mais'];
+      const faixaLabels = faixas.map(f => {
+        const cnt = RESPONDENTES_N77.filter(r => r.faixa === f).length;
+        return `${f}\n(n=${cnt})`;
+      });
+      const meanByFaixa = (prop) => faixas.map(f => mediaArray(RESPONDENTES_N77.filter(r => r.faixa === f).map(r => r[prop])));
+
       chartInstances.faixaEtaria = new Chart(document.getElementById('chart-faixa-etaria'), {
         type: 'line',
         data: {
-          labels: ['18–28\n(n=2)', '29–39\n(n=29)', '40–50\n(n=32)', '51–61\n(n=12)', '62+\n(n=2)'],
+          labels: faixaLabels,
           datasets: [
             {
               label: 'ECO Afetivo (p = 0,064)',
-              data: [3.58, 3.33, 3.64, 4.24, 4.83],
+              data: meanByFaixa('afetivo'),
               borderColor: '#16537E',
               backgroundColor: '#16537E',
               borderWidth: 2.5,
               pointRadius: 5,
-              tension: 0.2,
-              labelOffsetY: -8
+              tension: 0.2
             },
             {
               label: 'ECO Global (p = 0,026*)',
-              data: [2.86, 2.78, 3.19, 3.64, 3.78],
+              data: meanByFaixa('global'),
               borderColor: '#0B2E4E',
               backgroundColor: '#0B2E4E',
+              borderWidth: 3,
               borderDash: [6, 4],
-              borderWidth: 2.5,
               pointRadius: 5,
-              pointStyle: 'rect',
-              tension: 0.2,
-              labelOffsetY: -8
+              tension: 0.2
             },
             {
               label: 'ECO Normativo (p = 0,022*)',
-              data: [1.67, 2.23, 2.68, 3.32, 3.67],
+              data: meanByFaixa('normativo'),
               borderColor: '#B91C1C',
               backgroundColor: '#B91C1C',
-              borderDash: [3, 3],
               borderWidth: 2.5,
+              borderDash: [3, 3],
               pointRadius: 5,
-              pointStyle: 'triangle',
-              tension: 0.2,
-              labelOffsetY: 14
+              tension: 0.2
             }
           ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          layout: { padding: { top: 20, right: 16 } },
+          layout: { padding: { top: 18, right: 12 } },
           scales: {
             y: {
-              min: 1.2,
-              max: 5.2,
-              ticks: { callback: (v) => fmtBR(v, 1) },
+              min: 1.5,
+              max: 5.0,
+              ticks: { stepSize: 0.5, callback: (v) => fmtBR(v, 1) },
               grid: { color: '#E2E8F0' }
             },
             x: {
               grid: { display: false },
-              ticks: { font: { size: 11, weight: '600' } }
+              ticks: { font: { size: 10, weight: '600' } }
             }
           },
           plugins: {
-            legend: { position: 'bottom', labels: { usePointStyle: true, padding: 14, font: { size: 11, weight: '600' } } },
-            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Corte: 3,00' },
-            valueLabelsPlugin: { enabled: true, font: '700 10px Inter, sans-serif' },
+            legend: { position: 'bottom', labels: { font: { size: 11, weight: '600' } } },
+            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Corte 3,00' },
             tooltip: {
               backgroundColor: '#0B2E4E',
-              padding: 12,
+              padding: 10,
               callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ${fmtBR(ctx.raw, 2)}` }
             }
           }
         }
       });
 
-      // 2. Curva em Vale: Tempo de Serviço no ECO Global (Figura 4A)
+      // 2. Curva em Vale: Tempo de Serviço no ECO Global
+      const tempos = ['Até 1 ano', '1 a 3 anos', '4 a 6 anos', '7 a 9 anos', '10 a 12 anos', '> 12 anos'];
+      const tempoLabels = tempos.map(t => `${t}\n(n=${RESPONDENTES_N77.filter(r => r.tempo === t).length})`);
+      const tempoMeans = tempos.map(t => mediaArray(RESPONDENTES_N77.filter(r => r.tempo === t).map(r => r.global)));
+
       chartInstances.tempoServico = new Chart(document.getElementById('chart-tempo-servico'), {
         type: 'line',
         data: {
-          labels: ['Até 1 ano\n(n=7)', '1–3 anos\n(n=9)', '4–6 anos\n(n=6)', '7–9 anos\n(n=10)', '10–12 anos\n(n=5)', '>12 anos\n(n=40)'],
+          labels: tempoLabels,
           datasets: [{
-            label: 'ECO Global (Média)',
-            data: [2.65, 3.39, 2.60, 2.56, 3.32, 3.32],
+            label: 'ECO Global (H = 14,67; p = 0,012*)',
+            data: tempoMeans,
             borderColor: '#0B2E4E',
-            backgroundColor: 'rgba(185, 28, 28, 0.08)',
-            pointBackgroundColor: ['#B91C1C', '#16537E', '#B91C1C', '#B91C1C', '#16537E', '#16537E'],
+            pointBackgroundColor: tempoMeans.map(v => (v < 3 ? '#B91C1C' : '#16537E')),
             pointBorderColor: '#FFFFFF',
             pointBorderWidth: 2,
-            pointRadius: 6.5,
-            borderWidth: 2.8,
-            fill: false,
+            pointRadius: 6,
+            borderWidth: 3,
             tension: 0.15
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          layout: { padding: { top: 24, right: 16 } },
+          layout: { padding: { top: 24, right: 14 } },
           scales: {
             y: {
               min: 2.0,
-              max: 4.0,
-              ticks: { stepSize: 0.25, callback: (v) => fmtBR(v, 2) },
+              max: 3.8,
+              ticks: { stepSize: 0.3, callback: (v) => fmtBR(v, 1) },
               grid: { color: '#E2E8F0' }
             },
             x: {
               grid: { display: false },
-              ticks: { font: { size: 11, weight: '600' } }
+              ticks: { font: { size: 10, weight: '600' } }
             }
           },
           plugins: {
             legend: { display: false },
-            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Corte: 3,00' },
-            valueLabelsPlugin: { enabled: true, font: '700 12px Inter, sans-serif' },
+            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Corte 3,00' },
+            valueLabelsPlugin: { enabled: true, font: '700 11px Inter, sans-serif' },
             tooltip: {
               backgroundColor: '#0B2E4E',
-              padding: 12,
-              callbacks: {
-                label: (ctx) => ` ECO Global: ${fmtBR(ctx.raw, 2)} (${ctx.raw > 3 ? 'Comprometido' : 'Zona de vale / < 3,0'})`
-              }
+              padding: 10,
+              callbacks: { label: (ctx) => ` ECO Global médio: ${fmtBR(ctx.raw, 2)}` }
             }
           }
         }
       });
 
-      // 3. Exercício de FG/CD no ECO Normativo (Figura 4B)
+      // 3. Exercício de FG/CD no ECO Normativo
+      const semFg = RESPONDENTES_N77.filter(r => r.fgcd === 'Não exerce');
+      const comFg = RESPONDENTES_N77.filter(r => r.fgcd === 'Exerce atualmente');
+
       chartInstances.fgcdNormativo = new Chart(document.getElementById('chart-fgcd-normativo'), {
         type: 'bar',
         data: {
-          labels: ['Sem FG/CD (n = 47)', 'Com FG/CD (n = 30)'],
+          labels: [`Sem FG/CD\n(n = ${semFg.length})`, `Com FG/CD\n(n = ${comFg.length})`],
           datasets: [{
-            label: 'Média ECO Normativo',
-            data: [2.41, 2.93],
+            label: 'ECO Normativo (Mann-Whitney p = 0,028*)',
+            data: [mediaArray(semFg.map(r => r.normativo)), mediaArray(comFg.map(r => r.normativo))],
             backgroundColor: ['#94A3B8', '#16537E'],
             borderRadius: 8,
             barThickness: 64
@@ -1860,7 +2094,7 @@
           layout: { padding: { top: 24 } },
           scales: {
             y: {
-              min: 1.0,
+              min: 1.5,
               max: 3.6,
               ticks: { stepSize: 0.5, callback: (v) => fmtBR(v, 1) },
               grid: { color: '#E2E8F0' }
@@ -1872,28 +2106,32 @@
           },
           plugins: {
             legend: { display: false },
-            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Corte: 3,00' },
+            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Corte 3,00' },
             valueLabelsPlugin: { enabled: true, font: '800 13px Inter, sans-serif' },
             tooltip: {
               backgroundColor: '#0B2E4E',
-              padding: 12,
-              callbacks: { label: (ctx) => ` ECO Normativo: ${fmtBR(ctx.raw, 2)}` }
+              padding: 10,
+              callbacks: { label: (ctx) => ` ECO Normativo médio: ${fmtBR(ctx.raw, 2)}` }
             }
           }
         }
       });
 
-      // 4. Estabilidade entre Modalidades do PGD no ECO Global
+      // 4. Estabilidade entre Modalidades do PGD (ECO Global)
+      const pgdCats = ['Híbrido', 'Teletrabalho integral', 'Presencial integral'];
+      const pgdLabels = pgdCats.map(p => `${p}\n(n = ${RESPONDENTES_N77.filter(r => r.pgd === p).length})`);
+      const pgdMeans = pgdCats.map(p => mediaArray(RESPONDENTES_N77.filter(r => r.pgd === p).map(r => r.global)));
+
       chartInstances.pgdEstabilidade = new Chart(document.getElementById('chart-pgd-estabilidade'), {
         type: 'bar',
         data: {
-          labels: ['Híbrido\n(n = 33)', 'Teletrabalho integral\n(n = 18)', 'Presencial integral\n(n = 26)'],
+          labels: pgdLabels,
           datasets: [{
-            label: 'Média ECO Global',
-            data: [3.20, 3.06, 3.04],
+            label: 'ECO Global (Kruskal-Wallis p = 0,617)',
+            data: pgdMeans,
             backgroundColor: ['#16537E', '#0F766E', '#64748B'],
             borderRadius: 8,
-            barThickness: 54
+            barThickness: 56
           }]
         },
         options: {
@@ -1909,17 +2147,217 @@
             },
             x: {
               grid: { display: false },
+              ticks: { font: { size: 11, weight: '700' }, color: '#1E293B' }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Corte 3,00' },
+            valueLabelsPlugin: { enabled: true, font: '800 13px Inter, sans-serif' },
+            tooltip: {
+              backgroundColor: '#0B2E4E',
+              padding: 10,
+              callbacks: { label: (ctx) => ` ECO Global médio: ${fmtBR(ctx.raw, 2)} (sem diferença estatística)` }
+            }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 8B. GRÁFICOS DA VISÃO SIMPLES (LINGUAGEM ACESSÍVEL)
+    // =========================================================================
+    function initSimpleCharts() {
+      // 1. Comparativo em linguagem direta (TI vs Outros servidores)
+      chartInstances.simpleComparativo = new Chart(document.getElementById('chart-simple-comparativo'), {
+        type: 'bar',
+        data: {
+          labels: ['Fica porque QUER', 'Fica porque PRECISA', 'Fica porque DEVE'],
+          datasets: [
+            {
+              label: 'Profissionais de TI (IFES)',
+              data: [3.65, 3.08, 2.61],
+              backgroundColor: ['#16537E', '#D97706', '#B91C1C'],
+              borderRadius: 6,
+              barPercentage: 0.78,
+              categoryPercentage: 0.68
+            },
+            {
+              label: 'Outros servidores (UFPI)',
+              data: [3.72, 4.47, 3.19],
+              backgroundColor: '#CBD5E1',
+              borderColor: '#64748B',
+              borderWidth: 1.5,
+              borderRadius: 6,
+              barPercentage: 0.78,
+              categoryPercentage: 0.68
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { top: 22 } },
+          scales: {
+            y: {
+              min: 0,
+              max: 5,
+              ticks: { stepSize: 1, callback: (v) => fmtBR(v, 1) },
+              grid: { color: '#E2E8F0' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 11, weight: '700' }, color: '#1E293B' }
+            }
+          },
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 11, weight: '600' } } },
+            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Média (3,00)' },
+            valueLabelsPlugin: { enabled: true, font: '700 11px Inter, sans-serif' },
+            tooltip: {
+              backgroundColor: '#0B2E4E',
+              padding: 10,
+              callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ${fmtBR(ctx.raw, 2)} de 5,00` }
+            }
+          }
+        }
+      });
+
+      // 2. O que mais pesa a favor e contra (Top 3 vs Bottom 3)
+      chartInstances.simpleExtremos = new Chart(document.getElementById('chart-simple-extremos'), {
+        type: 'bar',
+        data: {
+          labels: [
+            'Sente-se "em casa" na instituição',
+            'Trabalho tem significado pessoal',
+            'Sair desestruturaria a vida hoje',
+            'Teria poucas opções no mercado',
+            'Obrigação moral com colegas',
+            'Sentiria culpa se saísse agora'
+          ],
+          datasets: [{
+            label: 'Nota média (1 a 5)',
+            data: [3.88, 3.71, 3.62, 2.60, 2.26, 2.23],
+            backgroundColor: ['#16537E', '#16537E', '#D97706', '#FB923C', '#B91C1C', '#B91C1C'],
+            borderRadius: 5,
+            barThickness: 20
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { right: 40 } },
+          scales: {
+            x: {
+              min: 1,
+              max: 4.5,
+              ticks: { stepSize: 0.5, callback: (v) => fmtBR(v, 1) },
+              grid: { color: '#E2E8F0' }
+            },
+            y: {
+              grid: { display: false },
               ticks: { font: { size: 11, weight: '600' }, color: '#1E293B' }
             }
           },
           plugins: {
             legend: { display: false },
-            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Corte: 3,00' },
+            referenceLinePlugin: { axis: 'x', value: 3.0, color: '#0F172A', label: '3,00' },
+            valueLabelsPlugin: { enabled: true, font: '700 11px Inter, sans-serif' },
+            tooltip: {
+              backgroundColor: '#0B2E4E',
+              padding: 10,
+              callbacks: { label: (ctx) => ` Nota média: ${fmtBR(ctx.raw, 2)} de 5,00` }
+            }
+          }
+        }
+      });
+
+      // 3. Curva da Carreira (Tempo de Serviço)
+      chartInstances.simpleCarreira = new Chart(document.getElementById('chart-simple-carreira'), {
+        type: 'line',
+        data: {
+          labels: ['Até 1 ano', '1 a 3 anos', '4 a 6 anos', '7 a 9 anos', '10 a 12 anos', '+12 anos'],
+          datasets: [{
+            label: 'Nota geral de vínculo',
+            data: [2.65, 3.39, 2.60, 2.56, 3.32, 3.32],
+            borderColor: '#0B2E4E',
+            pointBackgroundColor: ['#B91C1C', '#16537E', '#B91C1C', '#B91C1C', '#16537E', '#16537E'],
+            pointBorderColor: '#FFFFFF',
+            pointBorderWidth: 2,
+            pointRadius: 6.5,
+            borderWidth: 3,
+            tension: 0.2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { top: 24, right: 16 } },
+          scales: {
+            y: {
+              min: 2.0,
+              max: 3.9,
+              ticks: { stepSize: 0.5, callback: (v) => fmtBR(v, 1) },
+              grid: { color: '#E2E8F0' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 11, weight: '600' } }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Média (3,00)' },
+            valueLabelsPlugin: { enabled: true, font: '700 12px Inter, sans-serif' },
+            tooltip: {
+              backgroundColor: '#0B2E4E',
+              padding: 10,
+              callbacks: {
+                label: (ctx) => ` Vínculo médio: ${fmtBR(ctx.raw, 2)} (${ctx.raw >= 3 ? 'Acima da média' : 'Fase de atenção'})`
+              }
+            }
+          }
+        }
+      });
+
+      // 4. Mito do Trabalho Remoto (PGD)
+      chartInstances.simplePgd = new Chart(document.getElementById('chart-simple-pgd'), {
+        type: 'bar',
+        data: {
+          labels: ['Híbrido\n(33 pessoas)', '100% Remoto\n(18 pessoas)', '100% Presencial\n(26 pessoas)'],
+          datasets: [{
+            label: 'Nota geral de vínculo',
+            data: [3.20, 3.06, 3.04],
+            backgroundColor: ['#16537E', '#0F766E', '#64748B'],
+            borderRadius: 8,
+            barThickness: 56
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { top: 24 } },
+          scales: {
+            y: {
+              min: 2.0,
+              max: 3.8,
+              ticks: { stepSize: 0.3, callback: (v) => fmtBR(v, 1) },
+              grid: { color: '#E2E8F0' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 11, weight: '700' }, color: '#1E293B' }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Média (3,00)' },
             valueLabelsPlugin: { enabled: true, font: '800 13px Inter, sans-serif' },
             tooltip: {
               backgroundColor: '#0B2E4E',
-              padding: 12,
-              callbacks: { label: (ctx) => ` ECO Global: ${fmtBR(ctx.raw, 2)} (p = 0,617 — estável)` }
+              padding: 10,
+              callbacks: { label: (ctx) => ` Nota geral: ${fmtBR(ctx.raw, 2)} — praticamente igual entre os formatos` }
             }
           }
         }
@@ -1930,10 +2368,14 @@
     // 9. INICIALIZAÇÃO GLOBAL
     // =========================================================================
     window.addEventListener('DOMContentLoaded', () => {
-      initTab1Charts();
-      initTab2Charts();
-      renderAfeTable('all');
-      initTab4Charts();
+      try {
+        initTab1Charts();
+        initTab2Charts();
+        renderAfeTable('all');
+        initTab4Charts();
+      } catch (err) {
+        console.error('Erro ao inicializar o dashboard:', err);
+      }
     });
   </script>
 </body>
