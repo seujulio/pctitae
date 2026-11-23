@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comprometimento Organizacional de TI nas IFES | FURG – ICEAC</title>
+
+  <!-- Fonte Institucional Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            furg: {
+              navy: '#0B2E4E',
+              dark: '#071D41',
+              blue: '#16537E',
+              sky: '#E8F1F8',
+              red: '#B91C1C',
+              gold: '#D97706',
+              amber: '#F59E0B',
+              surface: '#F5F7FA',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Chart.js via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* Estilos complementares para transições, acessibilidade e Modo Apresentação */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #F5F7FA;
+      color: #0F172A;
+    }
+
+    /* Transição suave entre abas */
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Modo Apresentação para Projetor */
+    body.presentation-mode .hide-in-presentation {
+      display: none !important;
+    }
+    body.presentation-mode .main-container {
+      max-width: 96vw !important;
+      padding-left: 1.5rem !important;
+      padding-right: 1.5rem !important;
+    }
+    body.presentation-mode .kpi-value {
+      font-size: 2.5rem !important;
+      line-height: 1.1 !important;
+    }
+    body.presentation-mode .section-title {
+      font-size: 1.5rem !important;
+    }
+    body.presentation-mode .chart-box-tall {
+      height: 580px !important;
+    }
+    body.presentation-mode .chart-box-std {
+      height: 400px !important;
+    }
+    body.presentation-mode table {
+      font-size: 0.95rem !important;
+    }
+
+    /* Barra de rolagem discreta para abas/tabelas no mobile */
+    .custom-scroll::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #F1F5F9;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-furg-blue selection:text-white">
+
+  <!-- ===================================================================== -->
+  <!-- BARRA SUPERIOR INSTITUCIONAL (ESTILO PORTAIS FURG / GOV.BR)           -->
+  <!-- ===================================================================== -->
+  <div class="bg-furg-dark text-slate-200 text-xs py-2 border-b border-slate-800 hide-in-presentation">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2 font-medium tracking-wide">
+        <span class="inline-block w-2 h-2 rounded-full bg-furg-amber"></span>
+        <span>UNIVERSIDADE FEDERAL DO RIO GRANDE – FURG</span>
+        <span class="hidden sm:inline text-slate-400">|</span>
+        <span class="hidden sm:inline text-slate-300">ICEAC • Curso de Administração</span>
+      </div>
+      <div class="text-slate-300 flex items-center gap-3">
+        <span>Comportamento Organizacional (2026)</span>
+        <span class="hidden md:inline text-slate-500">•</span>
+        <span class="hidden md:inline text-slate-300">Carreira PCCTAE (Lei nº 11.091/2005)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- CABEÇALHO PRINCIPAL INSTITUCIONAL                                     -->
+  <!-- ===================================================================== -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="main-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <!-- Logotipo FURG com fallback elegante + Título -->
+        <div class="flex items-center gap-4">
+          <div class="flex-shrink-0 flex items-center">
+            <!-- Imagem oficial com fallback automático caso o arquivo local não esteja presente -->
+            <img
+              id="furg-logo-img"
+              src="assets/furg_logo_0_X6.png"
+              alt="Logotipo Oficial da FURG"
+              class="h-12 w-auto object-contain"
+              onerror="this.style.display='none'; document.getElementById('furg-logo-fallback').classList.remove('hidden');"
+            />
+            <!-- Fallback elegante institucional -->
+            <div id="furg-logo-fallback" class="hidden flex items-center gap-2.5 pr-3 border-r border-slate-200">
+              <svg class="w-10 h-10 flex-shrink-0" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                <circle cx="32" cy="32" r="30" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1.5"/>
+                <path d="M12 18C7 26 7 38 12 46L17 42V22L12 18Z" fill="#D97706"/>
+                <path d="M52 18C57 26 57 38 52 46L47 42V22L52 18Z" fill="#D97706"/>
+                <path d="M18 14H24V40H40V14H46V46H18V14Z" fill="#B91C1C"/>
+                <rect x="27" y="10" width="10" height="27" rx="1.5" fill="#F59E0B"/>
+                <path d="M20 51C27 55 37 55 44 51H20Z" fill="#D97706"/>
+              </svg>
+              <div class="leading-tight">
+                <div class="text-sm font-extrabold tracking-tight text-furg-navy">FURG</div>
+                <div class="text-[11px] font-semibold text-slate-600">ICEAC – Administração</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-l border-slate-200 pl-4">
+            <h1 class="text-base sm:text-lg lg:text-xl font-bold text-furg-navy leading-snug">
+              Comprometimento Organizacional de Profissionais de TI nas IFES
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5 hide-in-presentation">
+              Diagnóstico psicométrico e comparativo da carreira PCCTAE no Brasil (<span class="font-semibold text-slate-700">n = 77</span>)
+            </p>
+          </div>
+        </div>
+
+        <!-- Botão de Modo Apresentação -->
+        <div class="flex items-center gap-2 self-start md:self-center">
+          <button
+            id="btn-presentation"
+            type="button"
+            onclick="togglePresentationMode()"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-furg-navy bg-furg-navy text-white hover:bg-furg-blue transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-furg-blue focus:ring-offset-1"
+            title="Amplia legibilidade e oculta elementos secundários para projeção"
+          >
+            <svg id="icon-pres-enter" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M8 21h8M12 17v4M3 7a2 2 0 012-2h14a2 2 0 012 2"/>
+            </svg>
+            <svg id="icon-pres-exit" class="w-4 h-4 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            <span id="label-presentation">Modo Apresentação</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navegação em 4 Abas (Atos da Apresentação) -->
+      <nav class="mt-4 -mb-3.5 flex overflow-x-auto custom-scroll gap-1 border-t border-slate-100 pt-2" role="tablist" aria-label="Atos da Apresentação">
+        <button
+          type="button"
+          role="tab"
+          aria-selected="true"
+          data-tab="tab-visao-geral"
+          onclick="switchTab('tab-visao-geral')"
+          class="tab-btn whitespace-nowrap px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-t-lg border-b-2 border-furg-navy text-furg-navy bg-furg-sky/60 transition-all"
+        >
+          <span class="inline-block px-1.5 py-0.5 text-[10px] rounded bg-furg-navy text-white mr-1.5">Ato 1 &amp; 3</span>
+          Visão Geral &amp; Inversão da ECO
+        </button>
+
+        <button
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-tab="tab-perfil"
+          onclick="switchTab('tab-perfil')"
+          class="tab-btn whitespace-nowrap px-4 py-2.5 text-xs sm:text-sm font-medium rounded-t-lg border-b-2 border-transparent text-slate-600 hover:text-furg-navy hover:bg-slate-50 transition-all"
+        >
+          <span class="inline-block px-1.5 py-0.5 text-[10px] rounded bg-slate-200 text-slate-700 mr-1.5">Ato 2</span>
+          Perfil &amp; Filtros Dinâmicos
+        </button>
+
+        <button
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-tab="tab-psicometria"
+          onclick="switchTab('tab-psicometria')"
+          class="tab-btn whitespace-nowrap px-4 py-2.5 text-xs sm:text-sm font-medium rounded-t-lg border-b-2 border-transparent text-slate-600 hover:text-furg-navy hover:bg-slate-50 transition-all"
+        >
+          <span class="inline-block px-1.5 py-0.5 text-[10px] rounded bg-slate-200 text-slate-700 mr-1.5">Ato 3</span>
+          Psicometria &amp; AFE
+        </button>
+
+        <button
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-tab="tab-fatores"
+          onclick="switchTab('tab-fatores')"
+          class="tab-btn whitespace-nowrap px-4 py-2.5 text-xs sm:text-sm font-medium rounded-t-lg border-b-2 border-transparent text-slate-600 hover:text-furg-navy hover:bg-slate-50 transition-all"
+        >
+          <span class="inline-block px-1.5 py-0.5 text-[10px] rounded bg-slate-200 text-slate-700 mr-1.5">Ato 4</span>
+          Fatores Associados &amp; Síntese Crítica
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- CONTEÚDO PRINCIPAL (4 ABAS)                                           -->
+  <!-- ===================================================================== -->
+  <main class="flex-1 main-container max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+    <!-- =================================================================== -->
+    <!-- ABA 1: VISÃO GERAL & INVERSÃO DA ECO (ATO 1 E 3)                    -->
+    <!-- =================================================================== -->
+    <section id="tab-visao-geral" class="tab-panel active space-y-6">
+      <!-- Faixa de contexto institucional -->
+      <div class="bg-gradient-to-r from-furg-navy to-furg-blue text-white rounded-xl p-5 sm:p-6 shadow-sm flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/15 text-amber-200 mb-2">
+            Achado Central • Teste de Friedman χ² = 36,424 (p &lt; 0,001)
+          </span>
+          <h2 class="section-title text-lg sm:text-xl font-bold tracking-tight">
+            Inversão Estrutural do Vínculo na Área de TI das IFES
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-200 mt-1 max-w-3xl hide-in-presentation">
+            Diferentemente dos TAEs gerais da UFPI (Avelino, 2024), nos quais predominava o vínculo Instrumental (4,47), os profissionais de TI permanecem majoritariamente por identificação emocional (Afetivo = 3,65), com forte retração do vínculo Instrumental (3,08) e ausência de comprometimento Normativo (2,61).
+          </p>
+        </div>
+        <div class="flex-shrink-0 bg-white/10 backdrop-blur-sm border border-white/15 rounded-lg px-4 py-3 text-xs space-y-1">
+          <div class="text-slate-300">Critério de Corte (Luz et al., 2018)</div>
+          <div class="font-semibold text-white">Escore &gt; 3,00 = Comprometido</div>
+          <div class="text-amber-200">Wilcoxon pareado: todos os pares p<sub>adj</sub> &lt; 0,001</div>
+        </div>
+      </div>
+
+      <!-- 5 Cards de KPI -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <!-- KPI 1: Amostra -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Amostra Válida</span>
+            <span class="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-furg-sky text-furg-navy">5 Regiões</span>
+          </div>
+          <div class="my-3">
+            <div class="kpi-value text-3xl font-extrabold text-furg-navy">n = 77</div>
+            <div class="text-xs text-slate-500 mt-1">Piso G*Power = <strong class="text-slate-700">68</strong> (+13,2%)</div>
+          </div>
+          <div class="pt-2 border-t border-slate-100 text-[11px] text-slate-500">
+            100% estatutários PCCTAE em TI
+          </div>
+        </div>
+
+        <!-- KPI 2: ECO Global -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">ECO Global</span>
+            <span class="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Comprometido (&gt; 3,0)</span>
+          </div>
+          <div class="my-3">
+            <div class="kpi-value text-3xl font-extrabold text-furg-navy">3,11</div>
+            <div class="text-xs text-slate-500 mt-1">DP: 0,79 • Mediana: 3,11</div>
+          </div>
+          <div class="pt-2 border-t border-slate-100 text-[11px] text-slate-500">
+            Depurada (16 itens): <strong class="text-slate-700">3,12</strong>
+          </div>
+        </div>
+
+        <!-- KPI 3: ECO Afetivo -->
+        <div class="bg-white rounded-xl border-2 border-furg-blue/30 p-5 shadow-sm flex flex-col justify-between relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-furg-blue">ECO Afetivo</span>
+            <span class="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Comprometido (&gt; 3,0)</span>
+          </div>
+          <div class="my-3">
+            <div class="kpi-value text-3xl font-extrabold text-furg-blue">3,65</div>
+            <div class="text-xs text-slate-500 mt-1">DP: 1,06 • Mediana: 3,83</div>
+          </div>
+          <div class="pt-2 border-t border-slate-100 text-[11px] font-medium text-furg-blue">
+            Base predominante ("quer ficar")
+          </div>
+        </div>
+
+        <!-- KPI 4: ECO Instrumental -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">ECO Instrumental</span>
+            <span class="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-amber-50 text-amber-800 border border-amber-200">Comprometido (&gt; 3,0)</span>
+          </div>
+          <div class="my-3">
+            <div class="kpi-value text-3xl font-extrabold text-furg-gold">3,08</div>
+            <div class="text-xs text-slate-500 mt-1">DP: 0,86 • Mediana: 3,17</div>
+          </div>
+          <div class="pt-2 border-t border-slate-100 text-[11px] text-amber-700 font-medium">
+            Nível limítrofe (-1,39 vs. UFPI)
+          </div>
+        </div>
+
+        <!-- KPI 5: ECO Normativo -->
+        <div class="bg-white rounded-xl border border-red-200 p-5 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">ECO Normativo</span>
+            <span class="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-red-50 text-furg-red border border-red-200">Não comprometido (&lt; 3,0)</span>
+          </div>
+          <div class="my-3">
+            <div class="kpi-value text-3xl font-extrabold text-furg-red">2,61</div>
+            <div class="text-xs text-slate-500 mt-1">DP: 1,05 • Mediana: 2,50</div>
+          </div>
+          <div class="pt-2 border-t border-slate-100 text-[11px] text-furg-red font-medium">
+            Maior dispersão (CV = 40,2%)
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráfico 1: Comparativo Amostra Atual vs Avelino (2024) -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-5">
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-furg-navy">
+              Comparativo das Dimensões da ECO: TI/IFES (n = 77) vs. Referência UFPI (Avelino, 2024)
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+              Escala Likert de 1 a 5 pontos • Linha tracejada indica o ponto de corte de comprometimento (3,00)
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2 text-xs">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 font-medium">
+              <span class="w-2.5 h-2.5 rounded-sm bg-furg-navy"></span> TI / IFES (2026, n = 77)
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 font-medium">
+              <span class="w-2.5 h-2.5 rounded-sm bg-slate-400"></span> TAEs UFPI (Avelino, 2024, n = 281)
+            </span>
+          </div>
+        </div>
+        <div class="chart-box-std relative h-80 sm:h-96 w-full">
+          <canvas id="chart-comparativo-avelino"></canvas>
+        </div>
+      </div>
+
+      <!-- Gráfico 2: Item a Item (ECO01 a ECO18) -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-5">
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-furg-navy">
+              Desempenho Médio Item a Item (ECO01 a ECO18) e Cisão Interna no Instrumental
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+              Todos os itens Afetivos superam 3,50. No Instrumental, os custos pessoais de ruptura (ECO07–09) permanecem altos, mas a percepção de escassez de alternativas no mercado (ECO10–12) cai abaixo de 3,00.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2 text-xs flex-shrink-0">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-furg-blue font-medium">
+              <span class="w-2.5 h-2.5 rounded-full bg-furg-blue"></span> Afetivo (ECO01–06)
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 font-medium">
+              <span class="w-2.5 h-2.5 rounded-full bg-furg-gold"></span> Instrumental – Custo Pessoal (07–09)
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-orange-50 text-orange-800 font-medium">
+              <span class="w-2.5 h-2.5 rounded-full bg-orange-400"></span> Instrumental – Alternativas (10–12)
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-red-50 text-furg-red font-medium">
+              <span class="w-2.5 h-2.5 rounded-full bg-furg-red"></span> Normativo (ECO13–18)
+            </span>
+          </div>
+        </div>
+        <div class="chart-box-tall relative h-[540px] w-full">
+          <canvas id="chart-itens-eco"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ABA 2: PERFIL & FILTROS DINÂMICOS (ATO 2)                           -->
+    <!-- =================================================================== -->
+    <section id="tab-perfil" class="tab-panel space-y-6">
+      <!-- Barra de Filtros Interativos -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
+          <div>
+            <h2 class="section-title text-base sm:text-lg font-bold text-furg-navy">
+              Filtros Dinâmicos do Perfil Sociodemográfico e Funcional
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5 hide-in-presentation">
+              Selecione um ou mais critérios para recalcular em tempo real os escores da ECO e as distribuições da amostra.
+            </p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span id="filter-status-badge" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-furg-sky text-furg-navy border border-furg-blue/20">
+              Exibindo 77 de 77 respondentes (100,0%)
+            </span>
+            <button
+              type="button"
+              onclick="resetFilters()"
+              class="px-3.5 py-1.5 rounded-lg text-xs font-semibold border border-slate-300 text-slate-700 hover:bg-slate-100 hover:text-furg-navy transition-colors"
+            >
+              Limpar Filtros
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div>
+            <label for="f-regiao" class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Macrorregião</label>
+            <select id="f-regiao" onchange="applyFilters()" class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-800 focus:border-furg-blue focus:bg-white focus:outline-none">
+              <option value="Todos">Todas as regiões</option>
+              <option value="Sudeste">Sudeste</option>
+              <option value="Sul">Sul</option>
+              <option value="Nordeste">Nordeste</option>
+              <option value="Norte">Norte</option>
+              <option value="Centro-Oeste">Centro-Oeste</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="f-ifes" class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Tipo de IFES</label>
+            <select id="f-ifes" onchange="applyFilters()" class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-800 focus:border-furg-blue focus:bg-white focus:outline-none">
+              <option value="Todos">Todas as IFES</option>
+              <option value="Universidade Federal">Universidade Federal</option>
+              <option value="IF ou CEFET">IF ou CEFET</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="f-pgd" class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Modalidade PGD</label>
+            <select id="f-pgd" onchange="applyFilters()" class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-800 focus:border-furg-blue focus:bg-white focus:outline-none">
+              <option value="Todos">Todas as modalidades</option>
+              <option value="Híbrido">Híbrido (PGD)</option>
+              <option value="Presencial integral">Presencial integral</option>
+              <option value="Teletrabalho integral">Teletrabalho integral (PGD)</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="f-fgcd" class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Exercício de FG/CD</label>
+            <select id="f-fgcd" onchange="applyFilters()" class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-800 focus:border-furg-blue focus:bg-white focus:outline-none">
+              <option value="Todos">Todos</option>
+              <option value="Exerce atualmente">Exerce atualmente</option>
+              <option value="Não exerce">Não exerce</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="f-cargo" class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Nível do Cargo</label>
+            <select id="f-cargo" onchange="applyFilters()" class="w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-800 focus:border-furg-blue focus:bg-white focus:outline-none">
+              <option value="Todos">Todos os níveis</option>
+              <option value="Nível E (Superior)">Nível E (Superior)</option>
+              <option value="Nível D (Médio)">Nível D (Médio)</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerta quando filtro resulta em n = 0 -->
+      <div id="empty-filter-alert" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-6 text-center">
+        <p class="text-sm font-semibold text-amber-900">Nenhum respondente encontrado para esta combinação específica de filtros.</p>
+        <p class="text-xs text-amber-700 mt-1">Clique em "Limpar Filtros" ou amplie uma das categorias selecionadas.</p>
+      </div>
+
+      <!-- KPIs Dinâmicos do Subconjunto Filtrado -->
+      <div id="filtered-kpis-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <div class="text-xs font-semibold uppercase text-slate-500">n Filtrado</div>
+          <div id="dyn-n" class="kpi-value text-2xl font-extrabold text-furg-navy mt-2">77</div>
+          <div id="dyn-pct" class="text-xs text-slate-500 mt-1">100,0% da amostra</div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <div class="flex items-center justify-between gap-1">
+            <span class="text-xs font-semibold uppercase text-slate-500">ECO Global</span>
+            <span id="dyn-badge-global" class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-emerald-50 text-emerald-700">Comprometido</span>
+          </div>
+          <div id="dyn-global" class="kpi-value text-2xl font-extrabold text-furg-navy mt-2">3,11</div>
+          <div class="text-xs text-slate-500 mt-1">Média das 3 dimensões</div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <div class="flex items-center justify-between gap-1">
+            <span class="text-xs font-semibold uppercase text-furg-blue">ECO Afetivo</span>
+            <span id="dyn-badge-afetivo" class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-emerald-50 text-emerald-700">Comprometido</span>
+          </div>
+          <div id="dyn-afetivo" class="kpi-value text-2xl font-extrabold text-furg-blue mt-2">3,65</div>
+          <div class="text-xs text-slate-500 mt-1">Identificação emocional</div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <div class="flex items-center justify-between gap-1">
+            <span class="text-xs font-semibold uppercase text-slate-500">ECO Instrumental</span>
+            <span id="dyn-badge-instrumental" class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-amber-50 text-amber-800">Comprometido</span>
+          </div>
+          <div id="dyn-instrumental" class="kpi-value text-2xl font-extrabold text-furg-gold mt-2">3,08</div>
+          <div class="text-xs text-slate-500 mt-1">Custos e alternativas</div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <div class="flex items-center justify-between gap-1">
+            <span class="text-xs font-semibold uppercase text-slate-500">ECO Normativo</span>
+            <span id="dyn-badge-normativo" class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-red-50 text-furg-red">Não comprometido</span>
+          </div>
+          <div id="dyn-normativo" class="kpi-value text-2xl font-extrabold text-furg-red mt-2">2,61</div>
+          <div class="text-xs text-slate-500 mt-1">Obrigação moral/dever</div>
+        </div>
+      </div>
+
+      <!-- 4 Gráficos de Distribuição Dinâmicos -->
+      <div id="filtered-charts-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Gênero -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-sm sm:text-base font-bold text-furg-navy">Distribuição por Gênero</h3>
+              <p class="text-xs text-slate-500">Forte predominância masculina na área de TI (93,5% no total)</p>
+            </div>
+          </div>
+          <div class="relative h-64 w-full">
+            <canvas id="chart-dist-genero"></canvas>
+          </div>
+        </div>
+
+        <!-- Escolaridade & Sobre-educação -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+          <div class="flex flex-wrap items-start justify-between gap-2 mb-4">
+            <div>
+              <h3 class="text-sm sm:text-base font-bold text-furg-navy">Escolaridade &amp; Sobre-educação</h3>
+              <p class="text-xs text-slate-500">96,1% possuem pós-graduação (amostra total)</p>
+            </div>
+            <span id="badge-sobre-educacao" class="px-2.5 py-1 rounded-full text-xs font-bold bg-furg-navy text-amber-300">
+              Sobre-educação: 98,7%
+            </span>
+          </div>
+          <div class="relative h-64 w-full">
+            <canvas id="chart-dist-escolaridade"></canvas>
+          </div>
+        </div>
+
+        <!-- Modalidade PGD -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+          <div class="mb-4">
+            <h3 class="text-sm sm:text-base font-bold text-furg-navy">Modalidade de Trabalho no PGD</h3>
+            <p class="text-xs text-slate-500">66,2% atuam em regime flexível (híbrido ou teletrabalho integral)</p>
+          </div>
+          <div class="relative h-64 w-full">
+            <canvas id="chart-dist-pgd"></canvas>
+          </div>
+        </div>
+
+        <!-- Macrorregião -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+          <div class="mb-4">
+            <h3 class="text-sm sm:text-base font-bold text-furg-navy">Distribuição por Macrorregião</h3>
+            <p class="text-xs text-slate-500">Abrangência nacional nas 5 regiões (Sudeste + Sul = 68,9%)</p>
+          </div>
+          <div class="relative h-64 w-full">
+            <canvas id="chart-dist-regiao"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ABA 3: PSICOMETRIA & AFE (ATO 3)                                    -->
+    <!-- =================================================================== -->
+    <section id="tab-psicometria" class="tab-panel space-y-6">
+      <!-- Painel Superior: Confiabilidade (Alfas de Cronbach) e Adequação da AFE -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Alfas de Cronbach -->
+        <div class="lg:col-span-7 bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="section-title text-base sm:text-lg font-bold text-furg-navy">
+                Confiabilidade Interna (Alfa de Cronbach)
+              </h2>
+              <p class="text-xs text-slate-500 mt-0.5">
+                Todas as dimensões superaram o piso de boa consistência (&alpha; &gt; 0,70) e os índices de Avelino (2024)
+              </p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Excelente Coesão
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200">
+              <div class="text-[11px] font-semibold uppercase text-furg-blue">Afetivo (6 itens)</div>
+              <div class="text-2xl font-extrabold text-furg-navy mt-1">0,879</div>
+              <div class="text-[11px] text-slate-500 mt-1">UFPI: 0,795</div>
+            </div>
+            <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200">
+              <div class="text-[11px] font-semibold uppercase text-furg-gold">Instrumental (6)</div>
+              <div class="text-2xl font-extrabold text-furg-navy mt-1">0,713</div>
+              <div class="text-[11px] text-slate-500 mt-1">UFPI: 0,666</div>
+            </div>
+            <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200">
+              <div class="text-[11px] font-semibold uppercase text-furg-red">Normativo (6)</div>
+              <div class="text-2xl font-extrabold text-furg-navy mt-1">0,841</div>
+              <div class="text-[11px] text-slate-500 mt-1">UFPI: 0,724</div>
+            </div>
+            <div class="p-3.5 rounded-lg bg-furg-sky/70 border border-furg-blue/30">
+              <div class="text-[11px] font-semibold uppercase text-furg-navy">Global (18 itens)</div>
+              <div class="text-2xl font-extrabold text-furg-navy mt-1">0,884</div>
+              <div class="text-[11px] text-furg-blue font-medium mt-1">Depurada (16): 0,887</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Indicadores da PCA / AFE -->
+        <div class="lg:col-span-5 bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <h2 class="section-title text-base sm:text-lg font-bold text-furg-navy mb-1">
+            Adequação da PCA / Varimax
+          </h2>
+          <p class="text-xs text-slate-500 mb-4">
+            Critérios do protocolo: h² &ge; 0,400 e carga fatorial &ge; 0,50
+          </p>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200">
+              <div class="text-[11px] font-semibold uppercase text-slate-500">KMO Global</div>
+              <div class="text-2xl font-extrabold text-furg-navy mt-1">0,812</div>
+              <div class="text-[11px] text-emerald-700 font-medium mt-0.5">Substancial (UFPI: 0,808)</div>
+            </div>
+            <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200">
+              <div class="text-[11px] font-semibold uppercase text-slate-500">Variância Explicada</div>
+              <div class="text-2xl font-extrabold text-furg-navy mt-1">58,79%</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">3 fatores (UFPI: 56,92%)</div>
+            </div>
+            <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200">
+              <div class="text-[11px] font-semibold uppercase text-slate-500">Bartlett (&chi;²)</div>
+              <div class="text-xl font-extrabold text-furg-navy mt-1">736,91</div>
+              <div class="text-[11px] text-emerald-700 font-medium mt-0.5">gl = 153 • p &lt; 0,001</div>
+            </div>
+            <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200">
+              <div class="text-[11px] font-semibold uppercase text-slate-500">Retenção de Itens</div>
+              <div class="text-xl font-extrabold text-furg-navy mt-1">16 de 18</div>
+              <div class="text-[11px] text-furg-red font-medium mt-0.5">Excluídos: ECO02 e ECO11</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela Interativa das Cargas Fatoriais -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-5 sm:p-6 border-b border-slate-200 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-furg-navy">
+              Matriz de Cargas Fatoriais (PCA com Rotação Varimax) e Comunalidades
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Destaque para os 2 itens excluídos por comunalidade h² &lt; 0,40 e para as 3 migrações conceituais (ECO07, ECO16 e ECO18) para RC1 (Afetivo).
+            </p>
+          </div>
+          <!-- Botões de Filtro da Tabela -->
+          <div class="flex flex-wrap gap-1.5" id="afe-filter-buttons">
+            <button type="button" onclick="filterAfeTable('all')" data-afe="all" class="afe-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-furg-navy text-white transition-colors">
+              Todos (18)
+            </button>
+            <button type="button" onclick="filterAfeTable('keep')" data-afe="keep" class="afe-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
+              Mantidos (16)
+            </button>
+            <button type="button" onclick="filterAfeTable('exclude')" data-afe="exclude" class="afe-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-50 text-furg-red hover:bg-red-100 transition-colors">
+              Excluídos h² &lt; 0,40 (2)
+            </button>
+            <button type="button" onclick="filterAfeTable('migrated')" data-afe="migrated" class="afe-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-800 hover:bg-amber-100 transition-colors">
+              Migrações para RC1 (3)
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto custom-scroll">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[11px] tracking-wider">
+                <th class="py-3 px-4 font-bold">Item</th>
+                <th class="py-3 px-4 font-bold">Descrição Resumida</th>
+                <th class="py-3 px-4 font-bold">Base Teórica</th>
+                <th class="py-3 px-4 font-bold text-right">h²</th>
+                <th class="py-3 px-4 font-bold text-right">RC1 (Afet.)</th>
+                <th class="py-3 px-4 font-bold text-right">RC2 (Norm.)</th>
+                <th class="py-3 px-4 font-bold text-right">RC3 (Inst.)</th>
+                <th class="py-3 px-4 font-bold text-center">Fator</th>
+                <th class="py-3 px-4 font-bold">Decisão Protocolo</th>
+              </tr>
+            </thead>
+            <tbody id="afe-table-body" class="divide-y divide-slate-100">
+              <!-- Preenchido via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+        <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex flex-wrap justify-between gap-2">
+          <span>Nota: Cargas fatoriais &ge; 0,50 destacadas em negrito. Itens com sufixo "r" tiveram pontuação invertida (6 &minus; original).</span>
+          <span>Média ECO Global completa (3,11) vs. depurada 16 itens (3,12).</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ABA 4: FATORES ASSOCIADOS & SÍNTESE CRÍTICA (ATO 4)                 -->
+    <!-- =================================================================== -->
+    <section id="tab-fatores" class="tab-panel space-y-6">
+      <!-- Linha 1: Faixa Etária + Tempo de Serviço -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Gráfico de Linha: Faixa Etária -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex flex-wrap items-start justify-between gap-2 mb-4">
+            <div>
+              <h3 class="text-base font-bold text-furg-navy">
+                Progressão do Comprometimento por Faixa Etária
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">
+                Kruskal-Wallis: Normativo <strong>p = 0,022*</strong> • Global <strong>p = 0,026*</strong> • Afetivo p = 0,064 (tendência)
+              </p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-furg-sky text-furg-navy">
+              Efeito Geracional
+            </span>
+          </div>
+          <div class="chart-box-std relative h-80 w-full">
+            <canvas id="chart-faixa-etaria"></canvas>
+          </div>
+        </div>
+
+        <!-- Gráfico da Curva em Vale: Tempo de Serviço -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex flex-wrap items-start justify-between gap-2 mb-4">
+            <div>
+              <h3 class="text-base font-bold text-furg-navy">
+                Curva em Vale: ECO Global por Tempo de Serviço
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">
+                Kruskal-Wallis: H = 14,67 • <strong>p = 0,012*</strong> • Queda crítica pós-estabilidade (4 a 9 anos)
+              </p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-red-50 text-furg-red border border-red-200">
+              Vale: 4–9 anos
+            </span>
+          </div>
+          <div class="chart-box-std relative h-80 w-full">
+            <canvas id="chart-tempo-servico"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Linha 2: FG/CD no Normativo + Estabilidade no PGD -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- FG/CD no Normativo -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex flex-wrap items-start justify-between gap-2 mb-4">
+            <div>
+              <h3 class="text-base font-bold text-furg-navy">
+                Exercício de FG/CD no Comprometimento Normativo
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">
+                Mann-Whitney U: <strong>p = 0,028*</strong> (Teste t: p = 0,035) • Responsabilidade de gestão eleva o dever moral
+              </p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              +0,52 pts com FG/CD
+            </span>
+          </div>
+          <div class="relative h-72 w-full">
+            <canvas id="chart-fgcd-normativo"></canvas>
+          </div>
+        </div>
+
+        <!-- Modalidade PGD no Global -->
+        <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex flex-wrap items-start justify-between gap-2 mb-4">
+            <div>
+              <h3 class="text-base font-bold text-furg-navy">
+                Estabilidade do Vínculo entre Modalidades do PGD (ECO Global)
+              </h3>
+              <p class="text-xs text-slate-500 mt-0.5">
+                Kruskal-Wallis: <strong>p = 0,617</strong> (ANOVA: p = 0,706) • Trabalho remoto/híbrido não fragiliza o vínculo
+              </p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+              Não significativo
+            </span>
+          </div>
+          <div class="relative h-72 w-full">
+            <canvas id="chart-pgd-estabilidade"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloco Final: Síntese Crítica (3 Pilares) -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- O que os dados provam -->
+        <div class="bg-white rounded-xl border-t-4 border-t-furg-navy border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-7 h-7 rounded-lg bg-furg-sky text-furg-navy flex items-center justify-center font-bold text-sm">1</span>
+            <h3 class="text-base font-bold text-furg-navy">O que os dados provam</h3>
+          </div>
+          <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <li class="flex gap-2">
+              <span class="text-emerald-600 font-bold">&bull;</span>
+              <span><strong>Inversão estrutural:</strong> comprometimento moderado (3,11) liderado pela base <strong>Afetiva (3,65)</strong>, superando estatisticamente a Instrumental (3,08) e a Normativa (2,61; Friedman p &lt; 0,001).</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-emerald-600 font-bold">&bull;</span>
+              <span><strong>Cisão no Instrumental:</strong> servidores reconhecem custos pessoais de sair (3,29–3,64), mas não se percebem sem alternativas no mercado de TI (2,53–2,83).</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-emerald-600 font-bold">&bull;</span>
+              <span><strong>Efeitos reais:</strong> vínculo cresce com a idade (p = 0,022 / 0,026), forma vale entre 4 e 9 anos de casa (p = 0,012) e sobe no Normativo com FG/CD (p = 0,028).</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-emerald-600 font-bold">&bull;</span>
+              <span><strong>Neutralidade do PGD:</strong> híbrido (3,20), teletrabalho (3,06) e presencial (3,04) mantêm o mesmo patamar de vínculo (p = 0,617).</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Limitações metodológicas -->
+        <div class="bg-white rounded-xl border-t-4 border-t-furg-gold border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-7 h-7 rounded-lg bg-amber-50 text-furg-gold flex items-center justify-center font-bold text-sm">2</span>
+            <h3 class="text-base font-bold text-furg-navy">Limitações metodológicas</h3>
+          </div>
+          <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <li class="flex gap-2">
+              <span class="text-furg-gold font-bold">&bull;</span>
+              <span><strong>Corte transversal estático:</strong> impede acompanhar o mesmo servidor ao longo do tempo e separar integralmente tempo de casa de efeitos de coorte.</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-furg-gold font-bold">&bull;</span>
+              <span><strong>Sem variáveis antecedentes:</strong> foca exclusivamente na ECO, não testando causalidade direta (salário, clima, liderança ou equidade externa).</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-furg-gold font-bold">&bull;</span>
+              <span><strong>Amostra não probabilística (n = 77):</strong> supera o piso G*Power (68), mas concentra-se em Universidades (88,3%) e Sudeste/Sul (68,9%), abaixo do ideal 10:1 (180) para AFE definitiva.</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-furg-gold font-bold">&bull;</span>
+              <span><strong>Homogeneidade escolar (98,7% sobre-educados):</strong> impede testar contraste estatístico de sobre-educação por falta de grupo controle numérico.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Implicações para a gestão de TI nas IFES -->
+        <div class="bg-white rounded-xl border-t-4 border-t-furg-blue border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-7 h-7 rounded-lg bg-blue-50 text-furg-blue flex items-center justify-center font-bold text-sm">3</span>
+            <h3 class="text-base font-bold text-furg-navy">Implicações para a gestão de TI</h3>
+          </div>
+          <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <li class="flex gap-2">
+              <span class="text-furg-blue font-bold">&bull;</span>
+              <span><strong>Ativo estratégico + alerta de retenção:</strong> o vínculo afetivo impulsiona desempenho, mas sem barreira instrumental ou culpa ao sair (ECO15 = 2,23), a evasão torna-se mais sensível à frustração.</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-furg-blue font-bold">&bull;</span>
+              <span><strong>Foco na janela crítica:</strong> priorizar ações de desenvolvimento, autonomia e reconhecimento para servidores de <strong>29 a 39 anos</strong> e com <strong>4 a 9 anos de serviço</strong>.</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-furg-blue font-bold">&bull;</span>
+              <span><strong>Manutenção do PGD:</strong> evidência empírica respalda o regime híbrido e o teletrabalho como política segura de retenção sem erosão do comprometimento.</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="text-furg-blue font-bold">&bull;</span>
+              <span><strong>Agenda futura:</strong> entrevistas qualitativas com a faixa vulnerável e ampliação da amostra em IFs e regiões N/NE/CO.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- RODAPÉ INSTITUCIONAL DISCRETO (PADRÃO FURG)                           -->
+  <!-- ===================================================================== -->
+  <footer class="bg-furg-navy text-slate-300 border-t border-slate-800 mt-10 hide-in-presentation">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-xs">
+        <div>
+          <div class="font-bold text-white tracking-wide">
+            FURG / ICEAC — Curso de Administração (2026)
+          </div>
+          <div class="text-slate-400 mt-1">
+            Pesquisa: Comprometimento Organizacional de Profissionais de Tecnologia da Informação nas IFES (Carreira PCCTAE)
+          </div>
+        </div>
+        <div class="md:text-right space-y-1">
+          <div>
+            <span class="text-slate-400">Equipe:</span>
+            <span class="text-slate-200 font-medium">
+              Izabelle Bernardo Schmitz, Julia Correa Araujo Peralta, Júlio César Medina Madruga e Michele Chaves Feijó
+            </span>
+          </div>
+          <div>
+            <span class="text-slate-400">Orientação:</span>
+            <span class="text-amber-300 font-semibold">Profa. Dra. Anne Pinheiro Leal – FURG/ICEAC, 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- SCRIPT PRINCIPAL: DADOS EMBUTIDOS, PLUGINS CHART.JS E INTERATIVIDADE  -->
+  <!-- ===================================================================== -->
+  <script>
+    // =========================================================================
+    // 1. UTILITÁRIOS DE FORMATAÇÃO BRASILEIRA (VÍRGULA DECIMAL)
+    // =========================================================================
+    function fmtBR(valor, casas = 2) {
+      if (valor === null || valor === undefined || isNaN(valor)) return '—';
+      return Number(valor).toFixed(casas).replace('.', ',');
+    }
+
+    function fmtPctBR(valor, casas = 1) {
+      if (valor === null || valor === undefined || isNaN(valor)) return '—';
+      return Number(valor).toFixed(casas).replace('.', ',') + '%';
+    }
+
+    // =========================================================================
+    // 2. PLUGINS CUSTOMIZADOS DO CHART.JS (LINHA DE CORTE 3,0 + RÓTULOS)
+    // =========================================================================
+    const referenceLinePlugin = {
+      id: 'referenceLinePlugin',
+      afterDatasetsDraw(chart, args, options) {
+        if (!options || options.value === undefined) return;
+        const { ctx, chartArea: { left, right, top, bottom }, scales } = chart;
+        const axis = options.axis || 'y';
+        const scale = scales[axis];
+        if (!scale) return;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.setLineDash([6, 4]);
+        ctx.lineWidth = 1.8;
+        ctx.strokeStyle = options.color || '#0F172A';
+
+        if (axis === 'y') {
+          const yPos = scale.getPixelForValue(options.value);
+          ctx.moveTo(left, yPos);
+          ctx.lineTo(right, yPos);
+          ctx.stroke();
+
+          if (options.label) {
+            ctx.setLineDash([]);
+            ctx.font = '600 11px Inter, sans-serif';
+            const textWidth = ctx.measureText(options.label).width;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+            ctx.fillRect(right - textWidth - 14, yPos - 22, textWidth + 10, 18);
+            ctx.fillStyle = '#0F172A';
+            ctx.textAlign = 'right';
+            ctx.fillText(options.label, right - 9, yPos - 9);
+          }
+        } else {
+          const xPos = scale.getPixelForValue(options.value);
+          ctx.moveTo(xPos, top);
+          ctx.lineTo(xPos, bottom);
+          ctx.stroke();
+
+          if (options.label) {
+            ctx.setLineDash([]);
+            ctx.font = '600 11px Inter, sans-serif';
+            ctx.fillStyle = '#0F172A';
+            ctx.textAlign = 'left';
+            ctx.fillText(options.label, xPos + 6, top + 12);
+          }
+        }
+        ctx.restore();
+      }
+    };
+
+    const valueLabelsPlugin = {
+      id: 'valueLabelsPlugin',
+      afterDatasetsDraw(chart, args, options) {
+        if (!options || !options.enabled) return;
+        const { ctx } = chart;
+        const isHorizontal = chart.options.indexAxis === 'y';
+
+        ctx.save();
+        ctx.font = options.font || '600 11px Inter, sans-serif';
+
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+          const meta = chart.getDatasetMeta(datasetIndex);
+          if (meta.hidden) return;
+
+          meta.data.forEach((element, index) => {
+            const val = dataset.data[index];
+            if (val === null || val === undefined) return;
+            const text = options.formatter ? options.formatter(val) : fmtBR(val, 2);
+
+            ctx.fillStyle = options.color || '#1E293B';
+            if (isHorizontal) {
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(text, element.x + 6, element.y);
+            } else {
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              const yOffset = dataset.labelOffsetY || -5;
+              ctx.fillText(text, element.x, element.y + yOffset);
+            }
+          });
+        });
+        ctx.restore();
+      }
+    };
+
+    Chart.register(referenceLinePlugin, valueLabelsPlugin);
+
+    // =========================================================================
+    // 3. BASES DE DADOS OFICIAIS DA PESQUISA (n = 77)
+    // =========================================================================
+
+    // 3.1 Itens da ECO (Figura 2 e Tabela 3 do Relatório Final)
+    const ITENS_ECO = [
+      { id: 'ECO01', desc: 'Feliz em dedicar carreira à IFES', base: 'Afetivo', sub: 'Afetivo', media: 3.61, h2: 0.568, rc1: 0.670, rc2: 0.307, rc3: 0.159, fator: 'RC1', decisao: 'Manter', status: 'keep' },
+      { id: 'ECO02', desc: 'Problemas da IFES como meus', base: 'Afetivo', sub: 'Afetivo', media: 3.51, h2: 0.388, rc1: 0.436, rc2: 0.421, rc3: -0.141, fator: 'RC1', decisao: 'Excluir (h² < 0,40)', status: 'exclude' },
+      { id: 'ECO03r', desc: 'Senso de integração (inv.)', base: 'Afetivo', sub: 'Afetivo', media: 3.55, h2: 0.598, rc1: 0.767, rc2: 0.077, rc3: -0.059, fator: 'RC1', decisao: 'Manter', status: 'keep' },
+      { id: 'ECO04r', desc: 'Vínculo emocional (inv.)', base: 'Afetivo', sub: 'Afetivo', media: 3.61, h2: 0.725, rc1: 0.807, rc2: 0.232, rc3: -0.139, fator: 'RC1', decisao: 'Manter', status: 'keep' },
+      { id: 'ECO05r', desc: 'Sentir-se "pessoa de casa" (inv.)', base: 'Afetivo', sub: 'Afetivo', media: 3.88, h2: 0.689, rc1: 0.825, rc2: 0.086, rc3: -0.010, fator: 'RC1', decisao: 'Manter', status: 'keep' },
+      { id: 'ECO06', desc: 'Imenso significado pessoal', base: 'Afetivo', sub: 'Afetivo', media: 3.71, h2: 0.778, rc1: 0.857, rc2: 0.190, rc3: 0.088, fator: 'RC1', decisao: 'Manter', status: 'keep' },
+      { id: 'ECO07', desc: 'Ficar é necessidade e desejo', base: 'Instrumental', sub: 'Inst-Custo', media: 3.64, h2: 0.534, rc1: 0.615, rc2: -0.002, rc3: 0.395, fator: 'RC1*', decisao: 'Manter (migrou)', status: 'migrated' },
+      { id: 'ECO08', desc: 'Difícil deixar a IFES agora', base: 'Instrumental', sub: 'Inst-Custo', media: 3.29, h2: 0.646, rc1: 0.486, rc2: -0.068, rc3: 0.636, fator: 'RC3', decisao: 'Manter', status: 'keep' },
+      { id: 'ECO09', desc: 'Vida ficaria desestruturada', base: 'Instrumental', sub: 'Inst-Custo', media: 3.62, h2: 0.569, rc1: 0.240, rc2: -0.008, rc3: 0.715, fator: 'RC3', decisao: 'Manter', status: 'keep' },
+      { id: 'ECO10', desc: 'Poucas alternativas se saísse', base: 'Instrumental', sub: 'Inst-Alt', media: 2.60, h2: 0.609, rc1: -0.046, rc2: 0.302, rc3: 0.718, fator: 'RC3', decisao: 'Manter', status: 'keep' },
+      { id: 'ECO11', desc: 'Já dei muito de mim', base: 'Instrumental', sub: 'Inst-Alt', media: 2.53, h2: 0.347, rc1: -0.228, rc2: 0.347, rc3: 0.418, fator: 'RC3', decisao: 'Excluir (h² < 0,40)', status: 'exclude' },
+      { id: 'ECO12', desc: 'Escassez de alternativas imediatas', base: 'Instrumental', sub: 'Inst-Alt', media: 2.83, h2: 0.582, rc1: -0.165, rc2: 0.285, rc3: 0.688, fator: 'RC3', decisao: 'Manter', status: 'keep' },
+      { id: 'ECO13r', desc: 'Obrigação de permanecer (inv.)', base: 'Normativo', sub: 'Normativo', media: 2.55, h2: 0.426, rc1: 0.361, rc2: 0.512, rc3: 0.181, fator: 'RC2', decisao: 'Manter', status: 'keep' },
+      { id: 'ECO14', desc: 'Não seria certo sair agora', base: 'Normativo', sub: 'Normativo', media: 2.53, h2: 0.616, rc1: 0.171, rc2: 0.707, rc3: 0.297, fator: 'RC2', decisao: 'Manter', status: 'keep' },
+      { id: 'ECO15', desc: 'Sentiria culpa se saísse (CV 66,5%)', base: 'Normativo', sub: 'Normativo', media: 2.23, h2: 0.633, rc1: 0.045, rc2: 0.781, rc3: 0.144, fator: 'RC2', decisao: 'Manter', status: 'keep' },
+      { id: 'ECO16', desc: 'Instituição merece lealdade', base: 'Normativo', sub: 'Normativo', media: 2.88, h2: 0.682, rc1: 0.591, rc2: 0.559, rc3: 0.145, fator: 'RC1*', decisao: 'Manter (cruzada)', status: 'migrated' },
+      { id: 'ECO17', desc: 'Obrigação moral com pessoas', base: 'Normativo', sub: 'Normativo', media: 2.26, h2: 0.596, rc1: 0.354, rc2: 0.683, rc3: 0.058, fator: 'RC2', decisao: 'Manter', status: 'keep' },
+      { id: 'ECO18', desc: 'Devo muito à instituição', base: 'Normativo', sub: 'Normativo', media: 3.21, h2: 0.597, rc1: 0.634, rc2: 0.419, rc3: 0.139, fator: 'RC1*', decisao: 'Manter (migrou)', status: 'migrated' }
+    ];
+
+    // 3.2 Base Anonimizada REAL de 77 Respondentes (base_anonimizada_n77.csv)
+    // Estrutura compacta por respondente:
+    // [genero, faixa_etaria, regiao, tipo_ifes, escolaridade, nivel_cargo, atuacao, fg_cd, tempo_servico, pgd, [ECO01..ECO18 brutos]]
+    const RAW_N77 = [
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','Mais de 12 anos','Teletrabalho integral',[3,3,2,4,2,5,3,5,4,4,2,4,5,2,2,4,2,4]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Doutorado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Teletrabalho integral',[5,4,1,1,1,5,4,5,4,1,1,2,5,1,1,1,1,5]],
+      ['Masculino','40 a 50 anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[4,3,4,3,2,4,3,4,5,3,4,3,5,3,1,1,1,4]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[5,5,1,1,1,3,2,2,2,2,3,2,3,4,3,2,3,2]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','De 4 a 6 anos','Teletrabalho integral',[5,4,4,4,4,2,4,3,2,1,3,5,3,2,3,4,5,3]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Até 1 ano','Presencial integral',[3,2,3,3,1,3,3,1,5,3,1,3,5,1,1,1,1,1]],
+      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[5,5,1,1,1,5,3,3,4,2,2,1,3,1,1,3,1,5]],
+      ['Masculino','29 a 39 anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 4 a 6 anos','Teletrabalho integral',[4,3,3,3,3,3,5,5,5,5,3,5,4,5,4,4,1,4]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Até 1 ano','Presencial integral',[3,2,4,4,3,2,5,3,5,1,1,1,3,1,1,1,4,2]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Até 1 ano','Presencial integral',[4,5,1,1,1,3,4,3,2,1,1,2,4,3,1,3,2,3]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 10 a 12 anos','Teletrabalho integral',[3,4,2,2,3,3,3,4,4,2,2,2,4,2,2,2,1,1]],
+      ['Feminino','51 a 61 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Presencial integral',[5,4,1,1,1,5,5,5,5,5,4,5,1,4,1,4,4,5]],
+      ['Masculino','29 a 39 anos','Norte','Universidade Federal','Graduação','Nível D (Médio)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[3,4,3,2,2,3,4,4,4,4,3,4,2,3,2,2,2,3]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[5,4,1,2,1,4,5,5,5,2,2,2,4,3,1,4,3,5]],
+      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Teletrabalho integral',[4,3,3,2,1,5,3,4,3,2,4,3,1,1,1,3,1,5]],
+      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Teletrabalho integral',[3,4,3,2,2,5,3,4,4,4,4,3,3,3,2,3,3,4]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Até 1 ano','Teletrabalho integral',[5,3,2,2,2,4,4,1,1,1,2,1,3,3,1,4,1,2]],
+      ['Masculino','29 a 39 anos','Norte','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','Mais de 12 anos','Teletrabalho integral',[1,1,1,1,3,1,2,1,1,1,5,1,5,1,1,1,1,1]],
+      ['Feminino','62+ anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[5,4,1,1,1,5,5,4,2,1,1,1,4,3,1,5,2,5]],
+      ['Masculino','29 a 39 anos','Nordeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Teletrabalho integral',[3,1,3,3,3,3,5,4,4,3,1,3,5,1,1,1,2,2]],
+      ['Masculino','40 a 50 anos','Nordeste','Universidade Federal','Doutorado','Nível E (Superior)','Técnica/Especializada','Exerce atualmente','Mais de 12 anos','Teletrabalho integral',[1,1,5,5,4,2,3,5,5,4,5,4,4,2,1,2,2,2]],
+      ['Masculino','62+ anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Exerce atualmente','Mais de 12 anos','Híbrido',[5,4,1,1,1,5,5,5,3,3,2,2,5,5,5,5,5,5]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[4,3,5,3,2,4,3,2,4,3,5,5,4,1,3,4,1,2]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','Mais de 12 anos','Teletrabalho integral',[3,1,2,2,2,3,4,5,5,1,4,2,3,4,1,2,2,1]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Até 1 ano','Presencial integral',[5,4,2,1,1,5,5,3,2,2,3,3,3,3,1,5,5,5]],
+      ['Masculino','51 a 61 anos','Sul','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 10 a 12 anos','Híbrido',[5,5,1,1,1,5,5,5,5,5,1,5,1,5,5,5,5,5]],
+      ['Masculino','29 a 39 anos','Nordeste','Universidade Federal','Mestrado','Nível D (Médio)','Gestão/Liderança','Exerce atualmente','De 10 a 12 anos','Híbrido',[1,1,3,3,2,3,3,4,2,1,5,1,3,1,1,1,1,1]],
+      ['Masculino','40 a 50 anos','Centro-Oeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','De 4 a 6 anos','Presencial integral',[4,4,5,3,4,1,1,1,1,1,1,1,5,1,1,1,1,1]],
+      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[4,5,2,1,1,5,4,3,2,4,2,4,4,2,3,5,2,5]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Doutorado','Nível D (Médio)','Gestão/Liderança','Não exerce','Mais de 12 anos','Híbrido',[4,3,2,2,2,5,4,4,5,3,3,5,5,1,1,4,2,4]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Doutorado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Teletrabalho integral',[5,5,1,1,1,5,5,3,5,1,1,1,5,1,1,5,3,4]],
+      ['Masculino','40 a 50 anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[1,1,5,5,5,1,2,1,2,1,1,1,5,1,1,1,2,1]],
+      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[2,3,5,5,3,1,3,4,5,4,4,4,4,4,4,1,1,2]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Exerce atualmente','De 1 a 3 anos','Híbrido',[5,3,1,1,1,5,5,5,5,3,3,3,1,5,5,5,5,5]],
+      ['Feminino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Presencial integral',[3,5,1,1,1,5,5,5,5,2,1,1,4,1,1,1,1,4]],
+      ['Masculino','29 a 39 anos','Sudeste','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 10 a 12 anos','Presencial integral',[5,5,1,1,1,5,4,4,5,5,2,3,5,4,3,3,3,3]],
+      ['Masculino','40 a 50 anos','Norte','Universidade Federal','Especialização / MBA','Nível D (Médio)','Gestão/Liderança','Não exerce','Mais de 12 anos','Teletrabalho integral',[4,4,3,3,2,4,4,4,5,4,3,4,2,4,5,4,3,5]],
+      ['Masculino','40 a 50 anos','Sul','IF ou CEFET','Mestrado','Outro','Técnica/Especializada','Não exerce','De 10 a 12 anos','Híbrido',[3,4,4,2,2,3,4,3,4,3,4,3,3,3,2,3,2,2]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Teletrabalho integral',[4,4,4,4,3,2,4,3,5,4,1,5,3,4,2,1,1,1]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[5,3,1,1,1,5,5,5,5,3,3,1,1,5,5,5,4,5]],
+      ['Masculino','29 a 39 anos','Centro-Oeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Híbrido',[1,2,1,5,5,3,2,5,1,1,1,4,5,1,1,1,1,1]],
+      ['Masculino','51 a 61 anos','Centro-Oeste','Universidade Federal','Especialização / MBA','Nível D (Médio)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[5,5,1,1,1,5,5,5,5,4,5,5,1,5,5,5,5,5]],
+      ['Masculino','29 a 39 anos','Norte','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Híbrido',[2,4,3,3,2,4,2,1,5,4,1,2,4,1,1,4,1,3]],
+      ['Masculino','51 a 61 anos','Centro-Oeste','Universidade Federal','Mestrado','Nível D (Médio)','Gestão/Liderança','Não exerce','Mais de 12 anos','Híbrido',[1,4,2,2,2,4,4,2,3,1,2,2,5,1,1,2,1,2]],
+      ['Feminino','51 a 61 anos','Nordeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[4,2,2,2,2,4,4,2,3,2,3,3,3,2,2,3,2,3]],
+      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[5,5,1,1,1,5,4,5,5,1,1,1,2,5,5,5,3,3]],
+      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Exerce atualmente','Mais de 12 anos','Híbrido',[3,4,2,1,2,4,2,2,4,2,2,2,2,4,4,4,3,3]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[4,3,1,1,1,4,3,5,5,3,1,3,3,4,4,3,3,4]],
+      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Exerce atualmente','De 7 a 9 anos','Presencial integral',[2,3,4,4,4,2,1,1,2,1,1,2,5,4,4,1,1,5]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Doutorado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Híbrido',[3,2,4,2,3,4,3,4,5,4,4,2,2,4,3,3,2,4]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[5,5,2,1,1,5,5,5,3,5,3,5,3,2,1,5,1,5]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Graduação','Nível D (Médio)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Híbrido',[4,4,1,2,2,5,5,5,4,3,2,3,2,1,1,4,1,4]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[4,1,5,5,3,2,4,4,4,3,2,2,4,1,1,1,1,1]],
+      ['Masculino','51 a 61 anos','Sul','Universidade Federal','Doutorado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[5,5,1,1,1,5,5,2,5,1,3,3,3,3,3,3,3,4]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Presencial integral',[5,4,1,4,2,5,5,5,5,4,4,5,4,4,5,4,4,4]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 4 a 6 anos','Presencial integral',[1,3,5,5,5,1,1,1,1,1,1,1,5,2,2,1,1,1]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Doutorado','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Híbrido',[5,5,5,2,5,5,3,2,2,2,4,4,3,3,2,4,4,5]],
+      ['Masculino','29 a 39 anos','Nordeste','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Híbrido',[5,4,2,2,2,5,4,2,1,4,2,4,3,3,2,3,3,3]],
+      ['Masculino','18 a 28 anos','Sudeste','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Exerce atualmente','De 4 a 6 anos','Híbrido',[4,5,4,2,4,3,4,5,5,2,4,3,4,1,1,3,1,3]],
+      ['Masculino','51 a 61 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[5,5,5,4,1,3,4,1,3,3,4,1,2,3,2,3,4,3]],
+      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','De 7 a 9 anos','Presencial integral',[4,4,2,2,2,4,4,3,5,4,2,3,3,2,2,3,2,1]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Até 1 ano','Presencial integral',[2,3,5,5,5,2,5,1,2,4,3,5,3,3,1,3,3,3]],
+      ['Masculino','29 a 39 anos','Sul','Universidade Federal','Mestrado','Nível E (Superior)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Híbrido',[1,1,5,5,5,2,4,2,2,1,1,3,5,1,1,1,1,1]],
+      ['Masculino','29 a 39 anos','Centro-Oeste','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Gestão/Liderança','Exerce atualmente','De 4 a 6 anos','Híbrido',[3,3,1,2,2,4,2,1,4,4,3,3,4,2,2,3,4,3]],
+      ['Masculino','29 a 39 anos','Norte','IF ou CEFET','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Híbrido',[4,4,2,2,1,5,4,3,3,1,1,3,5,1,1,1,1,5]],
+      ['Masculino','40 a 50 anos','Centro-Oeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Presencial integral',[4,4,2,2,1,4,4,4,4,2,4,4,2,4,4,5,4,5]],
+      ['Masculino','40 a 50 anos','Sudeste','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[4,2,2,1,1,5,4,5,3,1,3,1,2,4,3,3,3,4]],
+      ['Masculino','29 a 39 anos','Sudeste','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Gestão/Liderança','Exerce atualmente','De 7 a 9 anos','Teletrabalho integral',[1,5,1,1,1,5,3,1,1,1,1,1,3,1,5,3,3,5]],
+      ['Masculino','29 a 39 anos','Sudeste','IF ou CEFET','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Até 1 ano','Presencial integral',[1,5,5,5,1,3,3,1,1,1,3,3,5,1,1,1,1,2]],
+      ['Masculino','51 a 61 anos','Centro-Oeste','IF ou CEFET','Graduação','Nível D (Médio)','Técnica/Especializada','Não exerce','Mais de 12 anos','Presencial integral',[2,5,2,3,5,2,1,1,5,5,4,4,5,1,5,1,1,2]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Doutorado','Nível D (Médio)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[5,3,3,3,2,4,4,3,3,2,2,3,3,3,1,2,2,2]],
+      ['Masculino','29 a 39 anos','Sudeste','Universidade Federal','Mestrado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Teletrabalho integral',[4,4,1,1,1,5,5,5,4,1,1,2,1,4,4,4,4,4]],
+      ['Masculino','40 a 50 anos','Norte','Universidade Federal','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 7 a 9 anos','Presencial integral',[1,2,3,3,3,2,3,4,5,2,2,2,3,1,1,2,1,2]],
+      ['Masculino','18 a 28 anos','Norte','IF ou CEFET','Especialização / MBA','Nível D (Médio)','Técnica/Especializada','Não exerce','De 1 a 3 anos','Presencial integral',[5,3,1,4,1,3,4,3,3,3,1,3,5,2,1,1,1,3]],
+      ['Masculino','40 a 50 anos','Norte','Universidade Federal','Especialização / MBA','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Presencial integral',[5,3,1,1,1,5,3,3,3,4,3,3,1,1,1,5,3,4]],
+      ['Feminino','40 a 50 anos','Sudeste','Universidade Federal','Doutorado','Nível E (Superior)','Gestão/Liderança','Exerce atualmente','Mais de 12 anos','Híbrido',[3,4,2,3,3,2,2,3,5,5,5,5,5,5,5,2,1,4]],
+      ['Masculino','40 a 50 anos','Sul','Universidade Federal','Especialização / MBA','Nível E (Superior)','Técnica/Especializada','Não exerce','Mais de 12 anos','Teletrabalho integral',[5,4,1,2,1,4,2,2,4,3,3,2,4,1,2,4,2,2]]
+    ];
+
+    // Processamento da Etapa 1 (Inversão matemática 6 - x em ECO03, ECO04, ECO05 e ECO13 + médias exatas)
+    const RESPONDENTES_N77 = RAW_N77.map((row, idx) => {
+      const [genero, faixa_etaria, regiao, tipo_ifes, escolaridade, nivel_cargo, atuacao, fg_cd, tempo_servico, pgd, ecoRaw] = row;
+      // Aplica inversão nos índices 2 (ECO03), 3 (ECO04), 4 (ECO05) e 12 (ECO13)
+      const eco = ecoRaw.map((val, i) => (i === 2 || i === 3 || i === 4 || i === 12) ? (6 - val) : val);
+
+      const afetivo = eco.slice(0, 6).reduce((a, b) => a + b, 0) / 6;
+      const instrumental = eco.slice(6, 12).reduce((a, b) => a + b, 0) / 6;
+      const normativo = eco.slice(12, 18).reduce((a, b) => a + b, 0) / 6;
+      const global = (afetivo + instrumental + normativo) / 3;
+
+      // Regra de sobre-educação do protocolo (76 de 77 = 98,7%; 1 caso 'Outro' não classificado como sobre-educado)
+      const sobre_educacao =
+        (nivel_cargo === 'Nível D (Médio)') ||
+        (nivel_cargo === 'Nível E (Superior)' && escolaridade !== 'Graduação');
+
+      return {
+        id: idx + 1,
+        genero,
+        faixa_etaria,
+        regiao,
+        tipo_ifes,
+        escolaridade,
+        nivel_cargo,
+        atuacao,
+        fg_cd,
+        tempo_servico,
+        pgd,
+        sobre_educacao,
+        eco,
+        afetivo,
+        instrumental,
+        normativo,
+        global
+      };
+    });
+
+    // Sincroniza as médias reais item a item (ECO01..ECO18) diretamente dos 77 respondentes
+    ITENS_ECO.forEach((item, idx) => {
+      item.media = RESPONDENTES_N77.reduce((sum, r) => sum + r.eco[idx], 0) / RESPONDENTES_N77.length;
+    });
+
+    // =========================================================================
+    // 4. CONTROLE DE ABAS E MODO APRESENTAÇÃO
+    // =========================================================================
+    const chartInstances = {};
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.toggle('active', panel.id === tabId);
+      });
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        const isActive = btn.dataset.tab === tabId;
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        if (isActive) {
+          btn.className = 'tab-btn whitespace-nowrap px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-t-lg border-b-2 border-furg-navy text-furg-navy bg-furg-sky/60 transition-all';
+          const badge = btn.querySelector('span');
+          if (badge) badge.className = 'inline-block px-1.5 py-0.5 text-[10px] rounded bg-furg-navy text-white mr-1.5';
+        } else {
+          btn.className = 'tab-btn whitespace-nowrap px-4 py-2.5 text-xs sm:text-sm font-medium rounded-t-lg border-b-2 border-transparent text-slate-600 hover:text-furg-navy hover:bg-slate-50 transition-all';
+          const badge = btn.querySelector('span');
+          if (badge) badge.className = 'inline-block px-1.5 py-0.5 text-[10px] rounded bg-slate-200 text-slate-700 mr-1.5';
+        }
+      });
+
+      // Redimensiona gráficos ativos para evitar distorção
+      setTimeout(() => {
+        Object.values(chartInstances).forEach(ch => {
+          if (ch && typeof ch.resize === 'function') ch.resize();
+        });
+      }, 60);
+    }
+
+    function togglePresentationMode() {
+      const isPres = document.body.classList.toggle('presentation-mode');
+      const label = document.getElementById('label-presentation');
+      const iconEnter = document.getElementById('icon-pres-enter');
+      const iconExit = document.getElementById('icon-pres-exit');
+      const btn = document.getElementById('btn-presentation');
+
+      if (isPres) {
+        label.textContent = 'Sair da Apresentação (ESC)';
+        iconEnter.classList.add('hidden');
+        iconExit.classList.remove('hidden');
+        btn.classList.remove('bg-furg-navy', 'border-furg-navy');
+        btn.classList.add('bg-furg-red', 'border-furg-red');
+      } else {
+        label.textContent = 'Modo Apresentação';
+        iconEnter.classList.remove('hidden');
+        iconExit.classList.add('hidden');
+        btn.classList.remove('bg-furg-red', 'border-furg-red');
+        btn.classList.add('bg-furg-navy', 'border-furg-navy');
+      }
+
+      setTimeout(() => {
+        Object.values(chartInstances).forEach(ch => ch && ch.resize());
+      }, 100);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.body.classList.contains('presentation-mode')) {
+        togglePresentationMode();
+      }
+    });
+
+    // =========================================================================
+    // 5. RENDERIZAÇÃO DOS GRÁFICOS — ABA 1 (VISÃO GERAL & INVERSÃO)
+    // =========================================================================
+    function initTab1Charts() {
+      // Gráfico 1: Comparativo Amostra Atual vs. Avelino (2024 – UFPI)
+      const ctxComp = document.getElementById('chart-comparativo-avelino').getContext('2d');
+      chartInstances.comparativo = new Chart(ctxComp, {
+        type: 'bar',
+        data: {
+          labels: [
+            ['Afetivo', '(quer ficar)'],
+            ['Instrumental', '(precisa ficar)'],
+            ['Normativo', '(sente que deve)'],
+            ['Global', '(média geral)']
+          ],
+          datasets: [
+            {
+              label: 'TI / IFES (Presente estudo, n = 77)',
+              data: [3.65, 3.08, 2.61, 3.11],
+              backgroundColor: ['#16537E', '#D97706', '#B91C1C', '#0B2E4E'],
+              borderRadius: 6,
+              barPercentage: 0.78,
+              categoryPercentage: 0.65
+            },
+            {
+              label: 'TAEs Gerais / UFPI (Avelino, 2024, n = 281)',
+              data: [3.72, 4.47, 3.19, 3.35],
+              backgroundColor: '#CBD5E1',
+              borderColor: '#64748B',
+              borderWidth: 1.5,
+              borderRadius: 6,
+              barPercentage: 0.78,
+              categoryPercentage: 0.65
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { top: 24 } },
+          scales: {
+            y: {
+              min: 0,
+              max: 5,
+              ticks: {
+                stepSize: 1,
+                callback: (v) => fmtBR(v, 1),
+                font: { size: 12 }
+              },
+              grid: { color: '#E2E8F0' },
+              title: {
+                display: true,
+                text: 'Escore Médio (Escala Likert 1 a 5)',
+                font: { size: 12, weight: '600' },
+                color: '#475569'
+              }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 12, weight: '600' }, color: '#1E293B' }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            referenceLinePlugin: {
+              axis: 'y',
+              value: 3.0,
+              color: '#0F172A',
+              label: 'Ponto de corte: 3,00 (Luz et al., 2018)'
+            },
+            valueLabelsPlugin: {
+              enabled: true,
+              font: '700 12px Inter, sans-serif',
+              formatter: (v) => fmtBR(v, 2)
+            },
+            tooltip: {
+              backgroundColor: '#0B2E4E',
+              padding: 12,
+              callbacks: {
+                label: (ctx) => ` ${ctx.dataset.label}: ${fmtBR(ctx.raw, 2)}`
+              }
+            }
+          }
+        }
+      });
+
+      // Gráfico 2: Item a Item Horizontal (ECO01 a ECO18)
+      const ctxItens = document.getElementById('chart-itens-eco').getContext('2d');
+      const itemColors = ITENS_ECO.map(item => {
+        if (item.sub === 'Afetivo') return '#16537E';
+        if (item.sub === 'Inst-Custo') return '#D97706';
+        if (item.sub === 'Inst-Alt') return '#FB923C';
+        return '#B91C1C';
+      });
+
+      chartInstances.itensEco = new Chart(ctxItens, {
+        type: 'bar',
+        data: {
+          labels: ITENS_ECO.map(i => `${i.id} – ${i.desc}${i.status === 'exclude' ? ' [h²<0,40]' : ''}`),
+          datasets: [{
+            label: 'Média do Item (n = 77)',
+            data: ITENS_ECO.map(i => i.media),
+            backgroundColor: itemColors,
+            borderRadius: 4,
+            barThickness: 17
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { right: 44 } },
+          scales: {
+            x: {
+              min: 1,
+              max: 4.5,
+              ticks: {
+                stepSize: 0.5,
+                callback: (v) => fmtBR(v, 1),
+                font: { size: 11 }
+              },
+              grid: { color: '#E2E8F0' },
+              title: {
+                display: true,
+                text: 'Escore Médio (Escala Likert 1 a 5)',
+                font: { size: 12, weight: '600' },
+                color: '#475569'
+              }
+            },
+            y: {
+              grid: { display: false },
+              ticks: {
+                font: { size: 11, weight: '500' },
+                color: '#1E293B'
+              }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            referenceLinePlugin: {
+              axis: 'x',
+              value: 3.0,
+              color: '#0F172A',
+              label: 'Corte 3,00'
+            },
+            valueLabelsPlugin: {
+              enabled: true,
+              font: '700 11px Inter, sans-serif',
+              formatter: (v) => fmtBR(v, 2)
+            },
+            tooltip: {
+              backgroundColor: '#0B2E4E',
+              padding: 12,
+              callbacks: {
+                title: (items) => {
+                  const item = ITENS_ECO[items[0].dataIndex];
+                  return `${item.id} (${item.base})`;
+                },
+                label: (ctx) => {
+                  const item = ITENS_ECO[ctx.dataIndex];
+                  const linhas = [
+                    ` Média: ${fmtBR(item.media, 2)}`,
+                    ` Classificação: ${item.media > 3 ? 'Comprometido (> 3,0)' : 'Não comprometido (< 3,0)'}`,
+                    ` AFE: h² = ${fmtBR(item.h2, 3)} | ${item.decisao}`
+                  ];
+                  return linhas;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 6. FILTROS DINÂMICOS E GRÁFICOS — ABA 2 (PERFIL)
+    // =========================================================================
+    function updateStatusBadge(elId, val) {
+      const el = document.getElementById(elId);
+      if (val > 3.0) {
+        el.textContent = 'Comprometido (> 3,0)';
+        el.className = 'px-2 py-0.5 text-[10px] font-semibold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200';
+      } else {
+        el.textContent = 'Não comprometido (< 3,0)';
+        el.className = 'px-2 py-0.5 text-[10px] font-semibold rounded-full bg-red-50 text-furg-red border border-red-200';
+      }
+    }
+
+    function countBy(arr, key, orderedKeys) {
+      const map = {};
+      orderedKeys.forEach(k => { map[k] = 0; });
+      arr.forEach(item => {
+        if (map[item[key]] !== undefined) map[item[key]]++;
+      });
+      return orderedKeys.map(k => map[k]);
+    }
+
+    function applyFilters() {
+      const regiao = document.getElementById('f-regiao').value;
+      const ifes = document.getElementById('f-ifes').value;
+      const pgd = document.getElementById('f-pgd').value;
+      const fgcd = document.getElementById('f-fgcd').value;
+      const cargo = document.getElementById('f-cargo').value;
+
+      const filtered = RESPONDENTES_N77.filter(r =>
+        (regiao === 'Todos' || r.regiao === regiao) &&
+        (ifes === 'Todos' || r.tipo_ifes === ifes) &&
+        (pgd === 'Todos' || r.pgd === pgd) &&
+        (fgcd === 'Todos' || r.fg_cd === fgcd) &&
+        (cargo === 'Todos' || r.nivel_cargo === cargo)
+      );
+
+      const n = filtered.length;
+      const pct = (n / RESPONDENTES_N77.length) * 100;
+      document.getElementById('filter-status-badge').textContent =
+        `Exibindo ${n} de 77 respondentes (${fmtPctBR(pct)})`;
+
+      const emptyAlert = document.getElementById('empty-filter-alert');
+      const kpisGrid = document.getElementById('filtered-kpis-grid');
+      const chartsGrid = document.getElementById('filtered-charts-grid');
+
+      if (n === 0) {
+        emptyAlert.classList.remove('hidden');
+        kpisGrid.classList.add('opacity-40');
+        chartsGrid.classList.add('opacity-40');
+        document.getElementById('dyn-n').textContent = '0';
+        document.getElementById('dyn-pct').textContent = '0,0% da amostra';
+        ['dyn-global', 'dyn-afetivo', 'dyn-instrumental', 'dyn-normativo'].forEach(id => {
+          document.getElementById(id).textContent = '—';
+        });
+        return;
+      }
+
+      emptyAlert.classList.add('hidden');
+      kpisGrid.classList.remove('opacity-40');
+      chartsGrid.classList.remove('opacity-40');
+
+      const meanA = filtered.reduce((s, r) => s + r.afetivo, 0) / n;
+      const meanI = filtered.reduce((s, r) => s + r.instrumental, 0) / n;
+      const meanN = filtered.reduce((s, r) => s + r.normativo, 0) / n;
+      const meanG = (meanA + meanI + meanN) / 3;
+      const sobreCount = filtered.filter(r => r.sobre_educacao).length;
+      const sobrePct = (sobreCount / n) * 100;
+
+      document.getElementById('dyn-n').textContent = String(n);
+      document.getElementById('dyn-pct').textContent = `${fmtPctBR(pct)} da amostra`;
+      document.getElementById('dyn-global').textContent = fmtBR(meanG, 2);
+      document.getElementById('dyn-afetivo').textContent = fmtBR(meanA, 2);
+      document.getElementById('dyn-instrumental').textContent = fmtBR(meanI, 2);
+      document.getElementById('dyn-normativo').textContent = fmtBR(meanN, 2);
+      document.getElementById('badge-sobre-educacao').textContent = `Sobre-educação: ${fmtPctBR(sobrePct)}`;
+
+      updateStatusBadge('dyn-badge-global', meanG);
+      updateStatusBadge('dyn-badge-afetivo', meanA);
+      updateStatusBadge('dyn-badge-instrumental', meanI);
+      updateStatusBadge('dyn-badge-normativo', meanN);
+
+      // Atualiza os 4 gráficos de distribuição
+      const generoKeys = ['Masculino', 'Feminino'];
+      const escKeys = ['Especialização / MBA', 'Mestrado', 'Doutorado', 'Graduação'];
+      const pgdKeys = ['Híbrido', 'Presencial integral', 'Teletrabalho integral'];
+      const regKeys = ['Sudeste', 'Sul', 'Nordeste', 'Norte', 'Centro-Oeste'];
+
+      updateDistChart('distGenero', generoKeys, countBy(filtered, 'genero', generoKeys), n);
+      updateDistChart('distEscolaridade', escKeys, countBy(filtered, 'escolaridade', escKeys), n);
+      updateDistChart('distPgd', pgdKeys, countBy(filtered, 'pgd', pgdKeys), n);
+      updateDistChart('distRegiao', regKeys, countBy(filtered, 'regiao', regKeys), n);
+    }
+
+    function updateDistChart(instanceKey, labels, values, totalN) {
+      const ch = chartInstances[instanceKey];
+      if (!ch) return;
+      ch.data.labels = labels;
+      ch.data.datasets[0].data = values;
+      ch.options.plugins.tooltip.callbacks.label = (ctx) => {
+        const v = ctx.raw;
+        const p = totalN > 0 ? (v / totalN) * 100 : 0;
+        return ` ${v} servidores (${fmtPctBR(p)})`;
+      };
+      ch.update();
+    }
+
+    function resetFilters() {
+      ['f-regiao', 'f-ifes', 'f-pgd', 'f-fgcd', 'f-cargo'].forEach(id => {
+        document.getElementById(id).value = 'Todos';
+      });
+      applyFilters();
+    }
+
+    function initTab2Charts() {
+      // 1. Gênero (Doughnut)
+      chartInstances.distGenero = new Chart(document.getElementById('chart-dist-genero'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Masculino', 'Feminino'],
+          datasets: [{
+            data: [72, 5],
+            backgroundColor: ['#0B2E4E', '#D97706'],
+            borderWidth: 2,
+            borderColor: '#FFFFFF'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '62%',
+          plugins: {
+            legend: { position: 'bottom', labels: { padding: 16, font: { size: 12, weight: '600' } } },
+            tooltip: { backgroundColor: '#0B2E4E', padding: 10 }
+          }
+        }
+      });
+
+      // 2. Escolaridade (Bar)
+      chartInstances.distEscolaridade = new Chart(document.getElementById('chart-dist-escolaridade'), {
+        type: 'bar',
+        data: {
+          labels: ['Especialização / MBA', 'Mestrado', 'Doutorado', 'Graduação'],
+          datasets: [{
+            label: 'Respondentes',
+            data: [39, 26, 9, 3],
+            backgroundColor: ['#16537E', '#0B2E4E', '#0F766E', '#94A3B8'],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { top: 20 } },
+          scales: {
+            y: { beginAtZero: true, grid: { color: '#F1F5F9' }, ticks: { precision: 0 } },
+            x: { grid: { display: false }, ticks: { font: { size: 11, weight: '500' } } }
+          },
+          plugins: {
+            legend: { display: false },
+            valueLabelsPlugin: { enabled: true, formatter: (v) => String(v) },
+            tooltip: { backgroundColor: '#0B2E4E', padding: 10 }
+          }
+        }
+      });
+
+      // 3. PGD (Doughnut)
+      chartInstances.distPgd = new Chart(document.getElementById('chart-dist-pgd'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Híbrido', 'Presencial integral', 'Teletrabalho integral'],
+          datasets: [{
+            data: [33, 26, 18],
+            backgroundColor: ['#16537E', '#64748B', '#0F766E'],
+            borderWidth: 2,
+            borderColor: '#FFFFFF'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '62%',
+          plugins: {
+            legend: { position: 'bottom', labels: { padding: 14, font: { size: 12, weight: '600' } } },
+            tooltip: { backgroundColor: '#0B2E4E', padding: 10 }
+          }
+        }
+      });
+
+      // 4. Macrorregião (Horizontal Bar)
+      chartInstances.distRegiao = new Chart(document.getElementById('chart-dist-regiao'), {
+        type: 'bar',
+        data: {
+          labels: ['Sudeste', 'Sul', 'Nordeste', 'Norte', 'Centro-Oeste'],
+          datasets: [{
+            label: 'Respondentes',
+            data: [31, 22, 9, 8, 7],
+            backgroundColor: ['#0B2E4E', '#16537E', '#2B6CB0', '#4A90A4', '#64748B'],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { right: 32 } },
+          scales: {
+            x: { beginAtZero: true, grid: { color: '#F1F5F9' }, ticks: { precision: 0 } },
+            y: { grid: { display: false }, ticks: { font: { size: 12, weight: '600' } } }
+          },
+          plugins: {
+            legend: { display: false },
+            valueLabelsPlugin: { enabled: true, formatter: (v) => String(v) },
+            tooltip: { backgroundColor: '#0B2E4E', padding: 10 }
+          }
+        }
+      });
+
+      applyFilters();
+    }
+
+    // =========================================================================
+    // 7. TABELA INTERATIVA DE PSICOMETRIA & AFE — ABA 3
+    // =========================================================================
+    function renderAfeTable(filterMode = 'all') {
+      const tbody = document.getElementById('afe-table-body');
+      tbody.innerHTML = '';
+
+      const rows = ITENS_ECO.filter(item => {
+        if (filterMode === 'all') return true;
+        if (filterMode === 'keep') return item.status !== 'exclude';
+        if (filterMode === 'exclude') return item.status === 'exclude';
+        if (filterMode === 'migrated') return item.status === 'migrated';
+        return true;
+      });
+
+      rows.forEach(item => {
+        const isExcl = item.status === 'exclude';
+        const isMigr = item.status === 'migrated';
+
+        let rowBg = 'hover:bg-slate-50';
+        if (isExcl) rowBg = 'bg-red-50/70 hover:bg-red-50';
+        else if (isMigr) rowBg = 'bg-amber-50/60 hover:bg-amber-50';
+
+        const fmtLoad = (val) => {
+          const bold = Math.abs(val) >= 0.50 ? 'font-bold text-furg-navy bg-furg-sky/70 px-1.5 py-0.5 rounded' : 'text-slate-500';
+          return `<span class="${bold}">${fmtBR(val, 3)}</span>`;
+        };
+
+        let badgeDecisao = `<span class="inline-flex px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">${item.decisao}</span>`;
+        if (isExcl) {
+          badgeDecisao = `<span class="inline-flex px-2 py-0.5 rounded-full text-[11px] font-semibold bg-red-100 text-furg-red border border-red-200">${item.decisao}</span>`;
+        } else if (isMigr) {
+          badgeDecisao = `<span class="inline-flex px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-900 border border-amber-300">${item.decisao}</span>`;
+        }
+
+        const tr = document.createElement('tr');
+        tr.className = `${rowBg} transition-colors`;
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-bold text-furg-navy whitespace-nowrap">${item.id}</td>
+          <td class="py-3 px-4 text-slate-700">${item.desc}</td>
+          <td class="py-3 px-4 text-slate-600 whitespace-nowrap">${item.base}</td>
+          <td class="py-3 px-4 text-right font-mono ${item.h2 < 0.4 ? 'font-bold text-furg-red' : 'text-slate-700'}">${fmtBR(item.h2, 3)}</td>
+          <td class="py-3 px-4 text-right font-mono">${fmtLoad(item.rc1)}</td>
+          <td class="py-3 px-4 text-right font-mono">${fmtLoad(item.rc2)}</td>
+          <td class="py-3 px-4 text-right font-mono">${fmtLoad(item.rc3)}</td>
+          <td class="py-3 px-4 text-center font-bold ${isMigr ? 'text-amber-800' : 'text-slate-700'}">${item.fator}</td>
+          <td class="py-3 px-4 whitespace-nowrap">${badgeDecisao}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterAfeTable(mode) {
+      document.querySelectorAll('.afe-filter-btn').forEach(btn => {
+        const active = btn.dataset.afe === mode;
+        if (active) {
+          btn.classList.add('ring-2', 'ring-offset-1', 'ring-furg-navy');
+        } else {
+          btn.classList.remove('ring-2', 'ring-offset-1', 'ring-furg-navy');
+        }
+      });
+      renderAfeTable(mode);
+    }
+
+    // =========================================================================
+    // 8. GRÁFICOS DE FATORES ASSOCIADOS — ABA 4
+    // =========================================================================
+    function initTab4Charts() {
+      // 1. Progressão por Faixa Etária (Figura 3)
+      chartInstances.faixaEtaria = new Chart(document.getElementById('chart-faixa-etaria'), {
+        type: 'line',
+        data: {
+          labels: ['18–28\n(n=2)', '29–39\n(n=29)', '40–50\n(n=32)', '51–61\n(n=12)', '62+\n(n=2)'],
+          datasets: [
+            {
+              label: 'ECO Afetivo (p = 0,064)',
+              data: [3.58, 3.33, 3.64, 4.24, 4.83],
+              borderColor: '#16537E',
+              backgroundColor: '#16537E',
+              borderWidth: 2.5,
+              pointRadius: 5,
+              tension: 0.2,
+              labelOffsetY: -8
+            },
+            {
+              label: 'ECO Global (p = 0,026*)',
+              data: [2.86, 2.78, 3.19, 3.64, 3.78],
+              borderColor: '#0B2E4E',
+              backgroundColor: '#0B2E4E',
+              borderDash: [6, 4],
+              borderWidth: 2.5,
+              pointRadius: 5,
+              pointStyle: 'rect',
+              tension: 0.2,
+              labelOffsetY: -8
+            },
+            {
+              label: 'ECO Normativo (p = 0,022*)',
+              data: [1.67, 2.23, 2.68, 3.32, 3.67],
+              borderColor: '#B91C1C',
+              backgroundColor: '#B91C1C',
+              borderDash: [3, 3],
+              borderWidth: 2.5,
+              pointRadius: 5,
+              pointStyle: 'triangle',
+              tension: 0.2,
+              labelOffsetY: 14
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { top: 20, right: 16 } },
+          scales: {
+            y: {
+              min: 1.2,
+              max: 5.2,
+              ticks: { callback: (v) => fmtBR(v, 1) },
+              grid: { color: '#E2E8F0' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 11, weight: '600' } }
+            }
+          },
+          plugins: {
+            legend: { position: 'bottom', labels: { usePointStyle: true, padding: 14, font: { size: 11, weight: '600' } } },
+            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Corte: 3,00' },
+            valueLabelsPlugin: { enabled: true, font: '700 10px Inter, sans-serif' },
+            tooltip: {
+              backgroundColor: '#0B2E4E',
+              padding: 12,
+              callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ${fmtBR(ctx.raw, 2)}` }
+            }
+          }
+        }
+      });
+
+      // 2. Curva em Vale: Tempo de Serviço no ECO Global (Figura 4A)
+      chartInstances.tempoServico = new Chart(document.getElementById('chart-tempo-servico'), {
+        type: 'line',
+        data: {
+          labels: ['Até 1 ano\n(n=7)', '1–3 anos\n(n=9)', '4–6 anos\n(n=6)', '7–9 anos\n(n=10)', '10–12 anos\n(n=5)', '>12 anos\n(n=40)'],
+          datasets: [{
+            label: 'ECO Global (Média)',
+            data: [2.65, 3.39, 2.60, 2.56, 3.32, 3.32],
+            borderColor: '#0B2E4E',
+            backgroundColor: 'rgba(185, 28, 28, 0.08)',
+            pointBackgroundColor: ['#B91C1C', '#16537E', '#B91C1C', '#B91C1C', '#16537E', '#16537E'],
+            pointBorderColor: '#FFFFFF',
+            pointBorderWidth: 2,
+            pointRadius: 6.5,
+            borderWidth: 2.8,
+            fill: false,
+            tension: 0.15
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { top: 24, right: 16 } },
+          scales: {
+            y: {
+              min: 2.0,
+              max: 4.0,
+              ticks: { stepSize: 0.25, callback: (v) => fmtBR(v, 2) },
+              grid: { color: '#E2E8F0' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 11, weight: '600' } }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Corte: 3,00' },
+            valueLabelsPlugin: { enabled: true, font: '700 12px Inter, sans-serif' },
+            tooltip: {
+              backgroundColor: '#0B2E4E',
+              padding: 12,
+              callbacks: {
+                label: (ctx) => ` ECO Global: ${fmtBR(ctx.raw, 2)} (${ctx.raw > 3 ? 'Comprometido' : 'Zona de vale / < 3,0'})`
+              }
+            }
+          }
+        }
+      });
+
+      // 3. Exercício de FG/CD no ECO Normativo (Figura 4B)
+      chartInstances.fgcdNormativo = new Chart(document.getElementById('chart-fgcd-normativo'), {
+        type: 'bar',
+        data: {
+          labels: ['Sem FG/CD (n = 47)', 'Com FG/CD (n = 30)'],
+          datasets: [{
+            label: 'Média ECO Normativo',
+            data: [2.41, 2.93],
+            backgroundColor: ['#94A3B8', '#16537E'],
+            borderRadius: 8,
+            barThickness: 64
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { top: 24 } },
+          scales: {
+            y: {
+              min: 1.0,
+              max: 3.6,
+              ticks: { stepSize: 0.5, callback: (v) => fmtBR(v, 1) },
+              grid: { color: '#E2E8F0' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 12, weight: '700' }, color: '#1E293B' }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Corte: 3,00' },
+            valueLabelsPlugin: { enabled: true, font: '800 13px Inter, sans-serif' },
+            tooltip: {
+              backgroundColor: '#0B2E4E',
+              padding: 12,
+              callbacks: { label: (ctx) => ` ECO Normativo: ${fmtBR(ctx.raw, 2)}` }
+            }
+          }
+        }
+      });
+
+      // 4. Estabilidade entre Modalidades do PGD no ECO Global
+      chartInstances.pgdEstabilidade = new Chart(document.getElementById('chart-pgd-estabilidade'), {
+        type: 'bar',
+        data: {
+          labels: ['Híbrido\n(n = 33)', 'Teletrabalho integral\n(n = 18)', 'Presencial integral\n(n = 26)'],
+          datasets: [{
+            label: 'Média ECO Global',
+            data: [3.20, 3.06, 3.04],
+            backgroundColor: ['#16537E', '#0F766E', '#64748B'],
+            borderRadius: 8,
+            barThickness: 54
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: { padding: { top: 24 } },
+          scales: {
+            y: {
+              min: 2.0,
+              max: 3.8,
+              ticks: { stepSize: 0.3, callback: (v) => fmtBR(v, 1) },
+              grid: { color: '#E2E8F0' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 11, weight: '600' }, color: '#1E293B' }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            referenceLinePlugin: { axis: 'y', value: 3.0, color: '#0F172A', label: 'Corte: 3,00' },
+            valueLabelsPlugin: { enabled: true, font: '800 13px Inter, sans-serif' },
+            tooltip: {
+              backgroundColor: '#0B2E4E',
+              padding: 12,
+              callbacks: { label: (ctx) => ` ECO Global: ${fmtBR(ctx.raw, 2)} (p = 0,617 — estável)` }
+            }
+          }
+        }
+      });
+    }
+
+    // =========================================================================
+    // 9. INICIALIZAÇÃO GLOBAL
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      initTab1Charts();
+      initTab2Charts();
+      renderAfeTable('all');
+      initTab4Charts();
+    });
+  </script>
+</body>
+</html>
