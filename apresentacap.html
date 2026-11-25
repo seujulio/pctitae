@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Por que alguém fica no emprego? — Comprometimento Organizacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0F1C;
+    --bg-alt:#0E1626;
+    --card:#121B2E;
+    --card-border:#223252;
+    --line:#1F2B44;
+    --text:#EAF0FB;
+    --text-dim:#9FB0C9;
+    --text-faint:#6E7F9C;
+    --accent:#3B82F6;
+    --accent-light:#8FB8FA;
+    --accent-dim:#27406B;
+    --accent-strong:#1D4ED8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100vh;background:#05070D;overflow:hidden;}
+  body{font-family:'Inter',Arial,sans-serif;}
+
+  .deck{ position:relative; width:100vw; height:100vh; overflow:hidden; }
+  @supports (height: 100dvh){
+    html,body{ height:100dvh; }
+    .deck{ height:100dvh; }
+  }
+
+  .slide{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    padding:7vh 7vw 11vh 7vw;
+    background:var(--bg);
+    color:var(--text);
+    opacity:0; visibility:hidden;
+    transform:translateY(16px);
+    transition:opacity .5s ease, transform .5s ease;
+    pointer-events:none;
+  }
+  .slide.active{ opacity:1; visibility:visible; transform:translateY(0); pointer-events:auto; z-index:2; }
+  .slide.alt{ background:var(--bg-alt); }
+  .slide.feature{ background:radial-gradient(ellipse at top right, rgba(59,130,246,.16), transparent 62%), var(--bg); }
+
+  .eyebrow{
+    font-size:clamp(13px,1.1vw,16px);
+    font-weight:700;
+    letter-spacing:1.6px;
+    text-transform:uppercase;
+    color:var(--accent-light);
+    margin:0 0 14px 0;
+  }
+
+  h1{
+    font-family:'Inter',Arial,sans-serif;
+    font-weight:800;
+    font-size:clamp(38px,5.2vw,74px);
+    line-height:1.08;
+    margin:0;
+    color:var(--text);
+    letter-spacing:-0.5px;
+  }
+  h2{
+    font-family:'Inter',Arial,sans-serif;
+    font-weight:700;
+    font-size:clamp(26px,3.1vw,42px);
+    line-height:1.18;
+    margin:0;
+    color:var(--text);
+    max-width:1200px;
+    letter-spacing:-0.3px;
+  }
+  h3{
+    font-family:'Inter',Arial,sans-serif;
+    font-weight:600;
+    font-size:clamp(17px,1.5vw,22px);
+    margin:0;
+    color:var(--text);
+  }
+  p{
+    font-family:'Inter',Arial,sans-serif;
+    font-size:clamp(14px,1.2vw,18px);
+    line-height:1.55;
+    color:var(--text-dim);
+    margin:0;
+  }
+  ul{ margin:0; padding-left:1.1em; }
+  li{ font-size:clamp(14px,1.15vw,17px); line-height:1.6; color:var(--text-dim); margin-bottom:9px; }
+
+  .lede{ font-size:clamp(16px,1.45vw,21px); max-width:900px; margin-top:16px; color:var(--text-dim); }
+
+  .body-area{ flex:1; display:flex; flex-direction:column; justify-content:center; margin-top:2.2vh; overflow:hidden; }
+
+  /* entrance animation */
+  .enter{ opacity:0; transform:translateY(20px); }
+  .slide.active .enter{ animation:fadeUp .6s ease-out forwards; }
+  .slide.active .enter.d1{ animation-delay:.05s; }
+  .slide.active .enter.d2{ animation-delay:.15s; }
+  .slide.active .enter.d3{ animation-delay:.26s; }
+  .slide.active .enter.d4{ animation-delay:.37s; }
+  .slide.active .enter.d5{ animation-delay:.48s; }
+  .slide.active .enter.d6{ animation-delay:.59s; }
+  .slide.active .enter.d7{ animation-delay:.70s; }
+  .slide.active .enter.d8{ animation-delay:.81s; }
+  @keyframes fadeUp{ to{ opacity:1; transform:translateY(0); } }
+
+  .footer{
+    position:absolute; left:7vw; right:7vw; bottom:4vh;
+    display:flex; justify-content:space-between;
+    font-size:12.5px; color:var(--text-faint);
+  }
+
+  /* stat grid */
+  .stat-grid{ display:flex; flex-wrap:wrap; gap:1.5vw; margin-top:1vh; }
+  .stat-card{
+    flex:1 1 220px; background:var(--card); border:1px solid var(--card-border);
+    border-radius:14px; padding:2.1vh 1.5vw;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .stat-num{ font-family:'Inter',sans-serif; font-size:clamp(26px,2.9vw,40px); font-weight:800; color:var(--accent-light); }
+  .stat-label{ font-size:clamp(12px,1vw,14.5px); color:var(--text-dim); line-height:1.4; }
+
+  /* stat chips */
+  .stat-chip{
+    background:var(--card); border:1px solid var(--card-border); border-left:4px solid var(--accent);
+    border-radius:10px; padding:1.7vh 1.5vw;
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .stat-num-sm{ font-family:'Inter',sans-serif; font-size:clamp(19px,1.9vw,26px); font-weight:700; color:var(--text); }
+
+  .quote-box{
+    background:linear-gradient(135deg, rgba(59,130,246,.14), rgba(59,130,246,.02));
+    border:1px solid var(--card-border);
+    border-radius:14px; padding:2.4vh 1.9vw; display:flex; align-items:center;
+  }
+  .quote-box p{ color:var(--text); font-size:clamp(16px,1.5vw,21px); line-height:1.5; }
+
+  /* cards */
+  .cards{ display:flex; gap:1.5vw; margin-top:1vh; }
+  .card{
+    flex:1; background:var(--card); border:1px solid var(--card-border);
+    border-radius:14px; padding:2.1vh 1.5vw;
+    display:flex; flex-direction:column; gap:9px;
+  }
+  .card.accent-top{ border-top:4px solid var(--accent); }
+  .card.accent2-top{ border-top:4px solid var(--accent-light); }
+  .card.dark-top{ border-top:4px solid var(--text-faint); }
+  .tagline{ font-size:clamp(11.5px,.95vw,13.5px); font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--accent-light); }
+  .card.dark-top .tagline{ color:var(--text-dim); }
+  .def{ font-size:clamp(12.5px,1.02vw,15px); color:var(--text-dim); }
+
+  /* steps */
+  .steps{ display:flex; gap:1.1vw; margin-top:1vh; }
+  .step{
+    flex:1; background:var(--card); border:1px solid var(--card-border);
+    border-radius:12px; padding:1.9vh 1vw;
+    display:flex; flex-direction:column; gap:7px; text-align:center;
+  }
+  .step-num{ font-family:'Inter',sans-serif; font-size:clamp(20px,2.2vw,30px); font-weight:800; color:var(--accent-light); }
+  .step p{ font-size:clamp(11px,.92vw,13.5px); }
+  .arrow{ align-self:center; color:var(--text-faint); font-size:20px; }
+
+  .care-list{ display:flex; flex-wrap:wrap; gap:1vw 2vw; margin-top:1.5vh; }
+  .care-item{ display:flex; align-items:center; gap:10px; font-size:clamp(12.5px,1.02vw,15px); color:var(--text-dim); }
+  .dot{ width:8px; height:8px; border-radius:50%; background:var(--accent); flex:0 0 auto; }
+
+  /* table */
+  table{ width:100%; border-collapse:collapse; margin-top:1vh; }
+  th{ text-align:left; font-size:clamp(11.5px,.95vw,14px); font-weight:700; color:var(--text); padding:9px 13px; border-bottom:1px solid var(--card-border); }
+  td{ font-size:clamp(11.5px,.95vw,14px); color:var(--text-dim); padding:8px 13px; border-bottom:1px solid var(--line); }
+  tr.highlight td{ color:var(--text); font-weight:600; background:rgba(59,130,246,.08); }
+
+  /* bar chart */
+  .chart-wrap{ display:flex; flex-direction:column; gap:1.7vh; margin-top:.8vh; }
+  .dim-block{ display:flex; flex-direction:column; gap:.65vh; }
+  .dim-title{ font-size:clamp(13px,1.15vw,17px); font-weight:600; color:var(--text); }
+  .bar-row{ display:flex; align-items:center; gap:1.1vw; }
+  .bar-tag{ width:14vw; font-size:clamp(10.5px,.85vw,12.5px); color:var(--text-dim); flex:0 0 auto; }
+  .bar-track{ flex:1; height:24px; background:var(--bg-alt); border:1px solid var(--line); border-radius:6px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:5px; transform-origin:left; transform:scaleX(0); }
+  .slide.active .bar-fill{ animation:growBar 1s ease-out .5s forwards; }
+  @keyframes growBar{ to{ transform:scaleX(1); } }
+  .bar-fill.accent{ background:var(--accent); }
+  .bar-fill.accent2{ background:var(--accent-light); }
+  .bar-val{ width:3vw; font-size:clamp(12px,1vw,15px); font-weight:700; color:var(--text); text-align:right; }
+
+  .legend{ display:flex; gap:2vw; margin-top:.4vh; }
+  .legend-item{ display:flex; align-items:center; gap:8px; font-size:clamp(11px,.9vw,13px); color:var(--text-dim); }
+  .swatch{ width:13px; height:13px; border-radius:4px; }
+
+  /* vertical bar chart */
+  .cutoff-line{ position:absolute; left:0; right:0; bottom:60%; border-top:1px dashed var(--text-faint); z-index:1; }
+  .cutoff-label{ position:absolute; right:0; bottom:calc(60% + 4px); font-size:10.5px; color:var(--text-faint); }
+  .vbar-row{ position:relative; display:flex; align-items:flex-end; gap:1.2vw; height:15vh; z-index:2; }
+  .vbar-col{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; gap:5px; }
+  .vbar{ width:60%; border-radius:5px 5px 0 0; background:var(--accent); transform-origin:bottom; transform:scaleY(0); }
+  .vbar.low{ background:var(--accent-dim); }
+  .slide.active .vbar{ animation:growBarY .9s ease-out .45s forwards; }
+  @keyframes growBarY{ to{ transform:scaleY(1); } }
+  .vbar-val{ font-size:11.5px; font-weight:700; color:var(--text); }
+  .vbar-label{ font-size:10px; color:var(--text-dim); text-align:center; line-height:1.2; }
+
+  /* item rows */
+  .item-row{ display:flex; justify-content:space-between; align-items:baseline; padding:7px 0; border-bottom:1px solid var(--line); }
+  .item-row:last-child{ border-bottom:none; }
+  .item-row p{ font-size:clamp(11.5px,.95vw,14px); }
+  .item-val{ font-weight:700; color:var(--text); font-size:clamp(13px,1.1vw,16px); }
+
+  .two-col{ display:flex; gap:2.3vw; margin-top:1vh; }
+  .col{ flex:1; }
+
+  .check{ color:var(--accent-light); font-weight:700; }
+  .cross{ color:var(--text-faint); font-weight:700; }
+
+  .closing-box{
+    background:var(--card); border:1px solid var(--card-border); border-left:4px solid var(--accent);
+    border-radius:12px; padding:2.3vh 1.9vw; margin-top:2vh; max-width:1100px;
+  }
+
+  /* controls */
+  .controls{
+    position:fixed; left:0; right:0; bottom:0; height:7vh;
+    display:flex; align-items:center; justify-content:center; gap:18px;
+    background:linear-gradient(to top, rgba(0,0,0,.4), transparent);
+    z-index:50;
+  }
+  .nav-btn{
+    width:40px; height:40px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.25);
+    background:rgba(18,27,46,.7); color:var(--text);
+    font-size:18px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .2s, border-color .2s;
+  }
+  .nav-btn:hover{ background:var(--accent); border-color:var(--accent); }
+  .dots{ display:flex; gap:7px; }
+  .dot-ind{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.25); cursor:pointer; transition:background .2s, transform .2s; }
+  .dot-ind.active{ background:var(--accent); transform:scale(1.35); }
+  .counter{ color:var(--text); font-size:13px; min-width:52px; text-align:center; font-family:'Inter',sans-serif; }
+
+  /* ---------- block badge + transition line ---------- */
+  .block-badge{
+    position:absolute; top:4.2vh; right:7vw; text-align:right;
+    font-size:11px; font-weight:600; letter-spacing:.4px;
+    color:var(--text-faint);
+  }
+  .block-badge span{ display:block; }
+  .block-badge .block-name{ color:var(--accent-light); font-weight:700; }
+
+  .transition-line{
+    margin-top:1.3vh;
+    padding-top:1.1vh;
+    border-top:1px dashed var(--card-border);
+    font-size:clamp(12px,1vw,14.5px);
+    font-style:italic;
+    color:var(--text-dim);
+  }
+  .transition-line b{ color:var(--accent-light); font-style:normal; }
+
+  /* ---------- mobile (WhatsApp / celular) ---------- */
+  @media (max-width: 900px), (orientation: portrait){
+    .slide{
+      padding:5vh 5vw 9vh 5vw;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+    h1{ font-size:clamp(28px,8.5vw,52px); }
+    h2{ font-size:clamp(21px,6vw,30px); }
+    .lede{ font-size:clamp(14px,3.8vw,18px); }
+    .two-col{ flex-direction:column; gap:2.6vh; }
+    .cards{ flex-direction:column; gap:2vh; }
+    .steps{ flex-direction:column; gap:1.4vh; }
+    .steps .arrow{ transform:rotate(90deg); margin:-4px 0; }
+    .stat-grid{ gap:3vw 4vw; }
+    .stat-card{ flex:1 1 42%; }
+    .bar-tag{ width:30vw; font-size:11px; }
+    .vbar-row{ height:20vh; gap:2.2vw; }
+    .vbar-label{ font-size:9px; }
+    .footer{ font-size:10.5px; bottom:3.2vh; }
+    .controls{ height:9vh; gap:12px; }
+    .nav-btn{ width:44px; height:44px; }
+    .block-badge{ font-size:9.5px; top:3vh; }
+    .body-area{ margin-top:1.2vh; justify-content:flex-start; }
+    .quote-box p, .closing-box p{ font-size:clamp(14px,3.8vw,18px); }
+  }
+
+  /* ---------- print / PDF export ---------- */
+  @media print{
+    @page{ size:13.333in 7.5in; margin:0; }
+    html,body{ height:auto !important; overflow:visible !important; background:var(--bg) !important; }
+    .deck{ position:static !important; width:auto !important; height:auto !important; overflow:visible !important; }
+    .slide{
+      position:relative !important;
+      opacity:1 !important;
+      visibility:visible !important;
+      transform:none !important;
+      pointer-events:auto !important;
+      width:13.333in; height:7.5in;
+      page-break-after:always; break-after:page;
+      -webkit-print-color-adjust:exact; print-color-adjust:exact;
+    }
+    .slide:last-of-type{ page-break-after:auto; break-after:auto; }
+    .enter{ opacity:1 !important; transform:none !important; animation:none !important; }
+    .bar-fill{ transform:scaleX(1) !important; animation:none !important; }
+    .vbar{ transform:scaleY(1) !important; animation:none !important; }
+    .controls, .counter{ display:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- 1. COVER -->
+  <section class="slide feature active" data-notes="Apresente o título, a equipe e o peso dos TAEs na União (131.534 servidores; 23,12% da força civil federal). Esse é o fio que conduz a apresentação: entender por que o profissional de TI do serviço público permanece, ou não, na instituição.">
+    <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:2.3vh; max-width:1200px;">
+      <p class="eyebrow enter d1">Comportamento Organizacional · FURG · Turma 07235-U/2026</p>
+      <h1 class="enter d2">Comprometimento Organizacional na TI das IFES</h1>
+      <p class="lede enter d3">Diagnóstico com servidores efetivos da carreira PCCTAE em Tecnologia da Informação, amostra nacional de 77 respondentes, sobre por que esse profissional permanece na instituição.</p>
+      <p class="enter d4" style="font-size:13.5px; color:var(--text-faint); margin-top:1vh;">Izabelle Bernardo Schmitz · Julia Correa Araujo Peralta · Júlio César Medina Madruga · Michele Chaves Feijó</p>
+    </div>
+    <div class="footer">
+      <p>Disciplina de Comportamento Organizacional · Docente Anne Pinheiro Leal</p>
+      <p>Rio Grande, RS, 2026</p>
+    </div>
+  </section>
+
+  <!-- 2. PROBLEMA -->
+  <section class="slide" data-notes="Contextualize o desafio específico da TI nas IFES: mercado competitivo, PGD, alta qualificação formal. Lance a pergunta central: o predomínio instrumental encontrado por Avelino (2024) na UFPI se repete entre os profissionais de TI em escala nacional?">
+    <p class="block-badge"><span class="block-name">Bloco 1</span><span>Problema e Teoria</span></p>
+    <p class="eyebrow enter d1">O Problema</p>
+    <h2 class="enter d2">A TI sustenta as IFES, mas ninguém sabia se esses servidores realmente vestem a camisa</h2>
+    <div class="body-area">
+      <div class="two-col">
+        <div class="col" style="display:flex; flex-direction:column; gap:1.5vh;">
+          <div class="stat-chip enter d3">
+            <p class="stat-num-sm">131.534 servidores TAEs</p>
+            <p>ativos na União, 23,12% de toda a força civil federal (Brasil, 2023 apud Avelino, 2024).</p>
+          </div>
+          <div class="stat-chip enter d4">
+            <p class="stat-num-sm">Pressão específica na TI</p>
+            <p>mercado privado competitivo, obsolescência tecnológica acelerada e alta qualificação formal acumulada pelos servidores.</p>
+          </div>
+        </div>
+        <div class="col quote-box enter d5">
+          <p>O predomínio instrumental encontrado por Avelino (2024) na UFPI (4,47) se repete entre os profissionais de TI em escala nacional?</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><p>Introdução</p><p>2 / 12</p></div>
+  </section>
+
+  <!-- 3. CONCEITO -->
+  <section class="slide alt" data-notes="Explique o modelo tridimensional de Meyer, Allen e Smith (1993): Afetivo (quer ficar), Instrumental (precisa ficar) e Normativo (sente que deve). Reforce que o modelo foi validado no Brasil por Medeiros e Enders (1998). Se perguntarem sobre entrincheiramento, cite o debate de Bastos e Aguiar (2015).">
+    <p class="block-badge"><span class="block-name">Bloco 1</span><span>Problema e Teoria</span></p>
+    <p class="eyebrow enter d1">Orientação (a) — Conceito e Variáveis</p>
+    <h2 class="enter d2">Comprometimento como vínculo psicológico: o Modelo Tridimensional</h2>
+    <div class="body-area">
+      <div class="cards">
+        <div class="card accent-top enter d3">
+          <p class="tagline">Afetivo</p>
+          <h3>"Permanece porque quer"</h3>
+          <p class="def">Apego emocional, identificação com os valores institucionais, orgulho de pertencer e envolvimento ativo com os objetivos da organização.</p>
+        </div>
+        <div class="card accent2-top enter d4">
+          <p class="tagline">Instrumental</p>
+          <h3>"Permanece por necessidade"</h3>
+          <p class="def">Avaliação racional dos investimentos, recompensas, custos de desligamento e da escassez de alternativas no mercado de trabalho.</p>
+        </div>
+        <div class="card dark-top enter d5">
+          <p class="tagline">Normativo</p>
+          <h3>"Permanece porque sente que deve"</h3>
+          <p class="def">Sentimento de obrigação moral, lealdade e retribuição, internalizado pelos processos de socialização organizacional.</p>
+        </div>
+      </div>
+      <p class="enter d6" style="margin-top:1.9vh; font-size:12.5px;">Meyer e Allen (1991); Meyer, Allen e Smith (1993); validado no Brasil por Medeiros e Enders (1998). Variáveis: escore médio de cada base, em escala Likert de 1 a 5, a partir dos 18 itens da ECO.</p>
+      <p class="transition-line enter d7">Para testar se esse predomínio instrumental da UFPI se repetia na área de TI em escala nacional, <b>desenhamos o protocolo metodológico a seguir.</b></p>
+    </div>
+    <div class="footer"><p>Referencial Teórico</p><p>3 / 12</p></div>
+  </section>
+
+  <!-- 4. FOCO + INSTRUMENTO -->
+  <section class="slide" data-notes="Explique por que o foco é o comprometimento organizacional (o vínculo com a instituição), e não o ocupacional: trata-se de uma carreira estatutária de alta estabilidade, em que medir só a rotatividade mascara vínculos já corroídos. Apresente a ECO reduzida de 18 itens como instrumento validado, seis itens por base.">
+    <p class="block-badge"><span class="block-name">Bloco 2</span><span>Método e Perfil</span></p>
+    <p class="eyebrow enter d1">Orientações (b) e (c) — Foco e Instrumento</p>
+    <h2 class="enter d2">O foco é o vínculo com a instituição, medido pelos 18 itens da Escala ECO</h2>
+    <div class="body-area">
+      <div class="two-col">
+        <div class="col">
+          <h3 class="enter d3">Por que o foco organizacional?</h3>
+          <p class="enter d4" style="margin-top:1vh;">Em carreiras estatutárias de alta estabilidade, como o PCCTAE, medir apenas a rotatividade real mascara problemas graves: o servidor pode permanecer décadas com o vínculo afetivo ou normativo já erodido. Por isso o foco recai sobre a instituição como um todo, e não sobre a profissão ou a equipe.</p>
+        </div>
+        <div class="col">
+          <h3 class="enter d5">Instrumento utilizado</h3>
+          <p class="enter d5" style="margin-top:1vh;">ECO reduzida (Meyer, Allen e Smith, 1993; Medeiros e Enders, 1998), adaptada por Avelino (2024) ao trocar "empresa" por "instituição". Dezoito itens, em escala Likert de 1 a 5.</p>
+          <table class="enter d6" style="margin-top:1.3vh;">
+            <tr><th>Base</th><th>Itens</th><th>Exemplo de assertiva</th></tr>
+            <tr><td>Afetivo</td><td>6</td><td>"Sinto-me como 'pessoa de casa' na instituição"</td></tr>
+            <tr><td>Instrumental</td><td>6</td><td>"Ficar na instituição é mais necessidade que desejo"</td></tr>
+            <tr><td>Normativo</td><td>6</td><td>"Esta instituição merece minha lealdade"</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><p>Metodologia</p><p>4 / 12</p></div>
+  </section>
+
+  <!-- 5. METODO -->
+  <section class="slide alt" data-notes="Explique a coleta: survey eletrônico via Google Forms, TCLE no início, trava F1 eliminando quem não é PCCTAE efetivo de TI, dois blocos de questões, e depois a auditoria de saneamento (completude e variância zero). Reforce o anonimato e a ausência de coleta de e-mail.">
+    <p class="block-badge"><span class="block-name">Bloco 2</span><span>Método e Perfil</span></p>
+    <p class="eyebrow enter d1">Orientação (d) — Coleta de Dados e Cuidados Éticos</p>
+    <h2 class="enter d2">Survey eletrônico nacional, com trava de elegibilidade e consentimento explícito</h2>
+    <div class="body-area">
+      <div class="steps">
+        <div class="step enter d3"><div class="step-num">1</div><p>TCLE no início do formulário, com aceite obrigatório</p></div>
+        <div class="arrow enter d3">→</div>
+        <div class="step enter d4"><div class="step-num">2</div><p>Trava F1: apenas servidor efetivo PCCTAE em TI nas IFES</p></div>
+        <div class="arrow enter d4">→</div>
+        <div class="step enter d5"><div class="step-num">3</div><p>Bloco I: dez questões sociodemográficas e funcionais</p></div>
+        <div class="arrow enter d5">→</div>
+        <div class="step enter d6"><div class="step-num">4</div><p>Bloco II: 18 itens da ECO (Likert de 1 a 5)</p></div>
+        <div class="arrow enter d6">→</div>
+        <div class="step enter d7"><div class="step-num">5</div><p>Auditoria: completude e ausência de "straightlining"</p></div>
+      </div>
+      <h3 class="enter d7" style="margin-top:2.4vh;">Cuidados éticos tomados</h3>
+      <div class="care-list enter d8">
+        <div class="care-item"><span class="dot"></span>Participação voluntária, confidencial e anônima</div>
+        <div class="care-item"><span class="dot"></span>Nenhuma coleta de e-mail ou dado identificável</div>
+        <div class="care-item"><span class="dot"></span>Exclusão formal de terceirizados, estagiários, bolsistas e docentes</div>
+        <div class="care-item"><span class="dot"></span>Checagem de respostas sem variância (straightlining)</div>
+      </div>
+    </div>
+    <div class="footer"><p>Metodologia</p><p>5 / 12</p></div>
+  </section>
+
+  <!-- 6. AMOSTRA -->
+  <section class="slide" data-notes="Mostre o retrato da amostra: 93,5% masculino, 88,3% em Universidades Federais, cinco regiões cobertas, 66,2% já no PGD e o dado mais chamativo, 96,1% com pós-graduação (98,7% sobre-educados). Destaque que n = 77 supera o mínimo teórico do G*Power (n = 68).">
+    <p class="block-badge"><span class="block-name">Bloco 2</span><span>Método e Perfil</span></p>
+    <p class="eyebrow enter d1">O Perfil Coletado</p>
+    <h2 class="enter d2">77 respostas válidas: um retrato de servidores maduros e hiperqualificados</h2>
+    <div class="body-area">
+      <div class="stat-grid">
+        <div class="stat-card enter d3"><p class="stat-num">93,5%</p><p class="stat-label">são do gênero masculino (n = 72 de 77)</p></div>
+        <div class="stat-card enter d4"><p class="stat-num">88,3%</p><p class="stat-label">atuam em Universidades Federais</p></div>
+        <div class="stat-card enter d5"><p class="stat-num">5</p><p class="stat-label">macrorregiões brasileiras representadas</p></div>
+        <div class="stat-card enter d6"><p class="stat-num">96,1%</p><p class="stat-label">possuem pós-graduação (Especialização, Mestrado ou Doutorado)</p></div>
+        <div class="stat-card enter d7"><p class="stat-num">98,7%</p><p class="stat-label">estão sobre-educados em relação ao requisito mínimo do cargo</p></div>
+        <div class="stat-card enter d8"><p class="stat-num">66,2%</p><p class="stat-label">já atuam no PGD (regime híbrido ou teletrabalho integral)</p></div>
+      </div>
+      <p class="enter d8" style="margin-top:1.7vh; font-size:12.5px;">n = 77 casos válidos, superando o mínimo teórico de n = 68 calculado via G*Power 3.1.9.7 (Ringle, Silva e Bido, 2014; Avelino, 2024).</p>
+      <p class="transition-line enter d8">Com esse perfil de servidores altamente qualificados e majoritariamente no PGD, <b>as análises psicométricas revelam a principal descoberta dos dados.</b></p>
+    </div>
+    <div class="footer"><p>Perfil da Amostra</p><p>6 / 12</p></div>
+  </section>
+
+  <!-- 7. CONFIABILIDADE -->
+  <section class="slide alt" data-notes="Antes de interpretar qualquer média, valide a qualidade da medição. Todos os Alfas de Cronbach superaram 0,70 e bateram o estudo-base de Avelino (2024). KMO de 0,812 e Bartlett significativo autorizam a Análise Fatorial; apenas dois dos dezoito itens foram excluídos.">
+    <p class="block-badge"><span class="block-name">Bloco 3</span><span>A Grande Descoberta</span></p>
+    <p class="eyebrow enter d1">Antes de Interpretar: a Medição é Confiável?</p>
+    <h2 class="enter d2">A escala funcionou melhor na TI do que no estudo-base da UFPI</h2>
+    <div class="body-area">
+      <table class="enter d3">
+        <tr><th>Dimensão</th><th>Alfa — TI/IFES (n = 77)</th><th>Alfa — Avelino (2024)</th></tr>
+        <tr><td>Afetivo</td><td>0,879</td><td>0,795</td></tr>
+        <tr><td>Instrumental</td><td>0,713</td><td>0,666</td></tr>
+        <tr><td>Normativo</td><td>0,841</td><td>0,724</td></tr>
+        <tr class="highlight"><td>Global (18 itens)</td><td>0,884</td><td>0,826</td></tr>
+      </table>
+      <p class="enter d4" style="margin-top:1.7vh;">KMO = 0,812 · Teste de Bartlett p &lt; 0,001 · 16 de 18 itens mantidos na Análise Fatorial Exploratória (apenas ECO02 e ECO11 excluídos por comunalidade baixa), explicando 58,79% da variância total.</p>
+    </div>
+    <div class="footer"><p>Robustez Estatística</p><p>7 / 12</p></div>
+  </section>
+
+  <!-- 8. DESCOBERTA -->
+  <section class="slide feature" data-notes="Este é o clímax da apresentação: apresente a inversão estrutural. Na UFPI, Instrumental (4,47) supera Afetivo (3,72) e Normativo (3,19). Na TI, Afetivo (3,65) lidera sobre Instrumental (3,08) e Normativo (2,61). O teste de Friedman confirma que as três bases diferem entre si (p < 0,001). Gancho para o próximo slide: mas por que o Instrumental caiu tanto? Vamos abrir os itens.">
+    <p class="block-badge"><span class="block-name">Bloco 3</span><span>A Grande Descoberta</span></p>
+    <p class="eyebrow enter d1">A Grande Descoberta</p>
+    <h2 class="enter d2">Na TI, o vínculo é afetivo, não instrumental como no restante dos TAEs</h2>
+    <div class="body-area">
+      <div class="legend enter d3">
+        <div class="legend-item"><span class="swatch" style="background:var(--accent);"></span>TI / IFES (presente estudo, n = 77)</div>
+        <div class="legend-item"><span class="swatch" style="background:var(--accent-light);"></span>TAEs gerais UFPI (Avelino, 2024, n = 281)</div>
+      </div>
+      <div class="chart-wrap">
+        <div class="dim-block enter d4">
+          <p class="dim-title">Afetivo — "quer ficar"</p>
+          <div class="bar-row"><p class="bar-tag">TI / IFES</p><div class="bar-track"><div class="bar-fill accent" style="width:73%;"></div></div><p class="bar-val">3,65</p></div>
+          <div class="bar-row"><p class="bar-tag">UFPI (Avelino)</p><div class="bar-track"><div class="bar-fill accent2" style="width:74%;"></div></div><p class="bar-val">3,72</p></div>
+        </div>
+        <div class="dim-block enter d5">
+          <p class="dim-title">Instrumental — "precisa ficar"</p>
+          <div class="bar-row"><p class="bar-tag">TI / IFES</p><div class="bar-track"><div class="bar-fill accent" style="width:62%;"></div></div><p class="bar-val">3,08</p></div>
+          <div class="bar-row"><p class="bar-tag">UFPI (Avelino)</p><div class="bar-track"><div class="bar-fill accent2" style="width:89%;"></div></div><p class="bar-val">4,47</p></div>
+        </div>
+        <div class="dim-block enter d6">
+          <p class="dim-title">Normativo — "sente que deve"</p>
+          <div class="bar-row"><p class="bar-tag">TI / IFES</p><div class="bar-track"><div class="bar-fill accent" style="width:52%;"></div></div><p class="bar-val">2,61</p></div>
+          <div class="bar-row"><p class="bar-tag">UFPI (Avelino)</p><div class="bar-track"><div class="bar-fill accent2" style="width:64%;"></div></div><p class="bar-val">3,19</p></div>
+        </div>
+      </div>
+      <p class="enter d7" style="margin-top:1.5vh; font-size:12.5px;">Teste de Friedman: χ² = 36,424; p &lt; 0,001 — todos os pares diferem entre si (pós-teste de Wilcoxon, Bonferroni).</p>
+    </div>
+    <div class="footer"><p>Resultado Central</p><p>8 / 12</p></div>
+  </section>
+
+  <!-- 9. RAIO-X -->
+  <section class="slide" data-notes="Abra os 18 itens da ECO item a item. De um lado, o que sustenta o vínculo acima de 3,0: pertencimento, significado pessoal, custo de ruptura e gratidão. Do outro, o que o enfraquece abaixo de 3,0: mercado aberto, alternativas imediatas, ausência de culpa e baixo dever moral com as pessoas. Isso explica, por dentro, a inversão do slide anterior.">
+    <p class="block-badge"><span class="block-name">Bloco 3</span><span>A Grande Descoberta</span></p>
+    <p class="eyebrow enter d1">Análise Item a Item (ECO01 a ECO18)</p>
+    <h2 class="enter d2">O que sustenta o vínculo, e o que o enfraquece, item a item</h2>
+    <div class="body-area">
+      <div class="cards">
+        <div class="card accent2-top enter d3">
+          <p class="tagline">Sustenta o vínculo (&gt; 3,0)</p>
+          <div class="item-row"><p>Pertencimento — "pessoa de casa" (ECO05r)</p><p class="item-val">3,88</p></div>
+          <div class="item-row"><p>Significado pessoal (ECO06)</p><p class="item-val">3,71</p></div>
+          <div class="item-row"><p>Custo de ruptura — ficar é necessidade e desejo (ECO07)</p><p class="item-val">3,64</p></div>
+          <div class="item-row"><p>Vida ficaria desestruturada (ECO09)</p><p class="item-val">3,62</p></div>
+          <div class="item-row"><p>Gratidão institucional (ECO18)</p><p class="item-val">3,21</p></div>
+        </div>
+        <div class="card accent-top enter d4">
+          <p class="tagline">Enfraquece o vínculo (&lt; 3,0)</p>
+          <div class="item-row"><p>Alternativas imediatas de mercado (ECO12)</p><p class="item-val">2,83</p></div>
+          <div class="item-row"><p>Poucas alternativas se saísse (ECO10)</p><p class="item-val">2,60</p></div>
+          <div class="item-row"><p>Já dei muito de mim à instituição (ECO11)</p><p class="item-val">2,53</p></div>
+          <div class="item-row"><p>Baixo dever moral com as pessoas (ECO17)</p><p class="item-val">2,26</p></div>
+          <div class="item-row"><p>Ausência de culpa ao sair (ECO15, maior dispersão)</p><p class="item-val">2,23</p></div>
+        </div>
+      </div>
+      <p class="enter d5" style="margin-top:1.5vh;">O profissional de TI reconhece o custo pessoal de recomeçar, mas não se sente sem alternativas no mercado, nem em dívida moral com a instituição.</p>
+      <p class="transition-line enter d6">Vimos que o vínculo afetivo sustenta a categoria, mas esse comprometimento não é igual para todo mundo. <b>A seguir, quais perfis estão mais engajados e onde está o sinal de alerta para as IFES.</b></p>
+    </div>
+    <div class="footer"><p>Análise Item a Item</p><p>9 / 12</p></div>
+  </section>
+
+  <!-- 10. ANTECEDENTES -->
+  <section class="slide alt" data-notes="Apresente os antecedentes significativos: faixa etária, tempo de serviço e exercício de FG/CD. Explique brevemente a análise: testes não paramétricos (Kruskal-Wallis, Mann-Whitney, pós-teste de Dunn com Bonferroni) foram priorizados porque Shapiro-Wilk rejeitou a normalidade das bases Afetiva e Normativa. Destaque que o PGD foi neutro.">
+    <p class="block-badge"><span class="block-name">Bloco 4</span><span>Limites e Fechamento</span></p>
+    <p class="eyebrow enter d1">Orientação (e) — Antecedentes e Análise dos Dados</p>
+    <h2 class="enter d2">Tempo de casa, idade e função de confiança explicam quem está mais comprometido</h2>
+    <div class="body-area">
+      <h3 class="enter d3" style="margin-bottom:.8vh;">O vale pós-estabilidade: ECO Global por tempo de serviço</h3>
+      <div class="enter d3" style="position:relative; padding-top:6px;">
+        <p class="cutoff-label">corte 3,0</p>
+        <div class="cutoff-line"></div>
+        <div class="vbar-row">
+          <div class="vbar-col"><p class="vbar-val">2,65</p><div class="vbar low" style="height:53%;"></div><p class="vbar-label">Até 1 ano</p></div>
+          <div class="vbar-col"><p class="vbar-val">3,39</p><div class="vbar" style="height:68%;"></div><p class="vbar-label">1–3 anos</p></div>
+          <div class="vbar-col"><p class="vbar-val">2,60</p><div class="vbar low" style="height:52%;"></div><p class="vbar-label">4–6 anos</p></div>
+          <div class="vbar-col"><p class="vbar-val">2,56</p><div class="vbar low" style="height:51%;"></div><p class="vbar-label">7–9 anos</p></div>
+          <div class="vbar-col"><p class="vbar-val">3,32</p><div class="vbar" style="height:66%;"></div><p class="vbar-label">10–12 anos</p></div>
+          <div class="vbar-col"><p class="vbar-val">3,32</p><div class="vbar" style="height:66%;"></div><p class="vbar-label">&gt;12 anos</p></div>
+        </div>
+      </div>
+      <p class="enter d4" style="font-size:11px; margin-top:.4vh;">Kruskal-Wallis H = 14,67; p = 0,012 — o vínculo cai logo após a estabilidade e só se recompõe depois de 10 anos de instituição.</p>
+
+      <div class="cards" style="margin-top:1.5vh;">
+        <div class="card dark-top enter d5">
+          <p class="tagline">Faixa etária</p>
+          <h3>29–39 anos: 2,78 → 51–61 anos: 3,64</h3>
+          <p class="def">Quanto maior a idade, maior o comprometimento Normativo e Global (p = 0,026). Jovens de 29–39 anos (37,7% da amostra) estão abaixo do corte.</p>
+        </div>
+        <div class="card dark-top enter d6">
+          <p class="tagline">Função gratificada (FG/CD)</p>
+          <h3>Com função: 2,93 · Sem função: 2,41</h3>
+          <p class="def">Assumir gestão eleva o senso de dever institucional no Normativo (p = 0,028), diferente do padrão encontrado na UFPI.</p>
+        </div>
+      </div>
+      <p class="enter d7" style="margin-top:1.1vh;"><b style="color:var(--text);">Como os dados foram analisados:</b> testes não paramétricos (Mann-Whitney, Kruskal-Wallis com pós-teste de Dunn/Bonferroni), priorizados pela não normalidade das bases Afetiva e Normativa (Shapiro-Wilk). O PGD não reduziu o comprometimento em nenhuma dimensão (p = 0,617).</p>
+    </div>
+    <div class="footer"><p>Antecedentes</p><p>10 / 12</p></div>
+  </section>
+
+  <!-- 11. LIMITAÇÕES -->
+  <section class="slide" data-notes="Apresente os limites do próprio estudo antes que a banca pergunte: corte transversal, ausência de variáveis antecedentes diretas (salário, clima, liderança), amostra por conveniência concentrada em Universidades Federais e abaixo do piso ideal de 180 casos para consolidação fatorial definitiva.">
+    <p class="block-badge"><span class="block-name">Bloco 4</span><span>Limites e Fechamento</span></p>
+    <p class="eyebrow enter d1">Rigor Científico</p>
+    <h2 class="enter d2">O que os dados provam, e o que ainda não podem provar</h2>
+    <div class="body-area">
+      <div class="two-col">
+        <div class="col">
+          <h3 class="enter d3" style="color:var(--accent-light);">Provam, com rigor estatístico</h3>
+          <ul class="enter d4" style="margin-top:1.1vh;">
+            <li><span class="check">✓</span> Comprometimento global moderado (3,11), liderado pela base Afetiva (3,65)</li>
+            <li><span class="check">✓</span> Inversão estrutural frente ao padrão instrumental da UFPI</li>
+            <li><span class="check">✓</span> Efeitos reais de idade, tempo de serviço e FG/CD</li>
+            <li><span class="check">✓</span> Neutralidade do PGD sobre o vínculo institucional</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h3 class="enter d5" style="color:var(--text-faint);">Ainda não permitem inferir</h3>
+          <ul class="enter d6" style="margin-top:1.1vh;">
+            <li><span class="cross">✗</span> Causalidade direta: não há variáveis antecedentes (salário, clima, liderança)</li>
+            <li><span class="cross">✗</span> Generalização nacional: amostra por conveniência, 88,3% em Universidades Federais</li>
+            <li><span class="cross">✗</span> Validação fatorial definitiva: abaixo do piso de 180 casos (10 por item)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer"><p>Limitações</p><p>11 / 12</p></div>
+  </section>
+
+  <!-- 12. CONCLUSAO -->
+  <section class="slide feature" data-notes="Feche com o diagnóstico: o vínculo afetivo sustenta a categoria e é compatível com o trabalho híbrido, mas a retenção de jovens entre 29 e 39 anos e na janela de 4 a 9 anos de serviço depende de autonomia técnica, sentido do trabalho e perspectivas reais de carreira. Agradeça e abra para perguntas.">
+    <p class="block-badge"><span class="block-name">Bloco 4</span><span>Limites e Fechamento</span></p>
+    <p class="eyebrow enter d1">Orientação (f) — Conclusão do Diagnóstico</p>
+    <h2 class="enter d2">Um ativo e um alerta: o profissional de TI fica por identidade, não por falta de opção</h2>
+    <div class="body-area">
+      <div class="closing-box enter d3">
+        <p style="font-size:clamp(14.5px,1.35vw,19px); color:var(--text);">O vínculo afetivo (3,65) sustenta a categoria e é plenamente compatível com o trabalho híbrido e remoto no PGD. Mas, sem receio de ficar sem alternativas e sem culpa em sair, a retenção, sobretudo entre 29 e 39 anos e na janela de 4 a 9 anos de serviço, depende de políticas que preservem autonomia técnica, sentido do trabalho e perspectivas reais de carreira.</p>
+      </div>
+      <p class="enter d4" style="margin-top:2.8vh; font-size:13.5px; color:var(--text-faint);">Izabelle Bernardo Schmitz · Julia Correa Araujo Peralta · Júlio César Medina Madruga · Michele Chaves Feijó. Obrigado pela atenção. Perguntas?</p>
+    </div>
+    <div class="footer"><p>Considerações Finais</p><p>12 / 12</p></div>
+  </section>
+
+</div>
+
+<div class="controls">
+  <button class="nav-btn" id="prevBtn" aria-label="Slide anterior">‹</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="nextBtn" aria-label="Próximo slide">›</button>
+</div>
+<div class="counter" style="position:fixed; right:16px; bottom:16px; z-index:50;" id="counter"></div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dotsEl = document.getElementById('dots');
+  const counterEl = document.getElementById('counter');
+  let current = 0;
+
+  slides.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot-ind' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  });
+  const dotNodes = Array.from(dotsEl.children);
+
+  function retriggerAnimations(slide){
+    const animated = slide.querySelectorAll('.enter, .bar-fill, .vbar');
+    animated.forEach(el => {
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = '';
+    });
+  }
+
+  function goTo(i){
+    if (i < 0 || i >= slides.length) return;
+    slides[current].classList.remove('active');
+    dotNodes[current].classList.remove('active');
+    current = i;
+    const slide = slides[current];
+    slide.classList.add('active');
+    dotNodes[current].classList.add('active');
+    counterEl.textContent = (current + 1) + ' / ' + slides.length;
+    retriggerAnimations(slide);
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+  document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { goTo(current + 1); e.preventDefault(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { goTo(current - 1); e.preventDefault(); }
+    if (e.key === 'Home') { goTo(0); }
+    if (e.key === 'End') { goTo(slides.length - 1); }
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX);
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (dx > 60) goTo(current - 1);
+    if (dx < -60) goTo(current + 1);
+  });
+
+  counterEl.textContent = '1 / ' + slides.length;
+</script>
+
+</body>
+</html>
